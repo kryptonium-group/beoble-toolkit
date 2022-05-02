@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@beoble/js-sdk": ["packages/js-sdk/src/index.ts"],
+      "@beoble/react": ["packages/react/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
