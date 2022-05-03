@@ -3,7 +3,7 @@ import { React, ReactProps } from './react';
 
 export default {
   component: React,
-  title: 'React',
+  title: 'lib/React',
 } as Meta;
 
 const Template: Story<ReactProps> = (args) => <React {...args} />;
