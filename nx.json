@@ -26,6 +26,13 @@
       "application": {
         "babel": true
       }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "styled-components",
+        "linter": "eslint"
+      }
     }
-  }
+  },
+  "defaultProject": "example"
 }
