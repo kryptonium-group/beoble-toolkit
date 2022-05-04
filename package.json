@@ -5,6 +5,7 @@
   "scripts": {},
   "private": true,
   "dependencies": {
+    "@metamask/jazzicon": "^2.0.0",
     "core-js": "^3.6.5",
     "react": "18.0.0",
     "react-dom": "18.0.0",

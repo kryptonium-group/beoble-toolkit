@@ -3,7 +3,7 @@ import { Chat, ChatProps } from './index';
 
 export default {
   component: Chat,
-  title: 'Chat',
+  title: 'Widgets/Chat',
 } as Meta;
 
 const Template: Story<ChatProps> = (args) => <Chat {...args} />;
