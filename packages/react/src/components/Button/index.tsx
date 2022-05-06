@@ -7,13 +7,14 @@ export interface ButtonProps {
   children?: ReactNode;
 }
 
-const StyledButton = styled.button`
+export const Button = styled.button<ButtonProps>`
   color: pink;
   border: none;
-  border-radius: 16px;
-  padding: 0 12px;
+  border-radius: 12px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 const IconWrapper = styled.div`
@@ -22,16 +23,5 @@ const IconWrapper = styled.div`
   justify-content: center;
   margin: 0 8px;
 `;
-
-export function Button({ children }: ButtonProps) {
-  return (
-    <StyledButton>
-      <h2>{children}</h2>
-      <IconWrapper>
-        <Identication diameter={24} />
-      </IconWrapper>
-    </StyledButton>
-  );
-}
 
 export default Button;

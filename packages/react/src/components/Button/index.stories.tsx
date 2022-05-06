@@ -10,3 +10,5 @@ const Template: Story<ButtonProps> = (args) => <Button {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {};
+
+export const IconButton = <Button />;

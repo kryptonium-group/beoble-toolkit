@@ -7,9 +7,9 @@ export interface IdenticationProps {
   diameter: number;
 }
 
-const StyledIdentication = styled.div`
-  width: 24px;
-  height: 24px;
+const StyledIdentication = styled.div<IdenticationProps>`
+  width: ${({ diameter }) => diameter}px;
+  height: ${({ diameter }) => diameter}px;
   color: pink;
 `;
 
@@ -23,7 +23,7 @@ export function Identication({ diameter }: IdenticationProps) {
   }, []);
 
   return (
-    <StyledIdentication>
+    <StyledIdentication diameter={diameter}>
       <span ref={jazzconRef} />
     </StyledIdentication>
   );
