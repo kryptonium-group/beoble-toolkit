@@ -1,1 +1,1 @@
-export * from './lib/js-sdk';
+export * from './core';
