@@ -8,13 +8,15 @@ export interface ButtonProps {
 }
 
 export const Button = styled.button<ButtonProps>`
-  color: pink;
+  color: #fff;
+  background-color: #333;
   border: none;
   border-radius: 12px;
   padding: 8px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const IconWrapper = styled.div`

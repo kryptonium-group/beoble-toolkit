@@ -27,5 +27,5 @@ export const truncateString = (
  * @returns
  */
 export const shortenAddress = (address: string, charLength = 3) => {
-  return truncateString(address, 10, charLength, charLength);
+  return truncateString(address, 16, charLength, charLength);
 };

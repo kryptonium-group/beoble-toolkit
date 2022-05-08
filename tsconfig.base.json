@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@beoble/js-sdk": ["packages/js-sdk/src/index.ts"],
+      "@beoble/js-sdk": [
+        "dist/packages/js-sdk/src",
+        "packages/js-sdk/src/index.ts"
+      ],
       "@beoble/react": ["packages/react/src/index.ts"]
     },
     "typeRoots": ["./types"]
