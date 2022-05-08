@@ -7,7 +7,7 @@ export interface ButtonProps {
   children?: ReactNode;
 }
 
-export const Button = styled.button<ButtonProps>`
+export const Button = styled.button`
   color: #fff;
   background-color: #333;
   border: none;
