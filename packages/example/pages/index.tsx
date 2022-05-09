@@ -26,7 +26,6 @@ const Home: NextPage = () => {
           <div className={styles.appbar}>
             <Profile detailElement="modal" />
           </div>
-          <Chat />
           <main className={styles.main}>
             <h1 className={styles.title}>
               Welcome to <a href="https://beoble.io">Beoble!</a>
@@ -47,6 +46,7 @@ const Home: NextPage = () => {
             Get started by adding{' '}
             <code className={styles.code}>kits/Chat.tsx</code>
           </p>
+          <Profile detailElement={'modal'} />
           <ConnectButton onClick={connect} />
         </main>
       )}

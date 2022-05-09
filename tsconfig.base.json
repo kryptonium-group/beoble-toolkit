@@ -19,7 +19,7 @@
         "dist/packages/js-sdk/src",
         "packages/js-sdk/src/index.ts"
       ],
-      "@beoble/react": ["packages/react/src/index.ts"]
+      "@beoble/react": ["dist/packages/react", "packages/react/src/index.ts"]
     },
     "typeRoots": ["./types"]
   },

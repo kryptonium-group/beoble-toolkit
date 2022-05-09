@@ -1,5 +1,6 @@
 import { Button } from './Button';
 import styled from 'styled-components';
+import { Profile } from '@beoble/react';
 
 const Connect = styled(Button)`
   font-size: 16px;

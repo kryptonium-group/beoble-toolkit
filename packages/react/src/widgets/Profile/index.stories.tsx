@@ -1,8 +1,9 @@
 import { Story, Meta } from '@storybook/react';
 import ProfileDrawer from './Drawer';
-import { Profile, ProfileProps } from './index';
+import { Profile, ProfileProps } from './Profile';
 import ProfileModal from './Modal';
 import StatusButton from './StatusButton';
+import ConnectButton from './ConnectButton';
 
 export default {
   component: Profile,
@@ -19,3 +20,4 @@ Primary.args = {
 export const Status = () => <StatusButton />;
 export const Modal = () => <ProfileModal />;
 export const Drawer = () => <ProfileDrawer />;
+export const Connect = () => <ConnectButton />;
