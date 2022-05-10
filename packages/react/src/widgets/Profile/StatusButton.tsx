@@ -4,6 +4,7 @@ import Identication from '../../components/Identication';
 import BeobleSDK from '@beoble/js-sdk';
 import { useState } from 'react';
 import Logo from '../../assets/svg/beoble_white.svg';
+import useBeoble from '../../hooks/useBeoble/useBeoble';
 
 /* eslint-disable-next-line */
 export interface StatusButtonProps {
@@ -19,10 +20,21 @@ const Address = styled.p`
 
 const StatusButton = ({ onClick }: StatusButtonProps) => {
   const [connected, setConnected] = useState(false);
+  const Beoble = useBeoble();
 
-  const handleClickTest = () => {
+  const handleClickTest = async () => {
     setConnected(!connected);
     onClick && onClick();
+    Beoble?.initProvider();
+    const signer = Beoble?.provider?.getSigner();
+    const address = await signer?.getAddress();
+    console.log(`Account: ${address}`);
+
+    const ensName = await Beoble?.provider?.lookupAddress(address as string);
+    console.log(`ENS Name: ${ensName}`);
+
+    const ensAvatar = await Beoble?.provider?.getAvatar(ensName as string);
+    console.log(`ENS Avatar: ${ensAvatar}`);
   };
 
   return (

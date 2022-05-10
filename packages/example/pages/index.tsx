@@ -46,7 +46,7 @@ const Home: NextPage = () => {
             Get started by adding{' '}
             <code className={styles.code}>kits/Chat.tsx</code>
           </p>
-          <Profile detailElement={'modal'} />
+          {/*<Profile detailElement={'modal'} />*/}
           <ConnectButton onClick={connect} />
         </main>
       )}

@@ -4,20 +4,30 @@ import { Profile, ProfileProps } from './Profile';
 import ProfileModal from './Modal';
 import StatusButton from './StatusButton';
 import ConnectButton from './ConnectButton';
+import { BeobleProvider } from '../../contexts';
+import React, { FC, ReactNode } from 'react';
 
 export default {
   component: Profile,
   title: 'Widgets/Profile',
 } as Meta;
 
-const Template: Story<ProfileProps> = (args) => <Profile {...args} />;
+const Template: Story<ProfileProps> = (args) => (
+  <BeobleProvider>
+    <Profile {...args} />
+  </BeobleProvider>
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
   detailElement: 'modal',
 };
 
-export const Status = () => <StatusButton />;
-export const Modal = () => <ProfileModal />;
-export const Drawer = () => <ProfileDrawer />;
-export const Connect = () => <ConnectButton />;
+const ProviderTemplate = (prop: ReactNode) => (
+  <BeobleProvider>{prop}</BeobleProvider>
+);
+
+export const Status = () => ProviderTemplate(<StatusButton />);
+export const Modal = () => ProviderTemplate(<ProfileModal />);
+export const Drawer = () => ProviderTemplate(<ProfileDrawer />);
+export const Connect = () => ProviderTemplate(<ConnectButton />);

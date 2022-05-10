@@ -1,3 +1,5 @@
+import { isAddress } from './web3';
+
 /**
  *
  * @param str
@@ -27,5 +29,9 @@ export const truncateString = (
  * @returns
  */
 export const shortenAddress = (address: string, charLength = 3) => {
+  const validAddress = isAddress(address);
+  if (!validAddress) {
+    throw Error(`Invalid address parameter ${address}.`);
+  }
   return truncateString(address, 16, charLength, charLength);
 };
