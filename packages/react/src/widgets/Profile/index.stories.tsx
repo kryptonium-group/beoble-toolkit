@@ -5,7 +5,7 @@ import ProfileModal from './Modal';
 import StatusButton from './StatusButton';
 import ConnectButton from './ConnectButton';
 import { BeobleProvider } from '../../contexts';
-import React, { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 export default {
   component: Profile,
@@ -24,7 +24,9 @@ Primary.args = {
 };
 
 const ProviderTemplate = (prop: ReactNode) => (
-  <BeobleProvider>{prop}</BeobleProvider>
+  <div style={{ height: '100vh' }}>
+    <BeobleProvider>{prop}</BeobleProvider>
+  </div>
 );
 
 export const Status = () => ProviderTemplate(<StatusButton />);

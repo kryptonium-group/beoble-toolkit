@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import React, { useState } from 'react';
+import { WalletNotConnectedError } from '../lib/Errors';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IUseWeb3 {
@@ -13,7 +14,9 @@ export const useWeb3 = (): IUseWeb3 => {
 
   const initProvider = async () => {
     if (!window.ethereum) {
-      throw new Error(`Brwoser wallet should be connected first!`);
+      throw new WalletNotConnectedError(
+        `Brwoser wallet should be connected first!`
+      );
     }
     const browserProvider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(browserProvider);

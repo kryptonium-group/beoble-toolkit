@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Button from '../../components/Button';
 import Identication from '../../components/Identication';
 import BeobleSDK from '@beoble/js-sdk';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Logo from '../../assets/svg/beoble_white.svg';
 import useBeoble from '../../hooks/useBeoble/useBeoble';
 
@@ -19,32 +19,22 @@ const Address = styled.p`
 `;
 
 const StatusButton = ({ onClick }: StatusButtonProps) => {
-  const [connected, setConnected] = useState(false);
-  const Beoble = useBeoble();
+  const { isInitialized, initialize, address, ENSName, ENSAvatar } =
+    useBeoble();
 
-  const handleClickTest = async () => {
-    setConnected(!connected);
+  const handleClickTest = useCallback(async () => {
     onClick && onClick();
-    Beoble?.initProvider();
-    const signer = Beoble?.provider?.getSigner();
-    const address = await signer?.getAddress();
-    console.log(`Account: ${address}`);
-
-    const ensName = await Beoble?.provider?.lookupAddress(address as string);
-    console.log(`ENS Name: ${ensName}`);
-
-    const ensAvatar = await Beoble?.provider?.getAvatar(ensName as string);
-    console.log(`ENS Avatar: ${ensAvatar}`);
-  };
+    if (!isInitialized) initialize();
+    console.log(address, ENSAvatar, ENSName);
+  }, [onClick, isInitialized, initialize, address, ENSAvatar, ENSName]);
 
   return (
     <StatusButtonContainer>
       <Button onClick={handleClickTest}>
-        <Address>{BeobleSDK.Util.shortenAddress('bamnenim.eth')}</Address>
-        <Identication
-          diameter={16}
-          account="0xb033fB14cF7Dc769488Ad34Ae90D4b3AD810BB25"
-        />
+        <Address>
+          {BeobleSDK.Util.shortenAddress(ENSName ?? address ?? 'not connected')}
+        </Address>
+        {address && <Identication diameter={16} account={address} />}
       </Button>
     </StatusButtonContainer>
   );

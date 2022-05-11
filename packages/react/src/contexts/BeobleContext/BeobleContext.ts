@@ -4,9 +4,11 @@ import { createContext } from 'react';
 export interface IBeobleContext {
   isAuthenticated: boolean;
   isInitialized: boolean;
-  initialize: (address: string) => void;
+  initialize: () => void;
   provider: ethers.providers.Web3Provider | null;
-  initProvider: () => void;
+  address: string | null;
+  ENSName: string | null;
+  ENSAvatar: string | null;
 }
 
-export const BeobleContext = createContext<null | IBeobleContext>(null);
+export const BeobleContext = createContext<IBeobleContext | null>(null);
