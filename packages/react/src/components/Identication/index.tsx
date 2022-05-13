@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import jazzicon from '@metamask/jazzicon';
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 
 /* eslint-disable-next-line */
 export interface IdenticationProps {
@@ -19,9 +19,19 @@ export function Identication({ diameter, account }: IdenticationProps) {
   const icon = jazzicon(diameter, parseInt(account.slice(2, 10), 16));
   const jazzconRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    jazzconRef.current?.appendChild(icon);
-  }, []);
+  useLayoutEffect(() => {
+    const currentRef = jazzconRef.current;
+    if (icon) {
+      currentRef?.appendChild(icon);
+      return () => {
+        try {
+          currentRef?.removeChild(icon);
+        } catch (e) {
+          console.error('Avatar icon not found');
+        }
+      };
+    }
+  }, [icon, jazzconRef]);
 
   return (
     <StyledIdentication diameter={diameter}>
