@@ -32,7 +32,10 @@ const StatusButton = ({ onClick }: StatusButtonProps) => {
     <StatusButtonContainer>
       <Button onClick={handleClickTest}>
         <Address>
-          {BeobleSDK.Util.shortenAddress(ENSName ?? address ?? 'not connected')}
+          {BeobleSDK.Util.truncateString(
+            ENSName ?? address ?? 'not connected',
+            16
+          )}
         </Address>
         <Identication diameter={16} account={address ?? ''} />
       </Button>

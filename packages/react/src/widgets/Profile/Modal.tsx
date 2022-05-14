@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../components/Button';
 import Identication from '../../components/Identication';
@@ -246,7 +246,11 @@ const ManageWalletLink = styled.a`
 `;
 
 const ProfileModal = () => {
-  const { address } = useBeoble();
+  const { address, initialize, isInitialized } = useBeoble();
+
+  useEffect(() => {
+    if (!isInitialized) initialize();
+  }, []);
 
   return (
     <ProfileModalContainer>
