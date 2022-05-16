@@ -1,11 +1,22 @@
-import React, { useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled, { css, keyframes } from 'styled-components';
+import {
+  RiUserReceived2Line,
+  RiUserShared2Line,
+  RiChat3Line,
+  RiArrowDownSLine,
+  RiCloseFill,
+} from 'react-icons/ri';
+import { truncateString } from '../../../../../dist/packages/js-sdk/src/util';
 import Button from '../../components/Button';
 import Identication from '../../components/Identication';
 import useBeoble from '../../hooks/useBeoble/useBeoble';
 
 /* eslint-disable-next-line */
-export interface ProfileModalProps {}
+export interface ProfileModalProps {
+  isOpen?: boolean;
+  close?: () => void;
+}
 
 const flexStretch = css`
   vertical-align: inherit;
@@ -26,9 +37,45 @@ const noBorder = css`
   border-color: rgb(255, 255, 255);
 `;
 
+const Sidebar = keyframes`
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+`;
+
+const Blur = keyframes`
+  0% {
+    background-color: transparent;
+  }
+   100% {
+     background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+   }
+`;
+
+const Container = styled.div`
+  ${flexStretch}
+  ${noBorder};
+  position: fixed;
+  z-index: 150;
+  inset: 0px;
+  overflow-y: auto;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+  animation-duration: 300ms;
+  animation-name: ${Blur};
+`;
+
 const ProfileModalContainer = styled.div`
   ${flexStretch}
   ${noBorder};
+  z-index: 151;
   position: absolute;
   right: 0px;
   top: 0px;
@@ -38,7 +85,7 @@ const ProfileModalContainer = styled.div`
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
   animation-duration: 300ms;
-  animation-name: iEEIEZ;
+  animation-name: ${Sidebar};
 `;
 
 const ProfileModalCard = styled.div`
@@ -138,6 +185,23 @@ const MenuButton = styled(Button)`
     background-color: rgba(255, 255, 255, 0.05);
     color: rgb(255, 255, 255);
   }
+`;
+
+const MenuItemContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  -webkit-box-align: center;
+  align-items: center;
+  width: 100%;
+`;
+
+const MEnuItemName = styled.span`
+  font-family: inherit;
+  font-weight: 700;
+  margin-left: 12px;
+  margin-right: 4px;
+  font-size: 15px;
+  vertical-align: inherit;
 `;
 
 const AddressContainer = styled.div`
@@ -245,44 +309,113 @@ const ManageWalletLink = styled.a`
   }
 `;
 
-const ProfileModal = () => {
-  const { address, initialize, isInitialized } = useBeoble();
+const MenuArrow = styled(RiArrowDownSLine)<{ isOpen: boolean }>`
+  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transition: transform 150ms ease;
+`;
+
+const CloseButton = styled(Button)`
+  ${noBorder}
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  height: 34px;
+  width: 34px;
+  -webkit-box-align: center;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  transition: all 0.15s ease-in-out 0s;
+  border-radius: 34px;
+  transform-origin: center center;
+  vertical-align: inherit;
+  padding: 0px;
+  overflow: visible;
+`;
+
+const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
+  const [isChattingMenuOpen, setIsChattingMenuOpen] = useState(false);
+  const [isFollowersMenuOpen, setIsFollowersMenuOpen] = useState(false);
+  const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
+
+  const { address, ENSName, initialize, isInitialized } = useBeoble();
+
+  const handleClickChattingMenu = () => {
+    setIsChattingMenuOpen(!isChattingMenuOpen);
+  };
+
+  const handleClickFollowersMenu = () => {
+    setIsFollowersMenuOpen(!isFollowersMenuOpen);
+  };
+
+  const handleClickFollowingMenu = () => {
+    setIsFollowingMenuOpen(!isFollowingMenuOpen);
+  };
 
   useEffect(() => {
     if (!isInitialized) initialize();
   }, []);
 
   return (
-    <ProfileModalContainer>
-      <ProfileModalCard>
-        <ModalContent>
-          <ProfileInfoContainer>
-            <AddressContainer>
-              <AddressProfileButton>
-                <AddressProfileDiv>
-                  <Identication diameter={36} account={address ?? ''} />
-                  <AddressDiv>
-                    <AddressSpan>{address ?? ''}</AddressSpan>
-                    <ProfileSpan>View Profile</ProfileSpan>
-                  </AddressDiv>
-                </AddressProfileDiv>
-              </AddressProfileButton>
-              <WalletInfoContainer>
-                <WalletConnectStatus>Connected</WalletConnectStatus>
-                <ManageWalletLink>Manage wallets</ManageWalletLink>
-              </WalletInfoContainer>
-            </AddressContainer>
-          </ProfileInfoContainer>
-          <MenuContainer>
-            <MenuButton type="button">Edit profile</MenuButton>
-            <MenuButton type="button">Friend List</MenuButton>
-          </MenuContainer>
-          <Footer>
-            <OutlinedButton>Sign out</OutlinedButton>
-          </Footer>
-        </ModalContent>
-      </ProfileModalCard>
-    </ProfileModalContainer>
+    <Container onClick={close}>
+      <ProfileModalContainer>
+        <ProfileModalCard>
+          <ModalContent>
+            <ProfileInfoContainer>
+              <AddressContainer>
+                <AddressProfileButton>
+                  <AddressProfileDiv>
+                    <Identication diameter={36} account={address ?? ''} />
+                    <AddressDiv>
+                      <AddressSpan>{ENSName ?? 'undefined'}</AddressSpan>
+                      <ProfileSpan>
+                        {truncateString(address ?? ' ', 16, 4, 4)}
+                      </ProfileSpan>
+                    </AddressDiv>
+                  </AddressProfileDiv>
+                </AddressProfileButton>
+                <WalletInfoContainer>
+                  <WalletConnectStatus>Connected</WalletConnectStatus>
+                  <ManageWalletLink>Edit Profile</ManageWalletLink>
+                </WalletInfoContainer>
+              </AddressContainer>
+            </ProfileInfoContainer>
+            <MenuContainer>
+              <MenuButton type="button" onClick={handleClickFollowersMenu}>
+                <MenuItemContainer>
+                  <RiUserReceived2Line size={20} />
+                  <MEnuItemName>Followers</MEnuItemName>
+                  <MenuArrow isOpen={isFollowersMenuOpen} size={16} />
+                </MenuItemContainer>
+              </MenuButton>
+              <MenuButton type="button" onClick={handleClickFollowingMenu}>
+                <MenuItemContainer>
+                  <RiUserShared2Line size={20} />
+                  <MEnuItemName>Following</MEnuItemName>
+                  <MenuArrow isOpen={isFollowingMenuOpen} size={16} />
+                </MenuItemContainer>
+              </MenuButton>
+              <MenuButton type="button" onClick={handleClickChattingMenu}>
+                <MenuItemContainer>
+                  <RiChat3Line size={20} />
+                  <MEnuItemName>Chattings</MEnuItemName>
+                  <MenuArrow isOpen={isChattingMenuOpen} size={16} />
+                </MenuItemContainer>
+              </MenuButton>
+            </MenuContainer>
+            <Footer>
+              <OutlinedButton>Sign out</OutlinedButton>
+            </Footer>
+          </ModalContent>
+          <CloseButton onClick={close}>
+            <RiCloseFill size={16} />
+          </CloseButton>
+        </ProfileModalCard>
+      </ProfileModalContainer>
+    </Container>
   );
 };
 

@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { useEffect, useState } from 'react';
+import { hydrate } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import styled from 'styled-components';
 import {
   PROFILE_DRAWER_CLASSNAME,
   PROFILE_MODAL_CLASSNAME,
 } from '../../constants';
+import { useDelay } from '../../hooks/useDelayMount';
 import ProfileDrawer from './Drawer';
 import ProfileModal from './Modal';
 import StatusButton from './StatusButton';
@@ -17,30 +19,23 @@ export interface ProfileProps {
 
 const StyledProfile = styled.div``;
 
-export function Profile({ detailElement }: ProfileProps) {
-  const renderModal = () => {
-    const el = document.createElement('div');
-    el.id = PROFILE_MODAL_CLASSNAME;
-    getDocumentRoot().appendChild(el);
-    // apply this when @types/react-dom 18.1.0 come out
-    // https://reactjs.org/link/switch-to-createroot
-    // const root = createRoot(el);
+export const Profile = ({ detailElement }: ProfileProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    ReactDOM.render(
-      <ProfileModal />,
-      document.getElementById(PROFILE_MODAL_CLASSNAME)
-    );
+  const renderModal = () => {
+    const modalContainer = document.createElement('div');
+    modalContainer.id = PROFILE_MODAL_CLASSNAME;
+    getDocumentRoot().appendChild(modalContainer);
+    const root = createRoot(modalContainer);
+    root.render(<ProfileModal isOpen />);
   };
 
   const renderDrawer = () => {
-    const el = document.createElement('div');
-    el.id = PROFILE_DRAWER_CLASSNAME;
-    getDocumentRoot().appendChild(el);
-
-    ReactDOM.render(
-      <ProfileDrawer />,
-      document.getElementById(PROFILE_DRAWER_CLASSNAME)
-    );
+    const drawerContainer = document.createElement('div');
+    drawerContainer.id = PROFILE_DRAWER_CLASSNAME;
+    getDocumentRoot().appendChild(drawerContainer);
+    const root = createRoot(drawerContainer);
+    root.render(<ProfileDrawer />);
   };
 
   const getDocumentRoot = () => {
@@ -49,15 +44,26 @@ export function Profile({ detailElement }: ProfileProps) {
     return nextBody ?? reactBody ?? document.body;
   };
 
+  const closeModal = () => {
+    setTimeout(() => {
+      setIsModalOpen(false);
+    }, 300);
+  };
+
   useEffect(() => {
-    detailElement === 'drawer' ? renderDrawer() : renderModal();
+    //  detailElement === 'drawer' ? renderDrawer() : renderModal();
   }, [detailElement]);
 
   return (
     <StyledProfile>
-      <StatusButton />
+      <StatusButton
+        onClick={() => {
+          setIsModalOpen(!isModalOpen);
+        }}
+      />
+      {isModalOpen && <ProfileModal close={closeModal} />}
     </StyledProfile>
   );
-}
+};
 
 export default Profile;

@@ -30,6 +30,6 @@ const ProviderTemplate = (prop: ReactNode) => (
 );
 
 export const Status = () => ProviderTemplate(<StatusButton />);
-export const Modal = () => ProviderTemplate(<ProfileModal />);
+export const Modal = () => ProviderTemplate(<ProfileModal isOpen />);
 export const Drawer = () => ProviderTemplate(<ProfileDrawer />);
 export const Connect = () => ProviderTemplate(<ConnectButton />);
