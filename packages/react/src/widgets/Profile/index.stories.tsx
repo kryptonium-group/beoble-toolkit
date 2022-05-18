@@ -1,11 +1,11 @@
 import { Story, Meta } from '@storybook/react';
 import ProfileDrawer from './Drawer';
 import { Profile, ProfileProps } from './Profile';
-import ProfileModal from './Modal';
+import ProfileModal from './Modal/Modal';
 import StatusButton from './StatusButton';
 import ConnectButton from './ConnectButton';
 import { BeobleProvider } from '../../contexts';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export default {
   component: Profile,

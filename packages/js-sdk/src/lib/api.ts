@@ -26,27 +26,31 @@ export default class ApiClient {
     }
   }
 
-  private async getRestApiData(path?: string): Promise<any> {
+  public async get(path?: string, params?: any): Promise<any> {
     return this.tryRestApi(async () => {
-      await this.client.get(path || '');
+      await this.client.get(path || '', {
+        params,
+      });
     });
   }
 
-  private async postRestApiData(path?: string): Promise<any> {
+  public async post(path: string, data?: any, params?: any): Promise<any> {
     return this.tryRestApi(async () => {
-      await this.client.post(path || '');
+      await this.client.post(path, data, {
+        params,
+      });
     });
   }
 
-  private async deleteRestApiData(path?: string): Promise<any> {
+  public async delete(path: string): Promise<any> {
     return this.tryRestApi(async () => {
-      await this.client.delete(path || '');
+      await this.client.delete(path);
     });
   }
 
-  private async putRestApiData(path?: string): Promise<any> {
+  public async put(path: string, data?: any): Promise<any> {
     return this.tryRestApi(async () => {
-      await this.client.put(path || '');
+      await this.client.put(path, data);
     });
   }
 }

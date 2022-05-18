@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import { hydrate } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import styled from 'styled-components';
 import {
   PROFILE_DRAWER_CLASSNAME,
   PROFILE_MODAL_CLASSNAME,
 } from '../../constants';
-import { useDelay } from '../../hooks/useDelayMount';
 import ProfileDrawer from './Drawer';
-import ProfileModal from './Modal';
+import ProfileModal from './Modal/Modal';
 import StatusButton from './StatusButton';
 import { ProfileType } from './type';
 
@@ -21,6 +19,7 @@ const StyledProfile = styled.div``;
 
 export const Profile = ({ detailElement }: ProfileProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [doRenderModal, setDoRenderModal] = useState(false);
 
   const renderModal = () => {
     const modalContainer = document.createElement('div');
@@ -45,9 +44,20 @@ export const Profile = ({ detailElement }: ProfileProps) => {
   };
 
   const closeModal = () => {
+    setIsModalOpen(false);
     setTimeout(() => {
-      setIsModalOpen(false);
+      setDoRenderModal(false);
     }, 300);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    setDoRenderModal(true);
+  };
+
+  const toggleModal = () => {
+    if (isModalOpen) closeModal();
+    else openModal();
   };
 
   useEffect(() => {
@@ -56,12 +66,10 @@ export const Profile = ({ detailElement }: ProfileProps) => {
 
   return (
     <StyledProfile>
-      <StatusButton
-        onClick={() => {
-          setIsModalOpen(!isModalOpen);
-        }}
-      />
-      {isModalOpen && <ProfileModal close={closeModal} />}
+      <StatusButton onClick={toggleModal} />
+      {doRenderModal && (
+        <ProfileModal isOpen={isModalOpen} close={closeModal} />
+      )}
     </StyledProfile>
   );
 };

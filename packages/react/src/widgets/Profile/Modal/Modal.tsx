@@ -7,14 +7,14 @@ import {
   RiArrowDownSLine,
   RiCloseFill,
 } from 'react-icons/ri';
-import { truncateString } from '../../../../../dist/packages/js-sdk/src/util';
-import Button from '../../components/Button';
-import Identication from '../../components/Identication';
-import useBeoble from '../../hooks/useBeoble/useBeoble';
+import { truncateString } from '../../../../../../dist/packages/js-sdk/src/util';
+import Button from '../../../components/Button';
+import Identication from '../../../components/Identication';
+import useBeoble from '../../../hooks/useBeoble/useBeoble';
 
 /* eslint-disable-next-line */
 export interface ProfileModalProps {
-  isOpen?: boolean;
+  isOpen: boolean;
   close?: () => void;
 }
 
@@ -49,33 +49,35 @@ const Sidebar = keyframes`
   }
 `;
 
-const Blur = keyframes`
+const SidebarDisappear = keyframes`
   0% {
-    background-color: transparent;
+    
+    transform: translateX(0px);
+    opacity: 1;
   }
-   100% {
-     background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-   }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ isOpen: boolean }>`
   ${flexStretch}
   ${noBorder};
   position: fixed;
-  z-index: 150;
   inset: 0px;
   overflow-y: auto;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
-  animation-duration: 300ms;
-  animation-name: ${Blur};
+  overflow-x: hidden;
+  transition: all 300ms ease-in-out;
+  backdrop-filter: ${({ isOpen }) => (isOpen ? 'blur(10px)' : 'none')};
+  background-color: ${({ isOpen }) =>
+    isOpen ? 'rgba(255, 255, 255, 0.1)' : 'transperent'};
 `;
 
-const ProfileModalContainer = styled.div`
+const ProfileModalContainer = styled.div<{ isOpen: boolean }>`
   ${flexStretch}
   ${noBorder};
-  z-index: 151;
   position: absolute;
   right: 0px;
   top: 0px;
@@ -85,7 +87,7 @@ const ProfileModalContainer = styled.div`
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
   animation-duration: 300ms;
-  animation-name: ${Sidebar};
+  animation-name: ${({ isOpen }) => (isOpen ? Sidebar : SidebarDisappear)};
 `;
 
 const ProfileModalCard = styled.div`
@@ -228,6 +230,7 @@ const AddressProfileButton = styled(Button)`
   border: none;
   cursor: pointer;
   line-height: normal;
+
   padding: 12px;
 `;
 
@@ -355,13 +358,20 @@ const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
     setIsFollowingMenuOpen(!isFollowingMenuOpen);
   };
 
+  const handleBlockParentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
   useEffect(() => {
     if (!isInitialized) initialize();
-  }, []);
+  }, [isInitialized]);
 
   return (
-    <Container onClick={close}>
-      <ProfileModalContainer>
+    <Container onClick={close} isOpen={isOpen}>
+      <ProfileModalContainer
+        isOpen={isOpen}
+        onClick={(e) => handleBlockParentClick(e)}
+      >
         <ProfileModalCard>
           <ModalContent>
             <ProfileInfoContainer>

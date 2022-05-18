@@ -1,3 +1,5 @@
+import { UpdateType } from '.';
+
 export interface PersonaPostParams {
   profile: string;
   wallets: string[];
@@ -26,8 +28,6 @@ export interface PersonaResponse {
   reporters: string[];
   reportings: string[];
 }
-
-export type UpdateType = 'NORMAL' | 'ARRAY_ADD' | 'ARRAY_REMOVE';
 
 export interface PersonaPutParams
   extends Omit<PersonaPostParams, 'profile' | 'wallets'> {

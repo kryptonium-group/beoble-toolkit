@@ -1,6 +1,17 @@
 export const Paths = {
-  base: 'https://dev.beoble.app',
-  profile: '/profile',
-  persona: '/persona',
-  wallet: '/wallet',
+  base: 'api.beoble.app',
+  dev: 'dev.api.beoble.app',
+  user: {
+    base: '/user',
+    friend: {
+      base: '/user/friend',
+      request: '/user/friend/request',
+      friendship: '/user/friend/friendship',
+    },
+    follow: {
+      base: '/user/follow',
+      follower: '/user/follow/follower',
+      following: '/user/follow/following',
+    },
+  },
 };
