@@ -21,7 +21,7 @@
       ],
       "@beoble/react": ["dist/packages/react", "packages/react/src/index.ts"]
     },
-    "typeRoots": ["./types"]
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "exclude": ["node_modules", "tmp"]
 }

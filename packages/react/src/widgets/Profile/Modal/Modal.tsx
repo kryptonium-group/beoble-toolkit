@@ -7,7 +7,7 @@ import {
   RiArrowDownSLine,
   RiCloseFill,
 } from 'react-icons/ri';
-import { truncateString } from '../../../../../../dist/packages/js-sdk/src/util';
+import Beoble from '@beoble/js-sdk';
 import Button from '../../../components/Button';
 import Identication from '../../../components/Identication';
 import useBeoble from '../../../hooks/useBeoble/useBeoble';
@@ -382,7 +382,7 @@ const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
                     <AddressDiv>
                       <AddressSpan>{ENSName ?? 'undefined'}</AddressSpan>
                       <ProfileSpan>
-                        {truncateString(address ?? ' ', 16, 4, 4)}
+                        {Beoble.Util.truncateString(address ?? ' ', 16, 4, 4)}
                       </ProfileSpan>
                     </AddressDiv>
                   </AddressProfileDiv>

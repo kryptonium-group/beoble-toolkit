@@ -7,8 +7,20 @@ export default class ApiClient {
 
   constructor() {
     this.client = axios.create({
-      baseURL: Paths.base,
+      baseURL: Paths.dev,
+      timeout: 1000,
     });
+
+    this.client.interceptors.request.use(
+      function (config) {
+        // Do something before request is sent
+        return config;
+      },
+      function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      }
+    );
   }
 
   private async tryRestApi(apiCallFunc: () => Promise<any>) {
@@ -27,30 +39,28 @@ export default class ApiClient {
   }
 
   public async get(path?: string, params?: any): Promise<any> {
-    return this.tryRestApi(async () => {
-      await this.client.get(path || '', {
-        params,
-      });
-    });
+    return this.tryRestApi(
+      async () =>
+        await this.client.get(path || '', {
+          params,
+        })
+    );
   }
 
   public async post(path: string, data?: any, params?: any): Promise<any> {
-    return this.tryRestApi(async () => {
-      await this.client.post(path, data, {
-        params,
-      });
-    });
+    return this.tryRestApi(
+      async () =>
+        await this.client.post(path, data, {
+          params,
+        })
+    );
   }
 
   public async delete(path: string): Promise<any> {
-    return this.tryRestApi(async () => {
-      await this.client.delete(path);
-    });
+    return this.tryRestApi(async () => await this.client.delete(path));
   }
 
   public async put(path: string, data?: any): Promise<any> {
-    return this.tryRestApi(async () => {
-      await this.client.put(path, data);
-    });
+    return this.tryRestApi(async () => await this.client.put(path, data));
   }
 }

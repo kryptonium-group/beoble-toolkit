@@ -2,34 +2,26 @@ import { Paths } from '../constants';
 import ApiClient from '../lib/api';
 import NotInitializedException from '../lib/Exceptions/NotInitializedException';
 import { Rest } from './types';
+import { User } from './user';
 
 export default class Core {
   private client?: ApiClient;
+  public user: User;
 
-  public init() {
+  constructor() {
     this.client = new ApiClient();
-  }
-
-  @initialized()
-  public user(restType: Rest, data?: any) {
-    this.client?.delete;
-  }
-
-  @initialized()
-  public async getUser(wallet_address: string) {
-    const data = await this.client?.get(Paths.user.base, {
-      wallet_address,
-    });
-    console.log(data);
+    this.user = new User(this.client);
   }
 }
 
-function initialized() {
+function initialized(client?: ApiClient) {
   return function (
     target: any,
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    if (target.client) throw new NotInitializedException();
+    // if (target.client) throw new NotInitializedException();
   };
 }
+
+// export type ICore = typeof Core;

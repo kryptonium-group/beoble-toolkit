@@ -1,11 +1,26 @@
 import { UpdateType } from '.';
+import { IResponse } from './response';
 
-export interface UserResponse {
-  result: User[];
+export interface IUserResponse extends IResponse {
+  data: IUser[];
 }
 
-export interface UserUpdate {
-  user_id: string;
+export interface IGetUserParams {
+  user_id?: string;
+  wallet_address?: string;
+  alias?: string;
+  alias_search?: string;
+}
+
+export interface IPostUserBody {
+  wallet_address: string;
+  alias: string;
+  display_name: string;
+  description?: string;
+  representative_media_url?: string[];
+}
+
+export interface IPutUserBody {
   wallets?: string;
   update_type?: UpdateType[];
   alias?: string;
@@ -14,15 +29,7 @@ export interface UserUpdate {
   representative_media_url?: string[];
 }
 
-export interface UserCreate {
-  wallet_address: string;
-  alias: string;
-  display_name: string;
-  description?: string;
-  representative_media_url?: string[];
-}
-
-export interface User {
+export interface IUser {
   user_id: string;
   create_time: string; // date
   update_time: string; // date

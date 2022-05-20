@@ -1,6 +1,6 @@
 export const Paths = {
   base: 'api.beoble.app',
-  dev: 'dev.api.beoble.app',
+  dev: 'https://dev.api.beoble.app',
   user: {
     base: '/user',
     friend: {

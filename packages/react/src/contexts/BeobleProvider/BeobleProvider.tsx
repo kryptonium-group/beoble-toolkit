@@ -1,4 +1,5 @@
 import { FC, ReactNode, useCallback, useEffect, useState } from 'react';
+import Beoble from '@beoble/js-sdk';
 import useWeb3 from '../../hooks/useWeb3';
 import { ProviderNotInitializedError } from '../../lib/Errors';
 import { BeobleContext } from '../BeobleContext';
