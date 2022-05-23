@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Paths } from '../constants';
-import BeobleException from './Exceptions/BeobleException';
+import { BeobleException } from './Exceptions/BeobleException';
 
 export default class ApiClient {
   private client;

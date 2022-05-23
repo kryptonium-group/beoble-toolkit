@@ -3,27 +3,6 @@ import { Core } from '../../src/core';
 
 const MyWallet = '0xb033fB14cF7Dc769488Ad34Ae90D4b3AD810BB25';
 
-describe('example test', () => {
-  it('core should be able to handle methods', async () => {
-    const core = new Core();
-    expect([]).toEqual([]);
-  });
-
-  it('test axios', async () => {
-    const res = await axios({
-      method: 'get',
-      baseURL: 'https://dev.api.beoble.app',
-      url: '/user',
-      params: {
-        wallet_id: MyWallet,
-      },
-    });
-
-    expect(typeof res.data).toBe('object');
-    expect(res.data.data).toEqual([]);
-  });
-});
-
 describe('user test', () => {
   const core = new Core();
   const walletToCreate = MyWallet;
@@ -45,7 +24,7 @@ describe('user test', () => {
       wallet_address: MyWallet,
     });
 
-    console.log(res.data);
+    console.log(res.data[0]);
 
     expect(res.meta.count).toBe(1);
     const user = res.data[0];
@@ -59,5 +38,7 @@ describe('user test', () => {
     const res = await core.user.update(userId, {
       display_name: 'test',
     });
+
+    console.log(res);
   });
 });

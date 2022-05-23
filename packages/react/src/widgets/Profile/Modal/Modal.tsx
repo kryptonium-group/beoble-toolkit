@@ -7,7 +7,7 @@ import {
   RiArrowDownSLine,
   RiCloseFill,
 } from 'react-icons/ri';
-import Beoble from '@beoble/js-sdk';
+import { BeobleSDK } from '@beoble/js-sdk';
 import Button from '../../../components/Button';
 import Identication from '../../../components/Identication';
 import useBeoble from '../../../hooks/useBeoble/useBeoble';
@@ -344,7 +344,8 @@ const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
   const [isFollowersMenuOpen, setIsFollowersMenuOpen] = useState(false);
   const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
 
-  const { address, ENSName, initialize, isInitialized } = useBeoble();
+  const { address, ENSName, initialize, isInitialized, Beoble, user } =
+    useBeoble();
 
   const handleClickChattingMenu = () => {
     setIsChattingMenuOpen(!isChattingMenuOpen);
@@ -363,8 +364,16 @@ const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
   };
 
   useEffect(() => {
-    if (!isInitialized) initialize();
-  }, [isInitialized]);
+    if (!isInitialized) {
+      initialize();
+    }
+  }, [initialize, isInitialized]);
+
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+    }
+  }, [user]);
 
   return (
     <Container onClick={close} isOpen={isOpen}>
@@ -382,7 +391,12 @@ const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
                     <AddressDiv>
                       <AddressSpan>{ENSName ?? 'undefined'}</AddressSpan>
                       <ProfileSpan>
-                        {Beoble.Util.truncateString(address ?? ' ', 16, 4, 4)}
+                        {BeobleSDK.utils.truncateString(
+                          address ?? ' ',
+                          16,
+                          4,
+                          4
+                        )}
                       </ProfileSpan>
                     </AddressDiv>
                   </AddressProfileDiv>

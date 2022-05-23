@@ -1,5 +1,5 @@
 import { FC, ReactNode, useCallback, useEffect, useState } from 'react';
-import Beoble from '@beoble/js-sdk';
+import { BeobleSDK, Core, IUser } from '@beoble/js-sdk';
 import useWeb3 from '../../hooks/useWeb3';
 import { ProviderNotInitializedError } from '../../lib/Errors';
 import { BeobleContext } from '../BeobleContext';
@@ -11,33 +11,36 @@ export interface IBeobleProvider {
 export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [address, setAddress] = useState<null | string>(null);
-  const [ENSName, setENSName] = useState<null | string>(null);
-  const [ENSAvatar, setENSAvatar] = useState<null | string>(null);
+  const [Beoble, setBeoble] = useState<Core | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
 
-  const { provider, initProvider } = useWeb3();
+  const { provider, initProvider, address, ENSAvatar, ENSName } = useWeb3();
 
-  const initialize = () => {
+  const initialize = async () => {
     setIsInitialized(true);
-    initProvider();
+    const initAddress = await initProvider();
+    const beoble = new Core();
+    setBeoble(beoble);
+    const user = await beoble.user.get({
+      wallet_address: initAddress,
+    });
+    console.log(user.data[0]);
+    setUser(user.data[0]);
   };
 
-  const changeAddressInfo = async () => {
-    if (!provider) throw new ProviderNotInitializedError();
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const name = await provider.lookupAddress(address);
-    const avatar = name ? await provider.getAvatar(name) : null;
-    setAddress(address);
-    setENSName(name);
-    setENSAvatar(avatar);
+  const initUser = async (beoble: Core, wallet_address: string) => {
+    const user = await beoble.user.get({
+      wallet_address,
+    });
+    console.log(user.data[0]);
+    if (user.meta.count < 1) {
+      const newUser = await beoble.user.add({
+        wallet_address,
+        alias: wallet_address,
+        display_name: wallet_address,
+      });
+    } else setUser(user.data[0]);
   };
-
-  useEffect(() => {
-    if (provider) {
-      changeAddressInfo();
-    }
-  }, [provider]);
 
   return (
     <BeobleContext.Provider
@@ -49,6 +52,8 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
         address,
         ENSName,
         ENSAvatar,
+        Beoble,
+        user,
       }}
     >
       {children}

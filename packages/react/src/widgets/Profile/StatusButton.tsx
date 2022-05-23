@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import Button from '../../components/Button';
 import Identication from '../../components/Identication';
-import BeobleSDK from '@beoble/js-sdk';
-import { useCallback, useState } from 'react';
+import { BeobleSDK } from '@beoble/js-sdk';
+import { useCallback, useEffect, useState } from 'react';
 import Logo from '../../assets/svg/beoble_white.svg';
 import useBeoble from '../../hooks/useBeoble/useBeoble';
 
@@ -22,17 +22,21 @@ const StatusButton = ({ onClick }: StatusButtonProps) => {
   const { isInitialized, initialize, address, ENSName, ENSAvatar } =
     useBeoble();
 
+  useEffect(() => {
+    console.log('hi?');
+    if (!isInitialized) initialize();
+  }, [initialize, isInitialized]);
+
   const handleClickTest = useCallback(async () => {
     onClick && onClick();
-    if (!isInitialized) initialize();
     console.log(address, ENSAvatar, ENSName);
-  }, [onClick, isInitialized, initialize, address, ENSAvatar, ENSName]);
+  }, [onClick, address, ENSAvatar, ENSName]);
 
   return (
     <StatusButtonContainer>
       <Button onClick={handleClickTest}>
         <Address>
-          {BeobleSDK.Util.truncateString(
+          {BeobleSDK.utils.truncateString(
             ENSName ?? address ?? 'not connected',
             16
           )}

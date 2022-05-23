@@ -1,15 +1,10 @@
-import * as Core from './core';
-import * as Util from './util';
+import { Core } from './core';
+import * as utils from './util';
 export * from './lib';
-export * from './constants';
-export * from './types';
-
-export * from './core';
-export * from './util';
 
 const BeobleSDK = {
   Core,
-  Util,
+  utils,
 };
 
-export default BeobleSDK;
+export { BeobleSDK, Core };

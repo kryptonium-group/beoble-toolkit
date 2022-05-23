@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { createContext } from 'react';
-import {} from '@beoble/js-sdk';
+import { Core, IUser } from '@beoble/js-sdk';
 
 export interface IBeobleContext {
   isAuthenticated: boolean;
@@ -10,6 +10,8 @@ export interface IBeobleContext {
   address: string | null;
   ENSName: string | null;
   ENSAvatar: string | null;
+  Beoble: Core | null;
+  user: IUser | null;
 }
 
 export const BeobleContext = createContext<IBeobleContext | null>(null);
