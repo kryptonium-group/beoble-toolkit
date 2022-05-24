@@ -4,6 +4,7 @@ import {
   IPostUserBody,
   IPutUserBody,
   IUser,
+  IUserPutResponse,
   IUserResponse,
 } from '../lib';
 import ApiClient from '../lib/api';
@@ -19,7 +20,10 @@ export class User implements IRestEndPoint {
     return await this._clinet.get(Paths.user.base, params);
   }
 
-  public async update(user_id: string, body: IPutUserBody): Promise<IUser> {
+  public async update(
+    user_id: string,
+    body: IPutUserBody
+  ): Promise<IUserPutResponse> {
     return await this._clinet.put(`${Paths.user.base}/${user_id}`, body);
   }
 

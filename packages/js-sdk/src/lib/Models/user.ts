@@ -5,6 +5,10 @@ export interface IUserResponse extends IResponse {
   data: IUser[];
 }
 
+export interface IUserPutResponse extends IResponse {
+  data: IUser;
+}
+
 export interface IGetUserParams {
   user_id?: string;
   wallet_address?: string;

@@ -91,6 +91,7 @@ export function Input({ label, name, ...htmlInputProps }: InputProps) {
         <StyledInput
           ref={htmlElRef}
           id={name}
+          name={name}
           {...htmlInputProps}
           onBlur={handleBlur}
         />

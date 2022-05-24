@@ -3,6 +3,7 @@ import { BeobleSDK, Core, IUser } from '@beoble/js-sdk';
 import useWeb3 from '../../hooks/useWeb3';
 import { ProviderNotInitializedError } from '../../lib/Errors';
 import { BeobleContext } from '../BeobleContext';
+import { ModalProvider } from '../ModalContext/ModalProvider';
 
 export interface IBeobleProvider {
   children?: ReactNode;
@@ -56,7 +57,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
         user,
       }}
     >
-      {children}
+      <ModalProvider>{children}</ModalProvider>
     </BeobleContext.Provider>
   );
 };

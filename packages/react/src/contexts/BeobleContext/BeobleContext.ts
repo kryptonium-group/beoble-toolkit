@@ -6,10 +6,12 @@ export interface IBeobleContext {
   isAuthenticated: boolean;
   isInitialized: boolean;
   initialize: () => void;
+
   provider: ethers.providers.Web3Provider | null;
   address: string | null;
   ENSName: string | null;
   ENSAvatar: string | null;
+
   Beoble: Core | null;
   user: IUser | null;
 }

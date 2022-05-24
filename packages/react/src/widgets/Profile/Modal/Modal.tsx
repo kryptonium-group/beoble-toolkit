@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
-import {
-  RiUserReceived2Line,
-  RiUserShared2Line,
-  RiChat3Line,
-  RiArrowDownSLine,
-  RiCloseFill,
-} from 'react-icons/ri';
-import { BeobleSDK } from '@beoble/js-sdk';
+import { RiCloseFill } from 'react-icons/ri';
+import { MdArrowBack } from 'react-icons/md';
 import Button from '../../../components/Button';
-import Identication from '../../../components/Identication';
-import useBeoble from '../../../hooks/useBeoble/useBeoble';
 import { EditProfile, ProfileContent } from './Contents';
 import useBeobleModal from '../../../hooks/useBeoble/useBeobleModal';
 
@@ -127,12 +119,41 @@ const CloseButton = styled(Button)`
   overflow: visible;
 `;
 
+const ModalControlContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+`;
+
+const ControlButton = styled(Button)`
+  ${noBorder}
+  height: 34px;
+  width: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.15s ease-in-out 0s;
+  border-radius: 34px;
+  transform-origin: center center;
+  vertical-align: inherit;
+  padding: 0px;
+  overflow: visible;
+`;
+
 const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
-  const { route } = useBeobleModal();
+  const { route, popRoute } = useBeobleModal();
 
   const handleBlockParentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
+
+  useEffect(() => {
+    console.log(route);
+  }, [route]);
 
   return (
     <Container onClick={close} isOpen={isOpen}>
@@ -141,10 +162,19 @@ const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
         onClick={(e) => handleBlockParentClick(e)}
       >
         <ProfileModalCard>
-          <EditProfile />
-          <CloseButton onClick={close}>
-            <RiCloseFill size={16} />
-          </CloseButton>
+          <ModalControlContainer>
+            {route.length > 1 ? (
+              <ControlButton onClick={popRoute}>
+                <MdArrowBack size={16} />
+              </ControlButton>
+            ) : (
+              <div />
+            )}
+            <ControlButton onClick={close}>
+              <RiCloseFill size={16} />
+            </ControlButton>
+          </ModalControlContainer>
+          {route.at(-1) === 'edit' ? <EditProfile /> : <ProfileContent />}
         </ProfileModalCard>
       </ProfileModalContainer>
     </Container>

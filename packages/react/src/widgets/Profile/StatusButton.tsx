@@ -23,7 +23,6 @@ const StatusButton = ({ onClick }: StatusButtonProps) => {
     useBeoble();
 
   useEffect(() => {
-    console.log('hi?');
     if (!isInitialized) initialize();
   }, [initialize, isInitialized]);
 

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import {
   RiUserReceived2Line,
@@ -7,110 +7,15 @@ import {
   RiArrowDownSLine,
   RiCloseFill,
 } from 'react-icons/ri';
-import { BeobleSDK } from '@beoble/js-sdk';
+import { BeobleSDK, IPutUserBody } from '@beoble/js-sdk';
 import Button from '../../../components/Button';
 import Identication from '../../../components/Identication';
 import useBeoble from '../../../hooks/useBeoble/useBeoble';
 import Input from '../../../components/Input';
 import Textarea from '../../../components/Textarea';
-
-const InputContainer = styled.div`
-  box-sizing: border-box;
-  margin-bottom: 24px;
-  padding: 0 12px;
-  font-size: 13px;
-  color: rgb(255, 255, 255);
-`;
-
-const EditProfileTitle = styled.h1`
-  font-weight: 600;
-  font-size: 24px;
-  letter-spacing: 0px;
-  color: rgb(255, 255, 255);
-`;
-
-const TitleContainer = styled.div`
-  box-sizing: border-box;
-  flex-wrap: wrap;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-`;
-
-export const EditProfile = () => {
-  return (
-    <ModalContent>
-      <TitleContainer>
-        <EditProfileTitle>Profile Settings</EditProfileTitle>
-      </TitleContainer>
-      <InputContainer>
-        <Input name="alias" label="Alias" placeholder="Enter username" />
-      </InputContainer>
-      <InputContainer>
-        <Input name="username" label="Username" placeholder="Enter username" />
-      </InputContainer>
-      <InputContainer>
-        <Textarea
-          name={'bio'}
-          label="Description"
-          placeholder="Describe yourself on web3!"
-        />
-      </InputContainer>
-      <Footer>
-        <OutlinedButton>Save</OutlinedButton>
-      </Footer>
-    </ModalContent>
-  );
-};
-
-const flexStretch = css`
-  vertical-align: inherit;
-  max-width: 100%;
-  min-height: 0px;
-  min-width: 0px;
-  flex-shrink: 0;
-  flex-direction: column;
-  flex-basis: auto;
-  display: flex;
-  -webkit-box-align: stretch;
-  align-items: stretch;
-`;
-
-const noBorder = css`
-  border-width: 0px;
-  border-style: solid;
-  border-color: rgb(255, 255, 255);
-`;
-
-const ModalContent = styled.div`
-  display: flex;
-  flex-flow: column;
-  -webkit-box-flex: 1;
-  flex-grow: 1;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  vertical-align: inherit;
-`;
-
-const ProfileInfoContainer = styled.div`
-  ${noBorder}
-  ${flexStretch}
-  padding-left: 12px;
-  padding-right: 12px;
-`;
-const MenuContainer = styled.div`
-  ${noBorder}
-  ${flexStretch}
-  margin-top: 16px;
-`;
-const Footer = styled.div`
-  margin-top: auto;
-  ${noBorder}
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  ${flexStretch};
-`;
+import useBeobleModal from '../../../hooks/useBeoble/useBeobleModal';
+import { useBeobleSDK } from '../../../hooks/useBeobleSDK';
+import Spinner from '../../../components/Spinner';
 
 const OutlinedButton = styled(Button)`
   display: flex;
@@ -145,6 +50,172 @@ const OutlinedButton = styled(Button)`
     color: rgb(255, 255, 255);
     border-color: rgba(255, 255, 255, 0.18);
   }
+`;
+
+const InputContainer = styled.div`
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: rgb(255, 255, 255);
+`;
+
+const EditProfileTitle = styled.h1`
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: 0px;
+  color: rgb(255, 255, 255);
+`;
+
+const TitleContainer = styled.div`
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+`;
+
+const SaveButton = styled(OutlinedButton)`
+  background-color: rgb(32, 129, 226);
+  border: 1px solid rgb(32, 129, 226);
+
+  &:hover {
+    background-color: rgb(66, 160, 255);
+    border: 1px solid rgb(66, 160, 255);
+    color: rgb(255, 255, 255);
+  }
+`;
+
+export const EditProfile = () => {
+  const [inputs, setInputs] = useState<IPutUserBody>({});
+  const { user } = useBeoble();
+  const { updateUser, data, isFetching } = useBeobleSDK();
+
+  const handleSave = async () => {
+    if (!user) throw new Error('user is not initialized!');
+    updateUser(user.user_id, inputs);
+  };
+
+  const handleInputChage = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setInputs({
+      ...inputs,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  useEffect(() => {
+    if (data) {
+      setInputs({
+        alias: data.data.alias,
+        description: data.data.description,
+        display_name: data.data.display_name,
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    console.log(user);
+    if (user) {
+      setInputs({
+        alias: user.alias,
+        display_name: user.display_name,
+        description: user.description,
+      });
+    }
+  }, [user]);
+
+  return (
+    <ModalContent>
+      <TitleContainer>
+        <EditProfileTitle>Profile Settings</EditProfileTitle>
+      </TitleContainer>
+      <InputContainer>
+        <Input
+          name="alias"
+          label="Alias"
+          placeholder="Enter username"
+          value={inputs?.alias}
+          onChange={handleInputChage}
+          disabled={isFetching}
+        />
+      </InputContainer>
+      <InputContainer>
+        <Input
+          name="display_name"
+          label="Username"
+          placeholder="Enter username"
+          value={inputs?.display_name}
+          onChange={handleInputChage}
+          disabled={isFetching}
+        />
+      </InputContainer>
+      <InputContainer>
+        <Textarea
+          name="description"
+          label="Description"
+          placeholder="Describe yourself on web3!"
+          value={inputs?.description}
+          onChange={handleInputChage}
+          disabled={isFetching}
+        />
+      </InputContainer>
+      <Footer>
+        <SaveButton onClick={handleSave} disabled={isFetching}>
+          {isFetching ? <Spinner size={20} color="#ffffff" /> : 'Save'}
+        </SaveButton>
+      </Footer>
+    </ModalContent>
+  );
+};
+
+const flexStretch = css`
+  vertical-align: inherit;
+  max-width: 100%;
+  min-height: 0px;
+  min-width: 0px;
+  flex-shrink: 0;
+  flex-direction: column;
+  flex-basis: auto;
+  display: flex;
+  -webkit-box-align: stretch;
+  align-items: stretch;
+`;
+
+const noBorder = css`
+  border-width: 0px;
+  border-style: solid;
+  border-color: rgb(255, 255, 255);
+`;
+
+const ModalContent = styled.div`
+  display: flex;
+  flex-flow: column;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  margin-bottom: 20px;
+  vertical-align: inherit;
+`;
+
+const ProfileInfoContainer = styled.div`
+  ${noBorder}
+  ${flexStretch}
+  padding-left: 12px;
+  padding-right: 12px;
+`;
+const MenuContainer = styled.div`
+  ${noBorder}
+  ${flexStretch}
+  margin-top: 16px;
+`;
+const Footer = styled.div`
+  margin-top: auto;
+  ${noBorder}
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  ${flexStretch};
 `;
 
 const MenuButton = styled(Button)`
@@ -307,6 +378,7 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
   const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
 
   const { address, ENSName, initialize, isInitialized } = useBeoble();
+  const { addRoute } = useBeobleModal();
 
   const handleClickChattingMenu = () => {
     setIsChattingMenuOpen(!isChattingMenuOpen);
@@ -343,7 +415,13 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
           </AddressProfileButton>
           <WalletInfoContainer>
             <WalletConnectStatus>Connected</WalletConnectStatus>
-            <ManageWalletLink>Edit Profile</ManageWalletLink>
+            <ManageWalletLink
+              onClick={() => {
+                addRoute('edit');
+              }}
+            >
+              Edit Profile
+            </ManageWalletLink>
           </WalletInfoContainer>
         </AddressContainer>
       </ProfileInfoContainer>
