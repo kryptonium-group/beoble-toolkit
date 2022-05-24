@@ -1,6 +1,6 @@
 import { HtmlProps } from 'next/dist/shared/lib/html-context';
 import { InputHTMLAttributes, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useFocus } from '../../hooks/useFocus';
 
 /* eslint-disable-next-line */
@@ -23,27 +23,34 @@ const InputTitleContainer = styled.div`
 `;
 
 const InputTitle = styled.label`
-  color: rgb(53, 56, 64);
+  color: rgb(229, 232, 235);
   font-weight: 600;
   font-size: 16px;
   box-sizing: border-box;
 `;
 
+const hoverBackground = css`
+  box-shadow: rgb(4 17 29 / 25%) 0px 0px 8px 0px;
+  outline: none;
+  background-color: rgb(38, 41, 48);
+`;
+
 const InputContainer = styled.div<{ isActive: boolean }>`
   cursor: text;
   display: flex;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(29 31 34);
   border-radius: 10px;
-  border: 1px solid rgb(229, 232, 235);
+  border: 1px solid #333333;
   width: 100%;
   padding: 12px;
   box-sizing: border-box;
+  color: inherit;
+  font: inherit;
 
-  ${({ isActive }) =>
-    isActive && 'box-shadow: rgb(4 17 29 / 25%) 0px 0px 8px 0px;'}
+  ${({ isActive }) => isActive && hoverBackground}
 
-  &:active {
-    box-shadow: rgb(4 17 29 / 25%) 0px 0px 8px 0px;
+  &:hover {
+    background-color: rgb(38, 41, 48);
   }
 `;
 
@@ -52,15 +59,16 @@ const StyledInput = styled.input`
   border: none;
   outline: none;
   width: 100%;
-  font-size: 16px;
-  line-height: 26px;
-  min-height: 26px;
+  font-size: inherit;
+  line-height: inherit;
+  min-height: inherit;
   cursor: text;
+  color: inherit;
 `;
 
 export function Input({ label, name, ...htmlInputProps }: InputProps) {
   const [isFocus, setIsFocus] = useState(false);
-  const { htmlElRef, setElFocus } = useFocus();
+  const { htmlElRef, setElFocus } = useFocus<HTMLInputElement>();
 
   const handleFocus = () => {
     setElFocus();
