@@ -35,7 +35,14 @@ const hoverBackground = css`
   background-color: rgb(38, 41, 48);
 `;
 
-const InputContainer = styled.div<{ isActive: boolean }>`
+const disabledStyle = css`
+  background-color: rgb(38, 41, 48);
+  transition: all 100ms ease-out;
+  color: #999;
+  cursor: auto;
+`;
+
+const InputContainer = styled.div<{ isActive: boolean; disabled?: boolean }>`
   cursor: text;
   display: flex;
   background-color: rgb(29 31 34);
@@ -48,6 +55,7 @@ const InputContainer = styled.div<{ isActive: boolean }>`
   font: inherit;
 
   ${({ isActive }) => isActive && hoverBackground}
+  ${({ disabled }) => disabled && disabledStyle}
 
   &:hover {
     background-color: rgb(38, 41, 48);
@@ -87,7 +95,7 @@ export function Input({ label, name, ...htmlInputProps }: InputProps) {
           <InputTitle htmlFor={name}>{label}</InputTitle>
         </InputTitleContainer>
       )}
-      <InputContainer isActive={isFocus}>
+      <InputContainer isActive={isFocus} disabled={htmlInputProps.disabled}>
         <StyledInput
           ref={htmlElRef}
           id={name}

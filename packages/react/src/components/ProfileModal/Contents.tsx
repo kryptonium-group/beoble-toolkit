@@ -5,7 +5,6 @@ import {
   RiUserShared2Line,
   RiChat3Line,
   RiArrowDownSLine,
-  RiCloseFill,
 } from 'react-icons/ri';
 import { BeobleSDK, IPutUserBody } from '@beoble/js-sdk';
 import Button from '../Button';
@@ -14,26 +13,25 @@ import useBeoble from '../../hooks/useBeoble/useBeoble';
 import Input from '../Input';
 import Textarea from '../Textarea';
 import useBeobleModal from '../../hooks/useBeoble/useBeobleModal';
-import { useBeobleSDK } from '../../hooks/useBeobleSDK';
+import { useBeobleSDK } from '../../hooks/useBeoble/useBeobleSDK';
 import Spinner from '../Spinner';
 import NftPicker from '../NftPicker';
 
 const OutlinedButton = styled(Button)`
   display: flex;
-  -webkit-box-align: center;
   align-items: center;
-  -webkit-box-pack: center;
   justify-content: center;
   flex-flow: row nowrap;
   white-space: nowrap;
   background-color: rgba(255, 255, 255, 0.08);
   line-height: 48px;
   height: 48px;
-  padding-left: 26.4px;
-  padding-right: 26.4px;
+  padding-left: 26px;
+  padding-right: 26px;
   min-width: 192px;
   border: 1px solid transparent;
   border-radius: 48px;
+  border-color: rgba(255, 255, 255, 0.1);
   font-size: 14px;
   font-weight: 900;
   font-family: inherit;
@@ -41,14 +39,11 @@ const OutlinedButton = styled(Button)`
   transform-origin: center center;
   user-select: none;
   cursor: pointer;
-  border-color: rgba(255, 255, 255, 0.1);
   color: rgb(255, 255, 255);
-  background: transparent;
   appearance: button;
+  background: transparent;
 
   :hover {
-    background: transparent;
-    color: rgb(255, 255, 255);
     border-color: rgba(255, 255, 255, 0.18);
   }
 `;
@@ -92,6 +87,19 @@ const SaveButton = styled(OutlinedButton)`
     border: 1px solid rgb(66, 160, 255);
     color: rgb(255, 255, 255);
   }
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      background-color: #575757;
+      border: 1px solid #575757;
+      cursor: auto;
+
+      &:hover {
+        background-color: #575757;
+        border: 1px solid #575757;
+      }
+    `}
 `;
 
 const InputTitleContainer = styled.div`
@@ -112,6 +120,7 @@ export const EditProfile = () => {
   const [inputs, setInputs] = useState<IPutUserBody>({});
   const { user } = useBeoble();
   const { updateUser, data, isFetching } = useBeobleSDK();
+  const disableInput = isFetching || !user;
 
   const handleSave = async () => {
     if (!user) throw new Error('user is not initialized!');
@@ -166,7 +175,7 @@ export const EditProfile = () => {
           placeholder="Enter username"
           value={inputs?.alias}
           onChange={handleInputChage}
-          disabled={isFetching}
+          disabled={disableInput}
         />
       </InputContainer>
       <InputContainer>
@@ -176,7 +185,7 @@ export const EditProfile = () => {
           placeholder="Enter username"
           value={inputs?.display_name}
           onChange={handleInputChage}
-          disabled={isFetching}
+          disabled={isFetching || !user}
         />
       </InputContainer>
       <InputContainer>
@@ -186,11 +195,11 @@ export const EditProfile = () => {
           placeholder="Describe yourself on web3!"
           value={inputs?.description}
           onChange={handleInputChage}
-          disabled={isFetching}
+          disabled={isFetching || !user}
         />
       </InputContainer>
       <Footer>
-        <SaveButton onClick={handleSave} disabled={isFetching}>
+        <SaveButton onClick={handleSave} disabled={isFetching || !user}>
           {isFetching ? <Spinner size={20} color="#ffffff" /> : 'Save'}
         </SaveButton>
       </Footer>

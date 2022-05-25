@@ -31,6 +31,8 @@ export function Identication({ diameter, account }: IdenticationProps) {
         }
       };
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return () => {};
   }, [icon, jazzconRef]);
 
   return (

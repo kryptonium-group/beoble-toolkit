@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useFocus } from '../../hooks/useFocus';
 
 /* eslint-disable-next-line */
@@ -29,7 +29,15 @@ const InputTitle = styled.label`
   box-sizing: border-box;
 `;
 
-const StyledTextarea = styled.textarea<{ isActive: boolean }>`
+const disabledStyle = css`
+  background-color: rgb(38, 41, 48);
+  transition: all 100ms ease-out;
+  color: #999;
+`;
+
+const StyledTextarea = styled.textarea<{
+  isActive: boolean;
+}>`
   height: 76px;
   font-size: inherit;
   line-height: inherit;
@@ -47,6 +55,7 @@ const StyledTextarea = styled.textarea<{ isActive: boolean }>`
 
   ${({ isActive }) =>
     isActive && 'box-shadow: rgb(4 17 29 / 25%) 0px 0px 8px 0px;'}
+  ${({ disabled }) => disabled && disabledStyle}
 
   &:focus {
     box-shadow: rgb(4 17 29 / 25%) 0px 0px 8px 0px;

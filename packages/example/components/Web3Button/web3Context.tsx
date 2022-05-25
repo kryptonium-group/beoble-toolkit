@@ -10,6 +10,7 @@ import {
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3 from 'web3';
+import { useBeoble } from '@beoble/react';
 
 const initWeb3 = (provider: any) => {
   const web3: any = new Web3(provider);
@@ -34,12 +35,8 @@ export const useWeb3Context = () => {
   const web3Context = useContext(Web3Context);
 
   useEffect(() => {
-    console.log('in use web3 context ', web3Context);
-  }, [web3Context]);
-
-  useEffect(() => {
     if (web3Context?.cachedProvider) connect();
-  }, []);
+  }, [web3Context]);
 
   const connect = async () => {
     if (web3Context) {

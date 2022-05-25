@@ -1,12 +1,12 @@
 import { Core, IPutUserBody } from '@beoble/js-sdk';
 import { useState } from 'react';
-import useBeoble from './useBeoble/useBeoble';
+import useBeoble from './useBeoble';
 
 export const useBeobleSDK = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [isFetched, setIsFetched] = useState(true);
   const [data, setData] = useState<any>(undefined);
-  const { Beoble } = useBeoble();
+  const { Beoble, setUser } = useBeoble();
 
   const getUser = async () => {
     return;
@@ -14,11 +14,17 @@ export const useBeobleSDK = () => {
 
   const updateUser = async (userId: string, body: IPutUserBody) => {
     if (!Beoble) throw new Error('Beoble is not initialized!');
-    setIsFetching(true);
-    const res = await Beoble.user.update(userId, body);
-    setIsFetching(false);
-    setIsFetched(true);
-    setData(res);
+    try {
+      setIsFetching(true);
+      const res = await Beoble.user.update(userId, body);
+      console.log(res);
+      setIsFetching(false);
+      setIsFetched(true);
+      setData(res);
+      setUser(res.data);
+    } catch (err) {
+      console.log('unexpected error', err);
+    }
   };
 
   const addUser = async () => {

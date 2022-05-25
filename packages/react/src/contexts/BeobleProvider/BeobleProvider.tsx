@@ -55,6 +55,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
         ENSAvatar,
         Beoble,
         user,
+        setUser,
       }}
     >
       <ModalProvider>{children}</ModalProvider>

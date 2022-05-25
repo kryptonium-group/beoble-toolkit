@@ -2,17 +2,19 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { Profile, Chat } from '@beoble/react';
+import { Profile, Chat, useBeoble } from '@beoble/react';
 import ConnectButton from '../components/Web3Button';
 import { useWeb3Context } from '../components/Web3Button/web3Context';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   const { connect, address } = useWeb3Context();
-
-  useEffect(() => {
-    console.log('hi');
-  }, []);
+  const { initialize } = useBeoble();
+  const handleConnect = () => {
+    connect().then(() => {
+      initialize();
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -44,10 +46,10 @@ const Home: NextPage = () => {
 
           <p className={styles.description}>
             Get started by adding{' '}
-            <code className={styles.code}>kits/Chat.tsx</code>
+            <code className={styles.code}>Widget/Profile.tsx</code>
           </p>
           {/*<Profile detailElement={'modal'} />*/}
-          <ConnectButton onClick={connect} />
+          <ConnectButton onClick={handleConnect} />
         </main>
       )}
 

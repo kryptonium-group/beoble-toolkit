@@ -14,6 +14,7 @@ export interface IBeobleContext {
 
   Beoble: Core | null;
   user: IUser | null;
+  setUser: (user: IUser) => void;
 }
 
 export const BeobleContext = createContext<IBeobleContext | null>(null);
