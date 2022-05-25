@@ -3,7 +3,7 @@ import { Identication, IdenticationProps } from './index';
 
 export default {
   component: Identication,
-  title: 'Identication',
+  title: 'components/Identication',
 } as Meta;
 
 const Template: Story<IdenticationProps> = (args) => <Identication {...args} />;

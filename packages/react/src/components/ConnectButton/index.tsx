@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import React, { FC } from 'react';
 import Web3Modal from 'web3modal';
 import Logo from '../../assets/svg/beoble_white.svg';
-import Button from '../../components/Button';
+import Button from '../Button';
 import { ethers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
@@ -11,7 +11,7 @@ export interface ConnectButtonProps {}
 
 const StyledConnectButton = styled.div``;
 
-const ConnectButton: FC<ConnectButtonProps> = () => {
+export const ConnectButton: FC<ConnectButtonProps> = () => {
   /*
   const providerOptions = {
     walletconnect: {

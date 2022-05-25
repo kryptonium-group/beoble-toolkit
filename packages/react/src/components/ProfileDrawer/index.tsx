@@ -5,7 +5,7 @@ export interface ProfileDrawer {}
 
 const ProfileDrawerContainer = styled.div``;
 
-const ProfileDrawer = () => {
+export const ProfileDrawer = () => {
   return <ProfileDrawerContainer></ProfileDrawerContainer>;
 };
 

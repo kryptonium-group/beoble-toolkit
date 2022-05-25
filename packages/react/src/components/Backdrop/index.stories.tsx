@@ -3,7 +3,7 @@ import { Backdrop, BackdropProps } from './index';
 
 export default {
   component: Backdrop,
-  title: 'Backdrop',
+  title: 'components/Backdrop',
 } as Meta;
 
 const Template: Story<BackdropProps> = (args) => (

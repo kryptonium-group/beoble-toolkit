@@ -4,7 +4,7 @@ import { ReactComponent as LogoWhite } from '../../assets/svg/beoble_white.svg';
 
 export default {
   component: Button,
-  title: 'Button',
+  title: 'components/Button',
 } as Meta;
 
 const Template: Story<ButtonProps> = (args) => (

@@ -5,9 +5,9 @@ import {
   PROFILE_DRAWER_CLASSNAME,
   PROFILE_MODAL_CLASSNAME,
 } from '../../constants';
-import ProfileDrawer from './Drawer';
-import ProfileModal from './Modal/Modal';
-import StatusButton from './StatusButton';
+import ProfileDrawer from '../../components/ProfileDrawer';
+import { ProfileModal } from '../../components/ProfileModal';
+import StatusButton from '../../components/StatusButton';
 import { ProfileType } from './type';
 
 /* eslint-disable-next-line */

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Button from '../../components/Button';
-import Identication from '../../components/Identication';
+import Button from '../Button';
+import Identication from '../Identication';
 import { BeobleSDK } from '@beoble/js-sdk';
 import { useCallback, useEffect, useState } from 'react';
 import Logo from '../../assets/svg/beoble_white.svg';
@@ -18,7 +18,7 @@ const Address = styled.p`
   margin-right: 6px;
 `;
 
-const StatusButton = ({ onClick }: StatusButtonProps) => {
+export const StatusButton = ({ onClick }: StatusButtonProps) => {
   const { isInitialized, initialize, address, ENSName, ENSAvatar } =
     useBeoble();
 

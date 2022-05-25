@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { RiCloseFill } from 'react-icons/ri';
 import { MdArrowBack } from 'react-icons/md';
-import Button from '../../../components/Button';
+import Button from '../Button';
 import { EditProfile, ProfileContent } from './Contents';
-import useBeobleModal from '../../../hooks/useBeoble/useBeobleModal';
+import useBeobleModal from '../../hooks/useBeoble/useBeobleModal';
 
 /* eslint-disable-next-line */
 export interface ProfileModalProps {
@@ -97,28 +97,6 @@ const ProfileModalCard = styled.div`
   ${flexStretch}
 `;
 
-const CloseButton = styled(Button)`
-  ${noBorder}
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  height: 34px;
-  width: 34px;
-  -webkit-box-align: center;
-  align-items: center;
-  cursor: pointer;
-  outline: none;
-  display: flex;
-  -webkit-box-pack: center;
-  justify-content: center;
-  transition: all 0.15s ease-in-out 0s;
-  border-radius: 34px;
-  transform-origin: center center;
-  vertical-align: inherit;
-  padding: 0px;
-  overflow: visible;
-`;
-
 const ModalControlContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -144,7 +122,7 @@ const ControlButton = styled(Button)`
   overflow: visible;
 `;
 
-const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
+export const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
   const { route, popRoute } = useBeobleModal();
 
   const handleBlockParentClick = (e: React.MouseEvent<HTMLDivElement>) => {

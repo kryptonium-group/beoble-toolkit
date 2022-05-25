@@ -1,3 +1,5 @@
+export * from './components/NftModal/index';
+export * from './components/NftPicker/index';
 export * from './components/Spinner/index';
 export * from './components/Textarea/index';
 export * from './components/Input/index';

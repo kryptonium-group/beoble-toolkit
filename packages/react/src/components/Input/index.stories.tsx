@@ -3,7 +3,7 @@ import { Input, InputProps } from './index';
 
 export default {
   component: Input,
-  title: 'Input',
+  title: 'components/Input',
 } as Meta;
 
 const Template: Story<InputProps> = (args) => <Input {...args} />;

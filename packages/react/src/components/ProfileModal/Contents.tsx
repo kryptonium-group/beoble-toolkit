@@ -8,14 +8,15 @@ import {
   RiCloseFill,
 } from 'react-icons/ri';
 import { BeobleSDK, IPutUserBody } from '@beoble/js-sdk';
-import Button from '../../../components/Button';
-import Identication from '../../../components/Identication';
-import useBeoble from '../../../hooks/useBeoble/useBeoble';
-import Input from '../../../components/Input';
-import Textarea from '../../../components/Textarea';
-import useBeobleModal from '../../../hooks/useBeoble/useBeobleModal';
-import { useBeobleSDK } from '../../../hooks/useBeobleSDK';
-import Spinner from '../../../components/Spinner';
+import Button from '../Button';
+import Identication from '../Identication';
+import useBeoble from '../../hooks/useBeoble/useBeoble';
+import Input from '../Input';
+import Textarea from '../Textarea';
+import useBeobleModal from '../../hooks/useBeoble/useBeobleModal';
+import { useBeobleSDK } from '../../hooks/useBeobleSDK';
+import Spinner from '../Spinner';
+import NftPicker from '../NftPicker';
 
 const OutlinedButton = styled(Button)`
   display: flex;
@@ -60,6 +61,12 @@ const InputContainer = styled.div`
   color: rgb(255, 255, 255);
 `;
 
+const ProfileImageContainer = styled(InputContainer)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
 const EditProfileTitle = styled.h1`
   font-weight: 600;
   font-size: 24px;
@@ -73,6 +80,7 @@ const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 0 12px;
+  margin-bottom: 24px;
 `;
 
 const SaveButton = styled(OutlinedButton)`
@@ -84,6 +92,20 @@ const SaveButton = styled(OutlinedButton)`
     border: 1px solid rgb(66, 160, 255);
     color: rgb(255, 255, 255);
   }
+`;
+
+const InputTitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+`;
+
+const InputTitle = styled.label`
+  color: rgb(229, 232, 235);
+  font-weight: 600;
+  font-size: 16px;
+  box-sizing: border-box;
 `;
 
 export const EditProfile = () => {
@@ -131,6 +153,12 @@ export const EditProfile = () => {
       <TitleContainer>
         <EditProfileTitle>Profile Settings</EditProfileTitle>
       </TitleContainer>
+      <ProfileImageContainer>
+        <InputTitleContainer>
+          <InputTitle>Profile Image</InputTitle>
+        </InputTitleContainer>
+        <NftPicker size={100} />
+      </ProfileImageContainer>
       <InputContainer>
         <Input
           name="alias"

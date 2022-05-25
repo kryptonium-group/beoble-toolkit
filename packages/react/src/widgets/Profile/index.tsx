@@ -1,4 +1,3 @@
 export * from './Profile';
-export * from './Drawer';
-export * from './Modal/Modal';
-export * from './StatusButton';
+export * from '../../components/ProfileDrawer';
+export * from '../../components/StatusButton';

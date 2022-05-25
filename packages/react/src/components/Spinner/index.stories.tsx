@@ -3,7 +3,7 @@ import { Spinner, SpinnerProps } from './index';
 
 export default {
   component: Spinner,
-  title: 'Spinner',
+  title: 'components/Spinner',
 } as Meta;
 
 const Template: Story<SpinnerProps> = (args) => <Spinner {...args} />;
