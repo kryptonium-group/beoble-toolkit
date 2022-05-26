@@ -30,7 +30,7 @@ const Home: NextPage = () => {
           </div>
           <main className={styles.main}>
             <h1 className={styles.title}>
-              Welcome to <a href="https://beoble.io">Beoble!</a>
+              Welcome to <a href="https://beoble.io">beoble!</a>
             </h1>
 
             <p className={styles.description}>
@@ -41,7 +41,7 @@ const Home: NextPage = () => {
       ) : (
         <main className={styles.main}>
           <h1 className={styles.title}>
-            Welcome to <a href="https://beoble.io">Beoble!</a>
+            Welcome to <a href="https://beoble.io">beoble!</a>
           </h1>
 
           <p className={styles.description}>

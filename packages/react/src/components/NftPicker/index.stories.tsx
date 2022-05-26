@@ -1,4 +1,5 @@
 import { Story, Meta } from '@storybook/react';
+import { BeobleProvider } from '../../contexts';
 import { NftPicker, NftPickerProps } from './index';
 
 export default {
@@ -6,7 +7,11 @@ export default {
   title: 'components/NftPicker',
 } as Meta;
 
-const Template: Story<NftPickerProps> = (args) => <NftPicker {...args} />;
+const Template: Story<NftPickerProps> = (args) => (
+  <BeobleProvider>
+    <NftPicker {...args} />
+  </BeobleProvider>
+);
 
 export const Primary = Template.bind({});
 Primary.args = {};
