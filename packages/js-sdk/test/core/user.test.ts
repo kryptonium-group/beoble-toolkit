@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { Core } from '../../src/core';
-
-const MyWallet = '0xb033fB14cF7Dc769488Ad34Ae90D4b3AD810BB25';
+import { MyWallet } from './index.test';
 
 describe('user test', () => {
   const core = new Core();
@@ -13,6 +11,7 @@ describe('user test', () => {
       alias: MyWallet,
       display_name: MyWallet,
     });
+    console.log(res);
 
     expect(res.wallets[0]).toEqual(MyWallet);
     expect(res.alias).toEqual(MyWallet);
@@ -24,7 +23,7 @@ describe('user test', () => {
       wallet_address: MyWallet,
     });
 
-    console.log(res.data[0]);
+    console.log(res, res.data[0]);
 
     expect(res.meta.count).toBe(1);
     const user = res.data[0];
@@ -35,10 +34,24 @@ describe('user test', () => {
     const userId = (await core.user.get({ wallet_address: walletToCreate }))
       .data[0].user_id;
 
+    const timestamp = Date.now().toString();
     const res = await core.user.update(userId, {
-      display_name: 'test',
+      display_name: timestamp,
     });
-
     console.log(res);
+    expect(res.data.display_name).toEqual(timestamp);
+  });
+});
+
+describe('user chatroom test', () => {
+  const core = new Core();
+  it('get Chatroom', async () => {
+    const user = await core.user.get({ wallet_address: MyWallet });
+    console.log(user);
+    const user_id = user.data[0].user_id;
+    const res = await core.user.chatroom.get({
+      user_id,
+    });
+    console.log(user_id, res);
   });
 });

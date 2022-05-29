@@ -42,4 +42,19 @@ export interface IUser {
   display_name: string;
   description?: string;
   representative_media_url: string[];
+  wallets_count: number;
+  chatrooms_count: number;
+  friends_count: number;
+  friend_requests_received_count: number;
+  friend_requests_sent_count: number;
+  followers_received_count: number;
+  followers_sent_count: number;
+  following_hashtags_count: number;
+  groups_count: number;
+  reporters_received_count: number;
+  reporters_sent_count: number;
+}
+
+export interface IGetUserChatRoomParams {
+  user_id: string;
 }

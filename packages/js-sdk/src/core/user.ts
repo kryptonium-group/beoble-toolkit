@@ -1,5 +1,7 @@
 import { Paths } from '../constants';
 import {
+  IGetChatRoomResponse,
+  IGetUserChatRoomParams,
   IGetUserParams,
   IPostUserBody,
   IPutUserBody,
@@ -12,8 +14,10 @@ import { IRestEndPoint } from './types';
 
 export class User implements IRestEndPoint {
   private _clinet: ApiClient;
+  public chatroom: UserChatRoom;
   constructor(client: ApiClient) {
     this._clinet = client;
+    this.chatroom = new UserChatRoom(this._clinet);
   }
 
   public async get(params: IGetUserParams): Promise<IUserResponse> {
@@ -29,5 +33,43 @@ export class User implements IRestEndPoint {
 
   public async add(body: IPostUserBody): Promise<IUser> {
     return await this._clinet.post(Paths.user.base, body);
+  }
+}
+
+class UserChatRoom {
+  private _clinet: ApiClient;
+  constructor(client: ApiClient) {
+    this._clinet = client;
+  }
+
+  public async get(
+    params: IGetUserChatRoomParams
+  ): Promise<IGetChatRoomResponse> {
+    return await this._clinet.get(Paths.user.chatroom.base, params);
+  }
+
+  public async updateMembership() {
+    return;
+  }
+}
+
+class UserFollow {
+  private _clinet: ApiClient;
+  constructor(client: ApiClient) {
+    this._clinet = client;
+  }
+}
+
+class UserFriend {
+  private _clinet: ApiClient;
+  constructor(client: ApiClient) {
+    this._clinet = client;
+  }
+}
+
+class UserReport {
+  private _clinet: ApiClient;
+  constructor(client: ApiClient) {
+    this._clinet = client;
   }
 }
