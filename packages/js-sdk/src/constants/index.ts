@@ -35,4 +35,10 @@ export const Paths = {
     },
     recent: '/chatroom/chat/recent',
   },
+  auth: {
+    login: {
+      base: '/auth/login',
+      message: '/auth/login/message',
+    },
+  },
 };
