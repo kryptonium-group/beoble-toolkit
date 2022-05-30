@@ -8,5 +8,12 @@ export interface IAuthResponse extends IResponse {
 
 export interface IPostLogInBody {
   wallet_address: string;
-  signed_message: string;
+  signature: string;
+}
+
+export interface ILoginResponse extends IResponse {
+  data: {
+    login_account_address: string;
+    jwt_token: string;
+  };
 }

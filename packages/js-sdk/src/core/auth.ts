@@ -1,6 +1,10 @@
 import { Paths } from '../constants';
 import ApiClient from '../lib/api';
-import { IAuthResponse, IPostLogInBody } from '../lib/Models/auth';
+import {
+  IAuthResponse,
+  ILoginResponse,
+  IPostLogInBody,
+} from '../lib/Models/auth';
 
 export class Auth {
   private _client: ApiClient;
@@ -8,11 +12,18 @@ export class Auth {
     this._client = client;
   }
 
-  public async login(body: IPostLogInBody) {
-    return this._client.post(Paths.auth.login.base, body);
+  public async login(body: IPostLogInBody): Promise<ILoginResponse> {
+    const res: ILoginResponse = await this._client.post(
+      Paths.auth.login.base,
+      body
+    );
+    this._client.setAuthToekn(res.data.jwt_token);
+    return res;
   }
 
   public async getMessage(wallet_address: string): Promise<IAuthResponse> {
-    return await this._client.get(Paths.auth.login.message, { wallet_address });
+    return await this._client.get(Paths.auth.login.message, {
+      wallet_address,
+    });
   }
 }

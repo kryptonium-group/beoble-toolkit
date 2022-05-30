@@ -5,11 +5,13 @@ import { BeobleException } from './Exceptions/BeobleException';
 export default class ApiClient {
   private client;
 
-  constructor() {
+  constructor(authToken?: string) {
     this.client = axios.create({
       baseURL: Paths.dev,
       timeout: 1000,
     });
+
+    if (authToken) this.setAuthToekn(authToken);
 
     this.client.interceptors.request.use(
       function (config) {
@@ -21,6 +23,12 @@ export default class ApiClient {
         return Promise.reject(error);
       }
     );
+  }
+
+  public setAuthToekn(authToken: string) {
+    this.client.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${authToken}`;
   }
 
   private async tryRestApi(apiCallFunc: () => Promise<any>) {

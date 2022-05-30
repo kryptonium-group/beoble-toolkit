@@ -1,7 +1,10 @@
 import { Core } from '../../src/core';
-import { MyWallet } from './index.test';
+import { MasterKeyAuthToken, MyWallet } from './index.test';
 
-const core = new Core();
+const core = new Core({
+  authToken: MasterKeyAuthToken,
+});
+
 const getWalletChatRoom = async (wallet: string, index = 0) => {
   const user = await core.user.get({
     wallet_address: wallet,
@@ -55,7 +58,7 @@ describe('test chatroom membership', () => {
   it('test get', async () => {
     const { userChatroom } = await getWalletChatRoom(MyWallet);
     const res = await core.chatroom.member.get(userChatroom.chatroom_id);
-    console.log(res.data[0]);
+    console.log(res);
   });
 
   it('test update user membership', async () => {

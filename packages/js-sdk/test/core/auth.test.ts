@@ -9,14 +9,7 @@ describe('beoble Authentication test', () => {
     const testWallet = ethers.Wallet.createRandom();
     console.log(testWallet);
 
-    const user = await core.user.add({
-      wallet_address: testWallet.address,
-      alias: testWallet.address,
-      display_name: testWallet.address,
-    });
-    console.log(user);
-
-    const messageRes = await core.auth.getMessage(MyWallet);
+    const messageRes = await core.auth.getMessage(testWallet.address);
     console.log(messageRes);
 
     const signedMessage = await testWallet.signMessage(
@@ -26,8 +19,15 @@ describe('beoble Authentication test', () => {
 
     const loginRes = await core.auth.login({
       wallet_address: testWallet.address,
-      signed_message: signedMessage,
+      signature: signedMessage,
     });
     console.log(loginRes);
+
+    const user = await core.user.add({
+      wallet_address: testWallet.address,
+      alias: testWallet.address,
+      display_name: testWallet.address,
+    });
+    console.log(user);
   });
 });
