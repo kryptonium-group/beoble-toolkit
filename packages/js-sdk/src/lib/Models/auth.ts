@@ -1,19 +1,19 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { IResponse } from './response';
 
-export interface IAuthResponse extends IResponse {
-  data: {
-    message_to_sign: string;
-  };
+interface IAuthMessage {
+  message_to_sign: string;
 }
+export interface IAuthResponse extends IResponse<IAuthMessage> {}
 
 export interface IPostLogInBody {
   wallet_address: string;
   signature: string;
 }
 
-export interface ILoginResponse extends IResponse {
-  data: {
-    login_account_address: string;
-    jwt_token: string;
-  };
+interface ILoginData {
+  login_account_address: string;
+  jwt_token: string;
 }
+
+export interface ILoginResponse extends IResponse<ILoginData> {}

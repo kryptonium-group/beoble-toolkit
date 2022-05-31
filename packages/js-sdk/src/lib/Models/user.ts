@@ -1,13 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { UpdateType } from '.';
 import { IResponse } from './response';
 
-export interface IUserResponse extends IResponse {
-  data: IUser[];
-}
+export interface IUserResponse extends IResponse<IUser[]> {}
 
-export interface IUserPutResponse extends IResponse {
-  data: IUser;
-}
+export interface IUserPutResponse extends IResponse<IUser> {}
 
 export interface IGetUserParams {
   user_id?: string;

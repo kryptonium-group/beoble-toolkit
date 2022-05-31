@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { UpdateType } from '.';
 import { IResponse } from './response';
 
-export interface IChatResponse extends IResponse {
-  data: IChat;
-}
+export interface IChatResponse extends IResponse<IChat> {}
 
 export interface IGetChatParams {
   chat_id: string | string[];
@@ -14,7 +13,7 @@ export interface IPostChatBody {
   creator_user_id: string;
   chatroom_id: string;
   content_text: string;
-  content_media_url: string[];
+  content_media_url?: string[];
 }
 
 export interface IPutChatBody {

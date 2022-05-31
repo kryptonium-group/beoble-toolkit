@@ -1,8 +1,11 @@
 import { Core } from '../../src/core';
-import { MyWallet } from './index.test';
+import { MyWallet, MasterKeyAuthToken } from './index.test';
+
+const core = new Core({
+  authToken: MasterKeyAuthToken,
+});
 
 describe('user test', () => {
-  const core = new Core();
   const walletToCreate = MyWallet;
 
   it('add', async () => {
@@ -53,5 +56,59 @@ describe('user chatroom test', () => {
       user_id,
     });
     console.log(user_id, res);
+  });
+});
+
+describe('User Follow Test', () => {
+  it('test get follower', async () => {
+    return;
+  });
+
+  it('test get following', async () => {
+    return;
+  });
+
+  it('test follow', async () => {
+    return;
+  });
+
+  it('test unfollow', async () => {
+    return;
+  });
+});
+
+describe('User Report Test', () => {
+  it('test get reporter', async () => {
+    return;
+  });
+
+  it('test get reporting', async () => {
+    return;
+  });
+
+  it('test report', async () => {
+    return;
+  });
+
+  it('test undo report', async () => {
+    return;
+  });
+});
+describe('User Friend Test', () => {
+  it('test get friend', async () => {
+    return;
+  });
+
+  it('test get friend request', async () => {
+    return;
+  });
+
+  it('test ', async () => {
+    return;
+  });
+});
+describe('User Group Test', () => {
+  it('', async () => {
+    return;
   });
 });

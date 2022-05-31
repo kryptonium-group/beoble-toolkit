@@ -1,6 +1,5 @@
 import { ethers } from 'ethers';
 import { Core } from '../../src/core';
-import { MyWallet } from './index.test';
 
 const core = new Core();
 

@@ -37,6 +37,13 @@ export class Chat implements IRestEndPoint {
     return;
   }
 
+  public channel(config: IChannelConfig) {
+    return new Channel({
+      authToken: this._client.getAuthToken(),
+      ...config,
+    });
+  }
+
   public open(channel_id: string) {
     const socket = new WebSocket(Paths.wss.chat(channel_id));
     return socket;
@@ -45,50 +52,52 @@ export class Chat implements IRestEndPoint {
 
 export class Channel {
   private _socket: WebSocket;
-  public _isOpen = false;
+  private _isOpen = false;
 
-  constructor(config: IChannelProps) {
-    this._socket = new WebSocket(Paths.wss.chat(config.chatroom_id));
-    console.log(this._socket.readyState);
+  constructor(config: IChannelConfig) {
+    const chatUrl =
+      `${Paths.wss.chat(config.chatroom_id)}` + config.authToken
+        ? `?authorization=${config.authToken}`
+        : '';
+    this._socket = new WebSocket(chatUrl);
 
     this._socket.onopen = () => {
-      console.log('channel open');
       this._isOpen = true;
-      console.log(this._isOpen);
+    };
+
+    this._socket.onmessage = (ev) => {
+      console.log(ev, ev.data, typeof ev);
     };
 
     this._socket.onclose = () => {
-      console.log(this._socket.readyState, 'channel closed');
+      return;
     };
   }
 
   public async watch() {
-    const start = Date.now();
-    console.log('watch start ', this._socket.readyState);
-    await until(() => this._isOpen == true);
-    const end = Date.now();
-    console.log('watch end ', this._socket.readyState, (end - start) / 1000);
+    return this._socket.readyState;
   }
 
-  public async sendMessage(message: string) {
-    this._socket.send(message);
+  public async open() {
+    await until(() => this._isOpen == true);
+  }
+
+  public async sendMessage(chat: IPostChatBody) {
+    this._socket.send(JSON.stringify(chat));
   }
 
   public async close() {
     this._socket.close();
   }
 
-  public on(event: WebScocketEvents, callback: Event) {
-    return;
-  }
-
-  public onOpen() {
-    return;
+  public on(event: WebScocketEvents, callback: (event: any) => void) {
+    this._socket.addEventListener(event, callback);
   }
 }
 
 export type WebScocketEvents = 'open' | 'message' | 'error' | 'close';
 
-export interface IChannelProps {
+export interface IChannelConfig {
   chatroom_id: string;
+  authToken?: string;
 }

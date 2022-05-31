@@ -2,7 +2,8 @@ import { time } from 'console';
 import { Paths } from '../../src/constants';
 import { Core } from '../../src/core';
 import { Channel } from '../../src/core/chat';
-import { MyWallet } from './index.test';
+import { IChat, IPostChatBody } from '../../src/lib';
+import { MyWallet, TestChatRoomId } from './index.test';
 
 const core = new Core({
   authToken: 'sungmingodsungmingod',
@@ -24,7 +25,6 @@ const getWalletChat = async (
   const chatroom_id = userChatroom.data[chatroomIndex].chatroom_id;
   const chat = await core.chatroom.chat.getRecent(chatroom_id, 1);
   const chat_id = chat.data[chatIndex];
-  console.log(chat);
 
   return { user_id, chatroom_id };
 };
@@ -60,9 +60,20 @@ describe('Websocket Tests', () => {
   });
 
   it('test channel', async () => {
-    const { user_id, chatroom_id } = await getWalletChat(MyWallet);
-    console.log(Paths.wss.chat(chatroom_id));
-    const channel = new Channel({ chatroom_id });
-    await channel.watch();
+    const { user_id } = await getWalletChat(MyWallet);
+
+    const channel = new Channel({ chatroom_id: TestChatRoomId });
+    const timestamp = Date.now().toString();
+    const messageToUpload = `JS SDK Testing at ${timestamp}`;
+    await channel.open();
+    const testChat: IPostChatBody = {
+      creator_user_id: user_id,
+      chatroom_id: TestChatRoomId,
+      content_text: messageToUpload,
+    };
+    channel.sendMessage(testChat);
+    const recentChats = await core.chatroom.chat.getRecent(TestChatRoomId, 1);
+    expect(recentChats.data).toHaveLength(1);
+    expect(recentChats.data[0].content_text).toEqual(messageToUpload);
   });
 });

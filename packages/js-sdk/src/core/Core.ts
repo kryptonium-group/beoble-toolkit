@@ -30,5 +30,3 @@ function initialized(client?: ApiClient) {
     // if (target.client) throw new NotInitializedException();
   };
 }
-
-// export type ICore = typeof Core;

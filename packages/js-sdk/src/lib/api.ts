@@ -4,6 +4,7 @@ import { BeobleException } from './Exceptions/BeobleException';
 
 export default class ApiClient {
   private client;
+  private authToken?: string;
 
   constructor(authToken?: string) {
     this.client = axios.create({
@@ -11,8 +12,9 @@ export default class ApiClient {
       timeout: 1000,
     });
 
-    if (authToken) this.setAuthToekn(authToken);
-
+    if (authToken) {
+      this.setAuthToekn(authToken);
+    }
     this.client.interceptors.request.use(
       function (config) {
         // Do something before request is sent
@@ -25,7 +27,12 @@ export default class ApiClient {
     );
   }
 
+  public getAuthToken() {
+    return this.authToken;
+  }
+
   public setAuthToekn(authToken: string) {
+    this.authToken = authToken;
     this.client.defaults.headers.common[
       'Authorization'
     ] = `Bearer ${authToken}`;

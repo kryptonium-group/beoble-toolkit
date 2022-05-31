@@ -1,14 +1,13 @@
 import { Paths } from '../constants';
 import {
-  IChatResponse,
+  IChatRoomMembershipResponse,
   IChatRoomResponse,
+  IChatRoomsResponse,
   IGetChatRoomParams,
-  IGetChatRoomResponse,
   IPostChatRoomBody,
   IPutChatRoomBody,
   IPutChatRoomMembershipBody,
   IRecentChatResponse,
-  IUserResponse,
 } from '../lib';
 import ApiClient from '../lib/api';
 import { IRestEndPoint } from './types';
@@ -23,7 +22,7 @@ export class ChatRoom implements IRestEndPoint {
     this.chat = new Chat(this._client);
   }
 
-  public async get(params: IGetChatRoomParams): Promise<IGetChatRoomResponse> {
+  public async get(params: IGetChatRoomParams): Promise<IChatRoomsResponse> {
     return await this._client.get(Paths.chatroom.base, params);
   }
 
@@ -48,8 +47,8 @@ class Member implements IRestEndPoint {
     this._client = client;
   }
 
-  public async get(chatroom_id: string): Promise<IUserResponse> {
-    return await this._client.get(Paths.chatroom.member.get, {
+  public async get(chatroom_id: string): Promise<IChatRoomMembershipResponse> {
+    return await this._client.get(Paths.chatroom.member.base, {
       chatroom_id,
     });
   }
@@ -57,8 +56,11 @@ class Member implements IRestEndPoint {
   public async update(
     chatroom_id: string,
     body: IPutChatRoomMembershipBody
-  ): Promise<IChatRoomResponse> {
-    return await this._client.put(Paths.chatroom.member.put(chatroom_id), body);
+  ): Promise<IChatRoomMembershipResponse> {
+    return await this._client.put(
+      Paths.chatroom.member.withId(chatroom_id),
+      body
+    );
   }
 }
 

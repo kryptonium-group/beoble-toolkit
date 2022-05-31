@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { IChat, UpdateType } from '.';
 import { IResponse } from './response';
+import { IUser } from './user';
 
 export type ChatRoomType = 'DIRECT_CHAT' | 'GROUP_CHAT' | 'CHANNEL';
 
@@ -15,17 +17,21 @@ export interface IChatRoom {
   chatroom_type: ChatRoomType;
 }
 
-export interface IChatRoomResponse extends IResponse {
-  data: IChatRoom;
+interface IMembership {
+  ADMIN: IUser[];
+  NORMAL: IUser[];
 }
 
-export interface IGetChatRoomResponse extends IResponse {
-  data: IChatRoom[];
-}
+export type MembershipAction = 'ADD' | 'REMOVE';
+export type MembershipType = 'NORMAL' | 'ADMIN';
 
-export interface IRecentChatResponse extends IResponse {
-  data: IChat[];
-}
+export interface IChatRoomMembershipResponse extends IResponse<IMembership> {}
+
+export interface IChatRoomResponse extends IResponse<IChatRoom> {}
+
+export interface IChatRoomsResponse extends IResponse<IChatRoom[]> {}
+
+export interface IRecentChatResponse extends IResponse<IChat[]> {}
 
 export interface IGetChatRoomParams {
   chatroom_id: string;
@@ -47,9 +53,6 @@ export interface IPutChatRoomBody {
   representative_media_url?: string;
   update_type?: UpdateType;
 }
-
-export type MembershipAction = 'ADD' | 'REMOVE';
-export type MembershipType = 'NORMAL' | 'ADMIN';
 
 export interface IPutChatRoomMembershipBody {
   user_ids: string[];

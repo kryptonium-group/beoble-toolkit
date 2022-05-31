@@ -21,7 +21,6 @@ describe('test chatroom api', () => {
     const chatroomRes = await core.chatroom.get({
       chatroom_id: userChatroom.chatroom_id,
     });
-    console.log(chatroomRes);
     const chatRoom = chatroomRes.data[0];
     expect(chatRoom.alias).toEqual(userChatroom.alias);
   });
@@ -38,7 +37,6 @@ describe('test chatroom api', () => {
       creator_id,
       chatroom_type: 'DIRECT_CHAT',
     });
-    console.log(creator_id, res);
     expect(res.data).not.toBeUndefined();
     expect(res.data.creator_id).toEqual(creator_id);
   });
@@ -49,16 +47,15 @@ describe('test chatroom api', () => {
     const res = await core.chatroom.update(userChatroom.chatroom_id, {
       alias: timestamp,
     });
-
     expect(res.data.alias).toEqual(timestamp);
   });
 });
 
 describe('test chatroom membership', () => {
   it('test get', async () => {
-    const { userChatroom } = await getWalletChatRoom(MyWallet);
+    const { userChatroom, user_id } = await getWalletChatRoom(MyWallet);
     const res = await core.chatroom.member.get(userChatroom.chatroom_id);
-    console.log(res);
+    expect(res.data.ADMIN[0].user_id).toEqual(user_id);
   });
 
   it('test update user membership', async () => {
