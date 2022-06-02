@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { UpdateType } from '.';
+import { MembershipAction } from './chatroom';
 import { IResponse } from './response';
 
 export interface IUserResponse extends IResponse<IUser[]> {}
@@ -54,4 +55,9 @@ export interface IUser {
 
 export interface IGetUserChatRoomParams {
   user_id: string;
+}
+
+export interface IPutUserChatRoomMembershipBody {
+  target_id: string;
+  membership_action: MembershipAction;
 }

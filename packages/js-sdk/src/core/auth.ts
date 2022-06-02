@@ -1,17 +1,12 @@
 import { Paths } from '../constants';
-import ApiClient from '../lib/api';
 import {
   IAuthResponse,
   ILoginResponse,
   IPostLogInBody,
 } from '../lib/Models/auth';
+import { IAPIClass } from './types';
 
-export class Auth {
-  private _client: ApiClient;
-  constructor(client: ApiClient) {
-    this._client = client;
-  }
-
+export class Auth extends IAPIClass {
   public async login(body: IPostLogInBody): Promise<ILoginResponse> {
     const res: ILoginResponse = await this._client.post(
       Paths.auth.login.base,

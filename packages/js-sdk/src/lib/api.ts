@@ -71,8 +71,13 @@ export default class ApiClient {
     );
   }
 
-  public async delete(path: string): Promise<any> {
-    return this.tryRestApi(async () => await this.client.delete(path));
+  public async delete(path: string, data?: any, params?: any): Promise<any> {
+    return this.tryRestApi(
+      async () =>
+        await this.client.delete(path, {
+          data,
+        })
+    );
   }
 
   public async put(path: string, data?: any): Promise<any> {

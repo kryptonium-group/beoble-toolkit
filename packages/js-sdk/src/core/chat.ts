@@ -9,14 +9,9 @@ import {
 } from '../lib';
 import ApiClient from '../lib/api';
 import { until } from '../util';
-import { IRestEndPoint } from './types';
+import { IAPIClass, IRestEndPoint } from './types';
 
-export class Chat implements IRestEndPoint {
-  private _client: ApiClient;
-  constructor(client: ApiClient) {
-    this._client = client;
-  }
-
+export class Chat extends IAPIClass implements IRestEndPoint {
   public async get(params: IGetChatParams) {
     return this._client.get(Paths.chat.base, params);
   }
@@ -56,9 +51,8 @@ export class Channel {
 
   constructor(config: IChannelConfig) {
     const chatUrl =
-      `${Paths.wss.chat(config.chatroom_id)}` + config.authToken
-        ? `?authorization=${config.authToken}`
-        : '';
+      `${Paths.wss.chat(config.chatroom_id)}` +
+      (config.authToken ? `?auth_token=${config.authToken}` : '');
     this._socket = new WebSocket(chatUrl);
 
     this._socket.onopen = () => {

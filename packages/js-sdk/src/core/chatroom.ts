@@ -10,14 +10,13 @@ import {
   IRecentChatResponse,
 } from '../lib';
 import ApiClient from '../lib/api';
-import { IRestEndPoint } from './types';
+import { IAPIClass, IRestEndPoint } from './types';
 
-export class ChatRoom implements IRestEndPoint {
-  private _client: ApiClient;
+export class ChatRoom extends IAPIClass implements IRestEndPoint {
   public member: Member;
   public chat: Chat;
   constructor(client: ApiClient) {
-    this._client = client;
+    super(client);
     this.member = new Member(this._client);
     this.chat = new Chat(this._client);
   }
@@ -41,12 +40,7 @@ export class ChatRoom implements IRestEndPoint {
   }
 }
 
-class Member implements IRestEndPoint {
-  private _client: ApiClient;
-  constructor(client: ApiClient) {
-    this._client = client;
-  }
-
+class Member extends IAPIClass implements IRestEndPoint {
   public async get(chatroom_id: string): Promise<IChatRoomMembershipResponse> {
     return await this._client.get(Paths.chatroom.member.base, {
       chatroom_id,
@@ -64,12 +58,7 @@ class Member implements IRestEndPoint {
   }
 }
 
-class Chat {
-  private _client: ApiClient;
-  constructor(client: ApiClient) {
-    this._client = client;
-  }
-
+class Chat extends IAPIClass {
   public async getRecent(
     chatroom_id: string,
     limit: number
