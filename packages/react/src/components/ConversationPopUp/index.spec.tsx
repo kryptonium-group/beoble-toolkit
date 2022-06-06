@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import { Profile } from './index';
+import ConversationPopUp from './index';
 
-describe('Profile', () => {
+describe('ConversationPopUp', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Profile detailElement={'modal'} />);
+    const { baseElement } = render(<ConversationPopUp />);
     expect(baseElement).toBeTruthy();
   });
 });

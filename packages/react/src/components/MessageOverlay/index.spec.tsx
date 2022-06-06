@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import { Profile } from './index';
+import MessageOverlay from './index';
 
-describe('Profile', () => {
+describe('MessageOverlay', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Profile detailElement={'modal'} />);
+    const { baseElement } = render(<MessageOverlay />);
     expect(baseElement).toBeTruthy();
   });
 });

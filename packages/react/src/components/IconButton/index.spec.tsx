@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import { Profile } from './index';
+import IconButton from './index';
 
-describe('Profile', () => {
+describe('IconButton', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Profile detailElement={'modal'} />);
+    const { baseElement } = render(<IconButton />);
     expect(baseElement).toBeTruthy();
   });
 });

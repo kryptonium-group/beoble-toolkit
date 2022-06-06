@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import { Profile } from './index';
+import MessageHeader from './index';
 
-describe('Profile', () => {
+describe('MessageHeader', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Profile detailElement={'modal'} />);
+    const { baseElement } = render(<MessageHeader />);
     expect(baseElement).toBeTruthy();
   });
 });

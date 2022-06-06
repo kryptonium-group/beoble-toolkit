@@ -1,15 +1,15 @@
 import { Story, Meta } from '@storybook/react';
 import { BeobleProvider } from '../../contexts';
-import { Chat, ChatProps } from './index';
+import { MessageOverlay, MessageOverlayProps } from './index';
 
 export default {
-  component: Chat,
-  title: 'Widgets/Chat',
+  component: MessageOverlay,
+  title: 'MessageOverlay',
 } as Meta;
 
-const Template: Story<ChatProps> = (args) => (
+const Template: Story<MessageOverlayProps> = (args) => (
   <BeobleProvider>
-    <Chat {...args} />
+    <MessageOverlay {...args} />
   </BeobleProvider>
 );
 

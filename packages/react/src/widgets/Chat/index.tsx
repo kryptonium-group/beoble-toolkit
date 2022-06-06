@@ -1,18 +1,13 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import MessageOverlay, { Conversation } from '../../components/MessageOverlay';
 
 /* eslint-disable-next-line */
 export interface ChatProps {}
 
-const StyledChat = styled.div`
-  color: pink;
-`;
-
 export function Chat(props: ChatProps) {
-  return (
-    <StyledChat>
-      <h1>Welcome to Chat!</h1>
-    </StyledChat>
-  );
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  return <MessageOverlay {...{ conversations }} />;
 }
 
 export default Chat;

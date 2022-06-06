@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import { Profile } from './index';
+import OnlineStatus from './index';
 
-describe('Profile', () => {
+describe('OnlineStatus', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Profile detailElement={'modal'} />);
+    const { baseElement } = render(<OnlineStatus />);
     expect(baseElement).toBeTruthy();
   });
 });

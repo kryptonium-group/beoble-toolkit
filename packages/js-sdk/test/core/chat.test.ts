@@ -69,6 +69,7 @@ describe('Websocket Tests', () => {
     });
     const timestamp = Date.now().toString();
     const messageToUpload = `JS SDK Testing at ${timestamp}`;
+    console.log(messageToUpload);
     await channel.open();
     const testChat: IPostChatBody = {
       creator_user_id: user_id,

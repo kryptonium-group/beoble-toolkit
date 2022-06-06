@@ -1,2 +1,1 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const test = () => {};
+export * from './timeUtil';
