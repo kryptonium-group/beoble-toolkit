@@ -17,13 +17,11 @@ export const Button = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-`;
 
-const IconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 8px;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 `;
 
 export default Button;

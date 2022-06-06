@@ -1,3 +1,4 @@
+export * from './components/MessageForm/index';
 export * from './components/ConversationPopUp/index';
 export * from './components/Avatar/index';
 export * from './components/OnlineStatus/index';

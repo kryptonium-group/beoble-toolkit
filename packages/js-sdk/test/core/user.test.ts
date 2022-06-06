@@ -53,6 +53,9 @@ describe('user chatroom test', () => {
     const res = await core.user.chatroom.get({
       user_id,
     });
+
+    console.log(res);
+
     expect(res.data).not.toBeUndefined();
     expect(Array.isArray(res.data)).toBeTruthy();
     expect(res.data.length).toBeGreaterThanOrEqual(0);

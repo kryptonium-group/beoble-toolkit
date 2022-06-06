@@ -24,7 +24,15 @@ export const Colors = {
   background: {
     noneTintHover: '#00000014', // 0, 0, 0, 0.08
     white: '#ffffff',
-    shadow: '#0000004d',
+    shadow: '#0000004d', // 0, 0, 0, 0.3
+    containerTint: '#f9fafb',
+  },
+  signal: {
+    positive: '#057642',
+    positiveActive: '#004d2a',
+  },
+  border: {
+    faint: '#00000014',
   },
 };
 
