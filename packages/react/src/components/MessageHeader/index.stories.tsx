@@ -11,7 +11,7 @@ import {
 
 export default {
   component: MessageHeader,
-  title: 'MessageHeader',
+  title: 'components/MessageHeader',
 } as Meta;
 
 const Template: Story<MessageHeaderProps> = (args) => (

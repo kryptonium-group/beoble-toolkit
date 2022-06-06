@@ -3,7 +3,7 @@ import { MessageConversation, MessageConversationProps } from './index';
 
 export default {
   component: MessageConversation,
-  title: 'MessageConversation',
+  title: 'components/MessageConversation',
 } as Meta;
 
 const Template: Story<MessageConversationProps> = (args) => (

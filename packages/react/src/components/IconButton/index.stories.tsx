@@ -4,7 +4,7 @@ import { IconButton, IconButtonProps } from './index';
 
 export default {
   component: IconButton,
-  title: 'IconButton',
+  title: 'components/IconButton',
 } as Meta;
 
 const Template: Story<IconButtonProps> = (args) => (

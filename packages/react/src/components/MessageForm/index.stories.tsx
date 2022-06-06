@@ -3,7 +3,7 @@ import { MessageForm, MessageFormProps } from './index';
 
 export default {
   component: MessageForm,
-  title: 'MessageForm',
+  title: 'components/MessageForm',
 } as Meta;
 
 const Template: Story<MessageFormProps> = (args) => <MessageForm {...args} />;

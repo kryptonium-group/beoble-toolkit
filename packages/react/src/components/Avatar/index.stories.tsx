@@ -3,7 +3,7 @@ import { Avatar, AvatarProps } from './index';
 
 export default {
   component: Avatar,
-  title: 'Avatar',
+  title: 'components/Avatar',
 } as Meta;
 
 const Template: Story<AvatarProps> = (args) => <Avatar {...args} />;

@@ -3,7 +3,7 @@ import { ConversationPopUp, ConversationPopUpProps } from './index';
 
 export default {
   component: ConversationPopUp,
-  title: 'ConversationPopUp',
+  title: 'components/ConversationPopUp',
 } as Meta;
 
 const Template: Story<ConversationPopUpProps> = (args) => (

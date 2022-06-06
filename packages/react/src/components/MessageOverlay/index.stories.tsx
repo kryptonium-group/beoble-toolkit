@@ -4,7 +4,7 @@ import { MessageOverlay, MessageOverlayProps } from './index';
 
 export default {
   component: MessageOverlay,
-  title: 'MessageOverlay',
+  title: 'components/MessageOverlay',
 } as Meta;
 
 const Template: Story<MessageOverlayProps> = (args) => (

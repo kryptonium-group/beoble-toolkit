@@ -1,3 +1,5 @@
+export * from './components/Divider/index';
+export * from './components/Message/index';
 export * from './components/MessageForm/index';
 export * from './components/ConversationPopUp/index';
 export * from './components/Avatar/index';

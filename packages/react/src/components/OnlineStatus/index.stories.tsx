@@ -3,7 +3,7 @@ import { OnlineStatus, OnlineStatusProps } from './index';
 
 export default {
   component: OnlineStatus,
-  title: 'OnlineStatus',
+  title: 'components/OnlineStatus',
 } as Meta;
 
 const Template: Story<OnlineStatusProps> = (args) => <OnlineStatus {...args} />;
