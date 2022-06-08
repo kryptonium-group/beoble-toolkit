@@ -1,7 +1,6 @@
-import { FC, ReactNode, useCallback, useEffect, useState } from 'react';
-import { BeobleSDK, Core, IUser } from '@beoble/js-sdk';
+import { FC, ReactNode, useEffect, useState } from 'react';
+import { Core, IUser } from '@beoble/js-sdk';
 import useWeb3 from '../../hooks/useWeb3';
-import { ProviderNotInitializedError } from '../../lib/Errors';
 import { BeobleContext } from '../BeobleContext';
 import { ModalProvider } from '../ModalContext/ModalProvider';
 
@@ -10,25 +9,33 @@ export interface IBeobleProvider {
 }
 
 export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [Beoble, setBeoble] = useState<Core | null>(null);
   const [user, setUser] = useState<IUser | null>(null);
 
-  const { provider, initProvider, address, ENSAvatar, ENSName } = useWeb3();
+  const { provider, account } = useWeb3();
 
-  const initialize = async () => {
-    setIsInitialized(true);
-    const initAddress = await initProvider();
+  // create beoble sdk obj on mount
+  // and store
+  useEffect(() => {
     const beoble = new Core();
     setBeoble(beoble);
-    const user = await beoble.user.get({
-      wallet_address: initAddress,
-    });
-    console.log(user.data[0]);
-    setUser(user.data[0]);
-  };
+  }, []);
 
+  // when beoble sdk is created
+  // and web account information is fetched successfully
+  // mark initialized and fetch user from beoble sdk
+  useEffect(() => {
+    if (Beoble && account) {
+      setInitialized(true);
+      initUser(Beoble, account.address);
+    }
+  }, [Beoble, account]);
+
+  // fetch user with account address
+  // create new and store if no user exist
+  // else store it
   const initUser = async (beoble: Core, wallet_address: string) => {
     const user = await beoble.user.get({
       wallet_address,
@@ -40,19 +47,17 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
         alias: wallet_address,
         display_name: wallet_address,
       });
+      setUser(newUser);
     } else setUser(user.data[0]);
   };
 
   return (
     <BeobleContext.Provider
       value={{
-        initialize,
-        isInitialized,
+        initialized,
         isAuthenticated,
         provider,
-        address,
-        ENSName,
-        ENSAvatar,
+        account,
         Beoble,
         user,
         setUser,

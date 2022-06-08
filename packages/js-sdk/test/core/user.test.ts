@@ -1,36 +1,40 @@
+import { createComponentStoriesFile } from '@nrwl/react/src/generators/component-story/component-story';
 import { Core } from '../../src/core';
 import { MyWallet, MasterKeyAuthToken, getUser } from './index.test';
+import { MyWallets, TestWallets } from '../constants';
 
 const core = new Core({
   authToken: MasterKeyAuthToken,
 });
 
 describe('user test', () => {
-  const walletToCreate = MyWallet;
+  const walletToCreate = MyWallets[2];
 
   it('add', async () => {
     const res = await core.user.add({
-      wallet_address: MyWallet,
-      alias: MyWallet,
-      display_name: MyWallet,
+      wallet_address: walletToCreate,
+      alias: walletToCreate,
+      display_name: walletToCreate,
     });
     console.log(res);
 
-    expect(res.wallets[0]).toEqual(MyWallet);
-    expect(res.alias).toEqual(MyWallet);
-    expect(res.display_name).toEqual(MyWallet);
+    expect(res.wallets[0]).toEqual(walletToCreate);
+    expect(res.alias).toEqual(walletToCreate);
+    expect(res.display_name).toEqual(walletToCreate);
   });
 
   it('get', async () => {
+    const WalletToCheck = TestWallets[1];
+
     const res = await core.user.get({
-      wallet_address: MyWallet,
+      wallet_address: WalletToCheck,
     });
 
     console.log(res, res.data[0]);
 
     expect(res.meta.count).toBe(1);
     const user = res.data[0];
-    expect(user.wallets[0]).toEqual(MyWallet);
+    expect(user.wallets[0]).toEqual(WalletToCheck);
   });
 
   it('update', async () => {
@@ -54,12 +58,14 @@ describe('user chatroom test', () => {
       user_id,
     });
 
+    console.log(user_id);
     console.log(res);
 
     expect(res.data).not.toBeUndefined();
     expect(Array.isArray(res.data)).toBeTruthy();
     expect(res.data.length).toBeGreaterThanOrEqual(0);
     expect(res.data.length).toEqual(res.meta.count);
+    expect(res.data[0]).toHaveProperty('chatroom_id');
   });
 
   it('test update user chatroom membership', async () => {

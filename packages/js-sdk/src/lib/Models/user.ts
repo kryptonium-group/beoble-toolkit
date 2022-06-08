@@ -31,7 +31,7 @@ export interface IPutUserBody {
   representative_media_url?: string[];
 }
 
-export interface IUser {
+export interface IUser extends Partial<Counters> {
   user_id: string;
   create_time: string; // date
   update_time: string; // date
@@ -40,6 +40,9 @@ export interface IUser {
   display_name: string;
   description?: string;
   representative_media_url: string[];
+}
+
+interface Counters {
   wallets_count: number;
   chatrooms_count: number;
   friends_count: number;

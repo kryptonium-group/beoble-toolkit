@@ -1,10 +1,17 @@
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Channel } from '@beoble/js-sdk';
+import { useBeoble } from '../../hooks';
 import { Colors } from '../../styles';
+import Divider from '../Divider';
+import Message from '../Message';
 import MessageForm from '../MessageForm';
 import { ChatHeader } from '../MessageHeader';
+import { useChannel } from '../../hooks/useChannel';
 
-/* eslint-disable-next-line */
-export interface ConversationPopUpProps {}
+export interface ConversationPopUpProps {
+  chatroomId: string;
+}
 
 const Container = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -38,6 +45,17 @@ const MessageDisplayContainer = styled.div`
   flex-direction: column;
 `;
 
+const MessageListScrollable = styled.div`
+  width: calc(100% - 16px);
+  display: flex;
+  flex-direction: column-reverse;
+  flex-grow: 1;
+  justify-content: flex-start;
+  overflow-y: auto;
+  min-height: auto;
+  padding: 0px 8px;
+`;
+
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -46,16 +64,29 @@ const ContentContainer = styled.div`
   position: relative;
 `;
 
-export function ConversationPopUp(props: ConversationPopUpProps) {
+export const ConversationPopUp: FC<ConversationPopUpProps> = ({
+  chatroomId,
+}) => {
+  const { channel, sendMessage } = useChannel(chatroomId);
+
   return (
     <Container>
       <ChatHeader status={'online'} account={''} />
       <ContentContainer>
-        <MessageDisplayContainer></MessageDisplayContainer>
-        <MessageForm />
+        <MessageDisplayContainer>
+          <MessageListScrollable>
+            <Message isMine={true} isFollowing={true} content="hi" />
+            <Message isMine={true} isFollowing={false} content="hi" />
+            <Divider>Today</Divider>
+            <Message isMine={false} isFollowing={true} content="hi" />
+            <Message isMine={false} isFollowing={true} content="hi" />
+            <Message isMine={false} isFollowing={false} content="hi" />
+          </MessageListScrollable>
+        </MessageDisplayContainer>
+        <MessageForm onSend={sendMessage} />
       </ContentContainer>
     </Container>
   );
-}
+};
 
 export default ConversationPopUp;

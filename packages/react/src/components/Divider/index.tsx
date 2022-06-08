@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { Colors } from '../../styles';
 
 export interface DividerProps {
-  children: ReactNode;
+  children?: ReactNode;
   lineColor?: string;
   color?: string;
+  margin?: string;
 }
 
 const DivderContainer = styled.div`

@@ -50,6 +50,7 @@ describe('Websocket Tests', () => {
     const channel = new Channel({ chatroom_id: TestChatRoomId });
     const timestamp = Date.now().toString();
     const messageToUpload = `JS SDK Testing at ${timestamp}`;
+
     await channel.open();
     const testChat: IPostChatBody = {
       creator_user_id: user_id,
@@ -57,7 +58,9 @@ describe('Websocket Tests', () => {
       content_text: messageToUpload,
     };
     channel.sendMessage(testChat);
+
     const recentChats = await core.chatroom.chat.getRecent(TestChatRoomId, 1);
+    console.log(recentChats);
     expect(recentChats.data).toHaveLength(1);
     expect(recentChats.data[0].content_text).toEqual(messageToUpload);
   });

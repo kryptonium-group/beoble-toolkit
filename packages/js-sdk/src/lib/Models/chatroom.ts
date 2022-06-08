@@ -15,6 +15,8 @@ export interface IChatRoom {
   representative_media_url: string[];
   creator_id: string;
   chatroom_type: ChatRoomType;
+  latest_chat: IChat[];
+  members: IUser[];
 }
 
 interface IMembership {
@@ -44,6 +46,7 @@ export interface IPostChatRoomBody {
   representative_media_url?: string;
   creator_id: string;
   chatroom_type: ChatRoomType;
+  members: string[];
 }
 
 export interface IPutChatRoomBody {

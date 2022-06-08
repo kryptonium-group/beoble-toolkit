@@ -5,10 +5,18 @@ import { BsEmojiSmile } from 'react-icons/bs';
 import { Colors } from '../../styles';
 import IconButton from '../IconButton';
 import Button from '../Button';
-import { ChangeEvent, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from 'react';
 
 /* eslint-disable-next-line */
-export interface MessageFormProps {}
+export interface MessageFormProps {
+  onSend: (value: string) => void;
+}
 
 const FormContainer = styled.form`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -80,7 +88,7 @@ const SendButton = styled(Button)`
   margin-right: 8px;
 `;
 
-export function MessageForm(props: MessageFormProps) {
+export const MessageForm: FC<MessageFormProps> = ({ onSend }) => {
   const [isFocused, setIsFoucesd] = useState(false);
   const [messageContent, setMessageContent] = useState('');
 
@@ -88,14 +96,21 @@ export function MessageForm(props: MessageFormProps) {
     setMessageContent(e.target.value);
   };
 
+  const handleSendMessage = (e: SyntheticEvent) => {
+    e.preventDefault();
+    onSend(messageContent);
+    setMessageContent('');
+  };
+
   return (
-    <FormContainer>
+    <FormContainer onSubmit={handleSendMessage}>
       <TextEditorContainer {...{ isFocused }}>
         <TextEditor
           placeholder="Write a mesage..."
           onFocus={() => setIsFoucesd(true)}
           onBlur={() => setIsFoucesd(false)}
           onChange={handleMessageChange}
+          value={messageContent}
         />
       </TextEditorContainer>
       <FormFooter>
@@ -114,7 +129,9 @@ export function MessageForm(props: MessageFormProps) {
           </IconButton>
         </FooterActionButtonContainer>
         <FooterActionButtonContainer>
-          <SendButton disabled={!messageContent}>Send</SendButton>
+          <SendButton disabled={!messageContent} type="submit">
+            Send
+          </SendButton>
           <IconButton size={32}>
             <MdMoreHoriz />
           </IconButton>
@@ -122,6 +139,6 @@ export function MessageForm(props: MessageFormProps) {
       </FormFooter>
     </FormContainer>
   );
-}
+};
 
 export default MessageForm;

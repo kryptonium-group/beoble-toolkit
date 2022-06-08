@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Core } from '@beoble/js-sdk';
 import { Colors, FontWeights, Truncate } from '../../styles';
-import { convertTimestampTo } from '../../utils/timeUtil';
+import { convertTime } from '../../utils/timeUtil';
 import Avatar from '../Avatar';
 import { Status } from '../OnlineStatus';
 import { useBeoble } from '../../hooks';
@@ -119,7 +119,7 @@ export const MessageConversation: React.FC<MessageConversationProps> = ({
         <ConversationContentWrapper>
           <ConversationRow>
             <UserName>{userName}</UserName>
-            <LastMessageTime>{convertTimestampTo(timestamp)}</LastMessageTime>
+            <LastMessageTime>{convertTime(timestamp)}</LastMessageTime>
           </ConversationRow>
           <ConversationRow>
             <MessageContainer>

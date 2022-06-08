@@ -1,4 +1,5 @@
 import { Story, Meta } from '@storybook/react';
+import { LoremIpsum } from '../../constants';
 import { Message, MessageProps } from './index';
 
 export default {
@@ -12,22 +13,26 @@ export const MyMessage = Template.bind({});
 MyMessage.args = {
   isMine: true,
   isFollowing: false,
+  content: LoremIpsum,
 };
 
 export const MyMessageFollowing = Template.bind({});
-MyMessage.args = {
+MyMessageFollowing.args = {
   isMine: true,
   isFollowing: true,
+  content: 'hi',
 };
 
 export const OthersMessage = Template.bind({});
 OthersMessage.args = {
   isMine: false,
   isFollowing: false,
+  content: 'hi',
 };
 
 export const OthersMessageFollowing = Template.bind({});
-OthersMessage.args = {
+OthersMessageFollowing.args = {
   isMine: false,
   isFollowing: true,
+  content: 'hi',
 };

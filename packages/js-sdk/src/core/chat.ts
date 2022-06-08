@@ -60,7 +60,7 @@ export class Channel {
     };
 
     this._socket.onmessage = (ev) => {
-      console.log(ev, ev.data, typeof ev);
+      return;
     };
 
     this._socket.onclose = () => {

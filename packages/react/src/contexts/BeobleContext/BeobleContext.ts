@@ -1,16 +1,14 @@
 import { ethers } from 'ethers';
 import { createContext } from 'react';
 import { Core, IUser } from '@beoble/js-sdk';
+import { Account } from '../../hooks/useWeb3';
 
 export interface IBeobleContext {
   isAuthenticated: boolean;
-  isInitialized: boolean;
-  initialize: () => void;
+  initialized: boolean;
 
   provider: ethers.providers.Web3Provider | null;
-  address: string | null;
-  ENSName: string | null;
-  ENSAvatar: string | null;
+  account?: Account;
 
   Beoble: Core | null;
   user: IUser | null;

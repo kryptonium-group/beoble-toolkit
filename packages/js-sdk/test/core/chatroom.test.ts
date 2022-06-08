@@ -1,4 +1,5 @@
 import { Core } from '../../src/core';
+import { TestWallets } from '../constants';
 import { getUserChatRoom, MasterKeyAuthToken, MyWallet } from './index.test';
 
 const core = new Core({
@@ -15,20 +16,39 @@ describe('test chatroom api', () => {
     expect(chatRoom.alias).toEqual(chatroom.alias);
   });
 
-  it('create', async () => {
+  it('create direct chatroom', async () => {
+    const userWalletToCreate = TestWallets[1];
+    const audienceUserWallet = TestWallets[10];
     const user = await core.user.get({
-      wallet_address: MyWallet,
+      wallet_address: userWalletToCreate,
     });
+
+    const audience = await core.user.get({
+      wallet_address: audienceUserWallet,
+    });
+
+    const secondAudience = await core.user.get({
+      wallet_address: TestWallets[3],
+    });
+
     const creator_id = user.data[0].user_id;
+    const audience_id = audience.data[0].user_id;
 
     const res = await core.chatroom.add({
       alias: 'test',
       display_name: 'test',
       creator_id,
-      chatroom_type: 'DIRECT_CHAT',
+      chatroom_type: 'GROUP_CHAT',
+      members: [audience_id, secondAudience.data[0].user_id],
     });
+
+    console.log(res);
     expect(res.data).not.toBeUndefined();
     expect(res.data.creator_id).toEqual(creator_id);
+  });
+
+  it('create group chatroom', async () => {
+    return;
   });
 
   it('update', async () => {
@@ -62,8 +82,8 @@ describe('test chatroom membership', () => {
 
 describe('test chatroom chat', () => {
   it('test get recent chat', async () => {
-    const { chatroom } = await getUserChatRoom(core, MyWallet);
-    const res = await core.chatroom.chat.getRecent(chatroom.chatroom_id, 100);
+    const { chatroom_id } = await getUserChatRoom(core, MyWallet);
+    const res = await core.chatroom.chat.getRecent(chatroom_id, 15);
     console.log(res);
   });
 });

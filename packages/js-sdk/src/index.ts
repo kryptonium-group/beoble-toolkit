@@ -1,4 +1,4 @@
-import { Core } from './core';
+import { Core, Channel } from './core';
 import * as utils from './util';
 export * from './lib';
 
@@ -7,4 +7,4 @@ const BeobleSDK = {
   utils,
 };
 
-export { BeobleSDK, Core };
+export { BeobleSDK, Core, Channel };
