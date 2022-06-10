@@ -7,8 +7,8 @@ export type ChatRoomType = 'DIRECT_CHAT' | 'GROUP_CHAT' | 'CHANNEL';
 
 export interface IChatRoom {
   chatroom_id: string;
-  create_time: string;
-  update_time: string;
+  create_time: string | number;
+  update_time: string | number;
   alias: string;
   display_name: string;
   description: string;

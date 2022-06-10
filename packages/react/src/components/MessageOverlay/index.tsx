@@ -6,6 +6,7 @@ import { Colors } from '../../styles';
 import MessageConversation from '../MessageConversation';
 import MessageHeader from '../MessageHeader';
 import { useChatRoom } from '../../hooks/useChatRoom';
+import Spinner from '../Spinner';
 
 /* eslint-disable-next-line */
 export interface MessageOverlayProps {
@@ -44,27 +45,32 @@ const MessageOverlayBubble = styled.div<{
 `;
 
 const ScrollSection = styled.section`
-  overflow-y: auto;
+  display: block;
   position: relative;
   overflow: hidden;
   flex-grow: 1;
-  display: block;
+  overflow-y: auto;
+  height: inherit;
 `;
 
 const ConversationContainer = styled.div``;
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-grow: 1;
+`;
 
 export const MessageOverlay: FC<MessageOverlayProps> = () => {
   const [isMinimized, setIsMinimized] = useState(true);
 
   const { account } = useBeoble();
-  const { conversations } = useChatRoom();
+  const { conversations, isLoading } = useChatRoom();
 
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
-  };
-
-  const openChatRoom = (chatId: string) => {
-    return;
   };
 
   return (
@@ -73,13 +79,22 @@ export const MessageOverlay: FC<MessageOverlayProps> = () => {
         status={'online'}
         {...{ isMinimized }}
         onMinimizeButtonClick={toggleMinimize}
+        onHeaderClick={toggleMinimize}
         account={account?.address ?? ''}
-      ></MessageHeader>
-      <ConversationContainer>
-        {conversations.map((args) => (
-          <MessageConversation {...args} />
-        ))}
-      </ConversationContainer>
+      />
+
+      {isLoading && (
+        <SpinnerContainer>
+          <Spinner color={Colors.background.messageTint} />
+        </SpinnerContainer>
+      )}
+      <ScrollSection>
+        <ConversationContainer>
+          {conversations.map((args) => (
+            <MessageConversation {...args} />
+          ))}
+        </ConversationContainer>
+      </ScrollSection>
     </MessageOverlayBubble>
   );
 };

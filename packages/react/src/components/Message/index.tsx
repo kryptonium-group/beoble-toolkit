@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { Colors, FontWeights } from '../../styles';
+import { convertTime } from '../../utils';
 import Avatar from '../Avatar';
 
 /* eslint-disable-next-line */
@@ -8,7 +9,24 @@ export interface MessageProps {
   isMine: boolean;
   isFollowing: boolean;
   content: string;
+  timestamp: number;
+  profileImage?: string;
+  account: string;
+  userName: string;
+  chatId: string;
 }
+
+const mountAnimation = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+   to {
+     opacity: 1;
+    transform: translateY(0);
+
+   }
+`;
 
 const MessageContainer = styled.div<{ isMine: boolean }>`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -17,6 +35,7 @@ const MessageContainer = styled.div<{ isMine: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: ${({ isMine }) => (isMine ? 'end' : 'start')};
+  animation: ${mountAnimation} 500ms;
 `;
 
 const ProfileContainer = styled.div`
@@ -78,21 +97,35 @@ const TimePhrase = styled.time`
   color: ${Colors.text.lowEmphasis};
 `;
 
-export const Message: FC<MessageProps> = ({ isMine, isFollowing, content }) => {
+export const Message: FC<MessageProps> = ({
+  isMine,
+  isFollowing,
+  content,
+  profileImage,
+  account,
+  userName,
+  timestamp,
+  chatId,
+}) => {
   return (
     <MessageContainer {...{ isMine }}>
       {!isMine && (
         <ProfileContainer>
           {!isFollowing && (
-            <Avatar size={32} profileImg={''} status={'online'} account={''} />
+            <Avatar
+              size={32}
+              profileImg={profileImage}
+              status={'none'}
+              account={account}
+            />
           )}
         </ProfileContainer>
       )}
       <MessageContentContainer {...{ isMine }}>
         {!isFollowing && (
           <MessageInfoContainer>
-            <UserName>You</UserName>
-            <TimePhrase>Just now</TimePhrase>
+            <UserName>{userName}</UserName>
+            <TimePhrase>{convertTime(timestamp)}</TimePhrase>
           </MessageInfoContainer>
         )}
         <MessageBox {...{ isMine }}>{content}</MessageBox>

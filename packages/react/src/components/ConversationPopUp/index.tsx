@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Channel } from '@beoble/js-sdk';
-import { useBeoble } from '../../hooks';
 import { Colors } from '../../styles';
 import Divider from '../Divider';
 import Message from '../Message';
 import MessageForm from '../MessageForm';
 import { ChatHeader } from '../MessageHeader';
 import { useChannel } from '../../hooks/useChannel';
+import useChat from '../../hooks/useChat';
+import Spinner from '../Spinner';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
@@ -64,26 +64,45 @@ const ContentContainer = styled.div`
   position: relative;
 `;
 
+const SpinnerContainer = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   chatroomId,
 }) => {
-  const { channel, sendMessage } = useChannel(chatroomId);
+  const { sendMessage, messages, isLoading } = useChannel(chatroomId);
+  const { closeChat } = useChat();
 
   return (
     <Container>
-      <ChatHeader status={'online'} account={''} />
+      <ChatHeader
+        status={'online'}
+        account={''}
+        onClose={() => {
+          closeChat(chatroomId);
+        }}
+      />
       <ContentContainer>
         <MessageDisplayContainer>
           <MessageListScrollable>
-            <Message isMine={true} isFollowing={true} content="hi" />
-            <Message isMine={true} isFollowing={false} content="hi" />
-            <Divider>Today</Divider>
-            <Message isMine={false} isFollowing={true} content="hi" />
-            <Message isMine={false} isFollowing={true} content="hi" />
-            <Message isMine={false} isFollowing={false} content="hi" />
+            {isLoading && (
+              <SpinnerContainer>
+                <Spinner color={Colors.background.messageTint} />
+              </SpinnerContainer>
+            )}
+            {!isLoading &&
+              messages
+                .reverse()
+                .map((args) => <Message key={args.chatId} {...args} />)}
           </MessageListScrollable>
         </MessageDisplayContainer>
-        <MessageForm onSend={sendMessage} />
+        <MessageForm onSend={sendMessage} disabled={isLoading} />
       </ContentContainer>
     </Container>
   );

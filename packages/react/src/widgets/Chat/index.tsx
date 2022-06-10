@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import ConversationPopUp from '../../components/ConversationPopUp';
 import MessageOverlay, { Conversation } from '../../components/MessageOverlay';
+import useChat from '../../hooks/useChat';
 
 /* eslint-disable-next-line */
 export interface ChatProps {}
@@ -22,14 +23,19 @@ const ChatContainer = styled.div`
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 `;
 
-export function Chat(props: ChatProps) {
+export const Chat: FC<ChatProps> = (props: ChatProps) => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [openedConversations, setOpenedConversations] = useState<string[]>([]);
+  const [opened, setOpened] = useState<string>();
+  const { openedChat } = useChat();
+
   return (
     <ChatContainer>
       <MessageOverlay {...{ conversations }} />
-      <ConversationPopUp chatroomId={''} />
+      {openedChat.length > 0 &&
+        openedChat.map((chat) => <ConversationPopUp chatroomId={chat} />)}
     </ChatContainer>
   );
-}
+};
 
 export default Chat;

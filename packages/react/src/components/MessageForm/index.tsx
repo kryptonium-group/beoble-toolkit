@@ -16,6 +16,7 @@ import React, {
 /* eslint-disable-next-line */
 export interface MessageFormProps {
   onSend: (value: string) => void;
+  disabled?: boolean;
 }
 
 const FormContainer = styled.form`
@@ -66,6 +67,10 @@ const TextEditor = styled.textarea`
   overflow: auto;
   padding: 12px 48px 0 12px;
   resize: none;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const FormFooter = styled.footer`
@@ -88,7 +93,7 @@ const SendButton = styled(Button)`
   margin-right: 8px;
 `;
 
-export const MessageForm: FC<MessageFormProps> = ({ onSend }) => {
+export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
   const [isFocused, setIsFoucesd] = useState(false);
   const [messageContent, setMessageContent] = useState('');
 
@@ -111,28 +116,29 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend }) => {
           onBlur={() => setIsFoucesd(false)}
           onChange={handleMessageChange}
           value={messageContent}
+          {...{ disabled }}
         />
       </TextEditorContainer>
       <FormFooter>
         <FooterActionButtonContainer>
-          <IconButton size={32}>
+          <IconButton size={32} {...{ disabled }}>
             <AiOutlinePicture />
           </IconButton>
-          <IconButton size={32}>
+          <IconButton size={32} {...{ disabled }}>
             <AiOutlinePaperClip />
           </IconButton>
-          <IconButton size={32}>
+          <IconButton size={32} {...{ disabled }}>
             <MdGif />
           </IconButton>
-          <IconButton size={32}>
+          <IconButton size={32} {...{ disabled }}>
             <BsEmojiSmile />
           </IconButton>
         </FooterActionButtonContainer>
         <FooterActionButtonContainer>
-          <SendButton disabled={!messageContent} type="submit">
+          <SendButton disabled={!messageContent && disabled} type="submit">
             Send
           </SendButton>
-          <IconButton size={32}>
+          <IconButton size={32} {...{ disabled }}>
             <MdMoreHoriz />
           </IconButton>
         </FooterActionButtonContainer>

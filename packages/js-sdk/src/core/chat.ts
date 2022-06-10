@@ -34,8 +34,8 @@ export class Chat extends IAPIClass implements IRestEndPoint {
 
   public channel(config: IChannelConfig) {
     return new Channel({
-      authToken: this._client.getAuthToken(),
       ...config,
+      authToken: this._client.getAuthToken(),
     });
   }
 
@@ -59,16 +59,16 @@ export class Channel {
       this._isOpen = true;
     };
 
-    this._socket.onmessage = (ev) => {
+    this._socket.onmessage = (ev: MessageEvent<any>) => {
       return;
     };
 
     this._socket.onclose = () => {
-      return;
+      this._isOpen = false;
     };
   }
 
-  public async watch() {
+  public watch() {
     return this._socket.readyState;
   }
 
@@ -84,7 +84,10 @@ export class Channel {
     this._socket.close();
   }
 
-  public on(event: WebScocketEvents, callback: (event: any) => void) {
+  public on(
+    event: WebScocketEvents,
+    callback: (ev: MessageEvent<any> | Event | CloseEvent) => void
+  ) {
     this._socket.addEventListener(event, callback);
   }
 }

@@ -14,6 +14,7 @@ MyMessage.args = {
   isMine: true,
   isFollowing: false,
   content: LoremIpsum,
+  timestamp: 1654852163180,
 };
 
 export const MyMessageFollowing = Template.bind({});
@@ -21,6 +22,7 @@ MyMessageFollowing.args = {
   isMine: true,
   isFollowing: true,
   content: 'hi',
+  timestamp: 1654852163180,
 };
 
 export const OthersMessage = Template.bind({});
@@ -28,6 +30,7 @@ OthersMessage.args = {
   isMine: false,
   isFollowing: false,
   content: 'hi',
+  timestamp: 1654852163180,
 };
 
 export const OthersMessageFollowing = Template.bind({});
@@ -35,4 +38,5 @@ OthersMessageFollowing.args = {
   isMine: false,
   isFollowing: true,
   content: 'hi',
+  timestamp: 1654852163180,
 };

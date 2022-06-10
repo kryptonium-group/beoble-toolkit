@@ -1,4 +1,5 @@
 import { Story, Meta } from '@storybook/react';
+import { BeobleProvider } from '../../contexts';
 import { MessageConversation, MessageConversationProps } from './index';
 
 export default {
@@ -7,7 +8,9 @@ export default {
 } as Meta;
 
 const Template: Story<MessageConversationProps> = (args) => (
-  <MessageConversation {...args} />
+  <BeobleProvider>
+    <MessageConversation {...args} />
+  </BeobleProvider>
 );
 
 export const Primary = Template.bind({});

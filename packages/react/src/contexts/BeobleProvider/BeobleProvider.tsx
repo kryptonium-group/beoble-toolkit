@@ -3,6 +3,7 @@ import { Core, IUser } from '@beoble/js-sdk';
 import useWeb3 from '../../hooks/useWeb3';
 import { BeobleContext } from '../BeobleContext';
 import { ModalProvider } from '../ModalContext/ModalProvider';
+import { ChatProvider } from '../ChatContext/ChatProvider';
 
 export interface IBeobleProvider {
   children?: ReactNode;
@@ -40,7 +41,6 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
     const user = await beoble.user.get({
       wallet_address,
     });
-    console.log(user.data[0]);
     if (user.meta.count < 1) {
       const newUser = await beoble.user.add({
         wallet_address,
@@ -63,7 +63,9 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
         setUser,
       }}
     >
-      <ModalProvider>{children}</ModalProvider>
+      <ChatProvider>
+        <ModalProvider>{children}</ModalProvider>
+      </ChatProvider>
     </BeobleContext.Provider>
   );
 };

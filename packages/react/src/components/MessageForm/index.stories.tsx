@@ -9,4 +9,6 @@ export default {
 const Template: Story<MessageFormProps> = (args) => <MessageForm {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  disabled: false,
+};

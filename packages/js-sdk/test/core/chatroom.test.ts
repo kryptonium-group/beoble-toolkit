@@ -5,6 +5,7 @@ import { getUserChatRoom, MasterKeyAuthToken, MyWallet } from './index.test';
 const core = new Core({
   authToken: MasterKeyAuthToken,
 });
+const nullMemberChatRoomId = '617c7215-8c1a-4dc6-b6ed-c5b102bd8462';
 
 describe('test chatroom api', () => {
   it('get', async () => {
@@ -65,6 +66,7 @@ describe('test chatroom membership', () => {
   it('test get', async () => {
     const { chatroom, user_id } = await getUserChatRoom(core, MyWallet);
     const res = await core.chatroom.member.get(chatroom.chatroom_id);
+    console.log(JSON.stringify(res));
     expect(res.data.ADMIN[0].user_id).toEqual(user_id);
   });
 

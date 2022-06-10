@@ -6,13 +6,14 @@ import { CgArrowsExpandRight, CgClose } from 'react-icons/cg';
 import IconButton from '../IconButton';
 import Avatar from '../Avatar';
 import { Status } from '../OnlineStatus';
-import { FC } from 'react';
+import { FC, MouseEventHandler, MouseEvent } from 'react';
 import { Colors, FontWeights, Truncate } from '../../styles';
 
 export interface MessageHeaderProps {
   profileImage?: string;
   status: Status;
   onMinimizeButtonClick?: () => void;
+  onHeaderClick?: () => void;
   isMinimized: boolean;
   account: string;
 }
@@ -73,11 +74,20 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
   profileImage,
   status,
   onMinimizeButtonClick,
+  onHeaderClick,
   isMinimized,
   account,
 }) => {
+  const handleMoreButtonClick = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+  };
+
+  const handleNewMessageButtonClick = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+  };
+
   return (
-    <StyledMessageHeader>
+    <StyledMessageHeader onClick={onHeaderClick}>
       <ProfileContainer>
         <Avatar
           size={32}
@@ -88,10 +98,10 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
         <HeaderTitle>Messaging</HeaderTitle>
       </ProfileContainer>
       <ControlsContainer>
-        <IconButton size={32}>
+        <IconButton size={32} onClick={handleMoreButtonClick}>
           <MdMoreHoriz />
         </IconButton>
-        <IconButton size={32}>
+        <IconButton size={32} onClick={handleNewMessageButtonClick}>
           <BiEdit />
         </IconButton>
         <IconButton size={32} onClick={onMinimizeButtonClick}>
@@ -130,6 +140,8 @@ export interface ChatHeaderProps {
   status: Status;
   account: string;
   userName?: string;
+  onHeaderClick?: () => void;
+  onClose?: MouseEventHandler<any>;
 }
 
 const TitleContainer = styled.div`
@@ -161,9 +173,11 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   status,
   account,
   userName,
+  onHeaderClick,
+  onClose,
 }) => {
   return (
-    <StyledMessageHeader>
+    <StyledMessageHeader onClick={onHeaderClick}>
       <ProfileContainer>
         <Avatar
           size={32}
@@ -183,7 +197,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
         <IconButton size={32}>
           <CgArrowsExpandRight />
         </IconButton>
-        <IconButton size={32}>
+        <IconButton size={32} onClick={onClose}>
           <CgClose />
         </IconButton>
       </ControlsContainer>

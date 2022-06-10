@@ -29,5 +29,5 @@ const TestChatRooms = {
 
 export const Primary = Template.bind({});
 Primary.args = {
-  chatroomId: TestChatRooms[11],
+  chatroomId: TestChatRooms[1],
 };

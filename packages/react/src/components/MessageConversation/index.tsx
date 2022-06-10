@@ -1,19 +1,21 @@
-import { useEffect } from 'react';
+import { MouseEvent, useEffect } from 'react';
 import styled from 'styled-components';
-import { Core } from '@beoble/js-sdk';
+import useChat from '../../hooks/useChat';
 import { Colors, FontWeights, Truncate } from '../../styles';
 import { convertTime } from '../../utils/timeUtil';
 import Avatar from '../Avatar';
 import { Status } from '../OnlineStatus';
-import { useBeoble } from '../../hooks';
+import { mountAnimation } from '../../styles/commons';
 
 export interface MessageConversationProps {
-  timestamp: string | number;
+  timestamp: number;
   profilePhoto?: string;
   status: Status;
   lastMessage: string;
   userName: string;
-  onClick: React.MouseEventHandler<HTMLDivElement>;
+  account: string;
+  onClick?: React.MouseEventHandler<any>;
+  chatroomId: string;
 }
 
 const StyledMessageConversation = styled.div`
@@ -30,6 +32,8 @@ const StyledMessageConversation = styled.div`
   &:hover {
     background-color: ${Colors.background.noneTintHover};
   }
+
+  animation: ${mountAnimation} 500ms;
 `;
 
 const ProfileContainer = styled.div`
@@ -103,16 +107,25 @@ export const MessageConversation: React.FC<MessageConversationProps> = ({
   userName,
   profilePhoto,
   status,
+  account,
   onClick,
+  chatroomId,
 }) => {
+  const { openChat } = useChat();
+
+  const handleClick = (e: MouseEvent) => {
+    onClick && onClick(e);
+    openChat(chatroomId);
+  };
+
   return (
-    <StyledMessageConversation {...{ onClick }}>
+    <StyledMessageConversation onClick={handleClick}>
       <ProfileContainer>
         <Avatar
           size={48}
           profileImg={profilePhoto}
           status={status}
-          account={''}
+          account={account}
         />
       </ProfileContainer>
       <ConversationContentCard>

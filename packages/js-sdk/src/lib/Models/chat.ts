@@ -35,8 +35,8 @@ export interface IPutChatReportBody {
 
 export interface IChat {
   chat_id: string;
-  create_time: string;
-  update_time: string;
+  create_time: string | number;
+  update_time: string | number;
   parent_chat_id?: string;
   creator_user_id: string;
   chatroom_id: string;
