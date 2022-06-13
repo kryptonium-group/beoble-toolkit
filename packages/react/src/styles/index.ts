@@ -42,3 +42,9 @@ export const FontWeights = {
   normal: 400,
   bold: 600,
 };
+
+export const zIndex = {
+  modal: 999,
+  blur: 998,
+  messages: 997,
+};

@@ -19,28 +19,23 @@ const Address = styled.p`
 `;
 
 export const StatusButton = ({ onClick }: StatusButtonProps) => {
-  const { isInitialized, initialize, address, ENSName, ENSAvatar } =
-    useBeoble();
-
-  useEffect(() => {
-    if (!isInitialized) initialize();
-  }, [initialize, isInitialized]);
+  const { initialized, account } = useBeoble();
 
   const handleClickTest = useCallback(async () => {
     onClick && onClick();
-    console.log(address, ENSAvatar, ENSName);
-  }, [onClick, address, ENSAvatar, ENSName]);
+    console.log(account);
+  }, [onClick, account]);
 
   return (
     <StatusButtonContainer>
       <Button onClick={handleClickTest}>
         <Address>
           {BeobleSDK.utils.truncateString(
-            ENSName ?? address ?? 'not connected',
+            account?.ensName ?? account?.address ?? 'not connected',
             16
           )}
         </Address>
-        <Identication diameter={16} account={address ?? ''} />
+        <Identication diameter={16} account={account?.address ?? ''} />
       </Button>
     </StatusButtonContainer>
   );

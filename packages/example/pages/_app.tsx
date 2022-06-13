@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Web3ContextProvider } from '../components/Web3Button/web3Context';
-import { BeobleProvider } from '@beoble/react';
+import { BeobleProvider, Chat } from '@beoble/react';
 import './styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {

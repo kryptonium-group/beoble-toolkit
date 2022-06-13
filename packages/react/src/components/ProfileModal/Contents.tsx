@@ -233,6 +233,8 @@ const ModalContent = styled.div`
   flex-grow: 1;
   margin-bottom: 20px;
   vertical-align: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 `;
 
 const ProfileInfoContainer = styled.div`
@@ -414,7 +416,7 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
   const [isFollowersMenuOpen, setIsFollowersMenuOpen] = useState(false);
   const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
 
-  const { address, ENSName, initialize, isInitialized } = useBeoble();
+  const { initialized, account } = useBeoble();
   const { addRoute } = useBeobleModal();
 
   const handleClickChattingMenu = () => {
@@ -429,23 +431,22 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
     setIsFollowingMenuOpen(!isFollowingMenuOpen);
   };
 
-  useEffect(() => {
-    if (!isInitialized) {
-      initialize();
-    }
-  }, [initialize, isInitialized]);
-
   return (
     <ModalContent>
       <ProfileInfoContainer>
         <AddressContainer>
           <AddressProfileButton>
             <AddressProfileDiv>
-              <Identication diameter={36} account={address ?? ''} />
+              <Identication diameter={36} account={account?.address ?? ''} />
               <AddressDiv>
-                <AddressSpan>{ENSName ?? 'undefined'}</AddressSpan>
+                <AddressSpan>{account?.ensName ?? 'undefined'}</AddressSpan>
                 <ProfileSpan>
-                  {BeobleSDK.utils.truncateString(address ?? ' ', 16, 4, 4)}
+                  {BeobleSDK.utils.truncateString(
+                    account?.address ?? ' ',
+                    16,
+                    4,
+                    4
+                  )}
                 </ProfileSpan>
               </AddressDiv>
             </AddressProfileDiv>

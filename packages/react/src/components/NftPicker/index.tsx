@@ -14,7 +14,7 @@ import {
 export interface NftPickerProps extends SizeProps {}
 
 export function NftPicker({ size = 150 }: NftPickerProps) {
-  const { address } = useBeoble();
+  const { account } = useBeoble();
 
   return (
     <PickerContainer size={size}>
@@ -22,8 +22,8 @@ export function NftPicker({ size = 150 }: NftPickerProps) {
         <MdEdit color="#fff" size={size / 6} />
       </HoverContainer>
       <ImageContainer size={size}>
-        {address ? (
-          <Identication diameter={size} account={address} />
+        {account ? (
+          <Identication diameter={size} account={account.address} />
         ) : (
           <PickerImage src="https://storage.googleapis.com/opensea-static/opensea-profile/11.png" />
         )}

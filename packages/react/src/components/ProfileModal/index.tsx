@@ -5,6 +5,7 @@ import { MdArrowBack } from 'react-icons/md';
 import Button from '../Button';
 import { EditProfile, ProfileContent } from './Contents';
 import useBeobleModal from '../../hooks/useBeoble/useBeobleModal';
+import { zIndex } from '../../styles';
 
 /* eslint-disable-next-line */
 export interface ProfileModalProps {
@@ -67,6 +68,7 @@ const Container = styled.div<{ isOpen: boolean }>`
   backdrop-filter: ${({ isOpen }) => (isOpen ? 'blur(10px)' : 'none')};
   background-color: ${({ isOpen }) =>
     isOpen ? 'rgba(255, 255, 255, 0.1)' : 'transperent'};
+  z-index: ${zIndex.blur};
 `;
 
 const ProfileModalContainer = styled.div<{ isOpen: boolean }>`
@@ -82,6 +84,7 @@ const ProfileModalContainer = styled.div<{ isOpen: boolean }>`
   animation-fill-mode: both;
   animation-duration: 300ms;
   animation-name: ${({ isOpen }) => (isOpen ? Sidebar : SidebarDisappear)};
+  z-index: ${zIndex.modal};
 `;
 
 const ProfileModalCard = styled.div`

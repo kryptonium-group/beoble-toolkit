@@ -2,6 +2,7 @@
 import { ReactElement } from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
+import { Chat } from '@beoble/react';
 
 export default class CustomDocument extends Document<{
   styleTags: ReactElement[];

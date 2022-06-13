@@ -9,11 +9,8 @@ import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   const { connect, address } = useWeb3Context();
-  const { initialize } = useBeoble();
   const handleConnect = () => {
-    connect().then(() => {
-      initialize();
-    });
+    connect();
   };
 
   return (
@@ -27,6 +24,7 @@ const Home: NextPage = () => {
         <>
           <div className={styles.appbar}>
             <Profile detailElement="modal" />
+            <Chat />
           </div>
           <main className={styles.main}>
             <h1 className={styles.title}>

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ConversationPopUp from '../../components/ConversationPopUp';
 import MessageOverlay, { Conversation } from '../../components/MessageOverlay';
 import useChat from '../../hooks/useChat';
+import { zIndex } from '../../styles';
 
 /* eslint-disable-next-line */
 export interface ChatProps {}
@@ -11,7 +12,7 @@ const ChatContainer = styled.div`
   box-sizing: border-box;
   height: 0;
   position: fixed;
-  z-index: 1000;
+  z-index: ${zIndex.messages};
   bottom: 0;
   right: 0;
   overflow: visible;
