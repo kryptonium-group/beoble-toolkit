@@ -3,13 +3,14 @@ import { Channel, IChat } from '@beoble/js-sdk';
 import { useBeoble } from './useBeoble';
 import { MessageProps } from '../components/Message';
 import { isMinEqual } from '../utils';
-import { parse } from 'path';
+import useChat from './useChat';
 
 export const useChannel = (chatroomId: string) => {
   const { Beoble, user } = useBeoble();
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [channel, setChannel] = useState<Channel>();
   const [isLoading, setIsLoading] = useState(true);
+  const { updateChatrooms } = useChat();
 
   useEffect(() => {
     if (Beoble && user) openChannel();
@@ -26,6 +27,7 @@ export const useChannel = (chatroomId: string) => {
 
       chat.on('message', (e: any) => {
         updateMessage(e.data);
+        updateChatrooms();
       });
 
       await chat.open();
@@ -56,22 +58,32 @@ export const useChannel = (chatroomId: string) => {
     };
   };
 
+  const concatMessages = (prev: MessageProps[], incoming: MessageProps[]) => {
+    const lastPrevElem = prev.at(-1);
+    const firstIncomingElem = incoming.at(0);
+    if (!lastPrevElem) return incoming;
+    if (!firstIncomingElem) return prev;
+    if (isMinEqual(lastPrevElem.timestamp, firstIncomingElem.timestamp))
+      incoming[0].isFollowing = true;
+    return prev.concat(incoming);
+  };
+
   const updateMessage = (message: string) => {
     const parsed: IChat[] = JSON.parse(message);
-    console.log(parsed);
     const converted = parsed.map(convertChatToMessageProps);
-    setMessages((prev) => [...prev, ...converted]);
+    setMessages((prev) => concatMessages(prev, converted));
   };
 
   const sendMessage = (content: string) => {
     if (!user)
       throw new Error('user should be initialized before sending message!');
-    if (channel)
+    if (channel) {
       channel.sendMessage({
         creator_user_id: user.user_id,
         chatroom_id: chatroomId,
         content_text: content,
       });
+    }
   };
 
   return { sendMessage, openChannel, messages, isLoading };

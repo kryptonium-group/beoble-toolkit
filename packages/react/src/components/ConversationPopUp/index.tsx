@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { FC, useCallback, useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { Colors } from '../../styles';
 import Divider from '../Divider';
 import Message from '../Message';
@@ -8,12 +8,15 @@ import { ChatHeader } from '../MessageHeader';
 import { useChannel } from '../../hooks/useChannel';
 import useChat from '../../hooks/useChat';
 import Spinner from '../Spinner';
+import { useChatRoom } from '../../hooks/useChatroom';
+import { useBeoble } from '../../hooks';
+import { getChatroomMemberAccount } from '../../hooks/useChatRooms';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
 }
 
-const Container = styled.div`
+const Container = styled.div<{ isMinimized: boolean }>`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
@@ -34,6 +37,15 @@ const Container = styled.div`
   border-radius: 0.8rem 0.8rem 0 0;
 
   margin-left: 16px;
+
+  ${({ isMinimized }) => isMinimized && minimizedContainer}
+`;
+
+const minimizedContainer = css`
+  width: 216px;
+  transform: translateY(100%) translateY(-48px);
+  transition-duration: 167ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 `;
 
 const MessageDisplayContainer = styled.div`
@@ -76,17 +88,28 @@ const SpinnerContainer = styled.div`
 export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   chatroomId,
 }) => {
+  const [isMinimized, setIsMinimized] = useState(false);
   const { sendMessage, messages, isLoading } = useChannel(chatroomId);
   const { closeChat } = useChat();
+  const { chatroomAccount, chatroomName } = useChatRoom(chatroomId);
+
+  const handleCloseChat = useCallback(() => {
+    closeChat(chatroomId);
+  }, [chatroomId]);
+
+  const handleHeaderClick = () => {
+    setIsMinimized(!isMinimized);
+  };
 
   return (
-    <Container>
+    <Container {...{ isMinimized }}>
       <ChatHeader
         status={'online'}
-        account={''}
-        onClose={() => {
-          closeChat(chatroomId);
-        }}
+        account={chatroomAccount}
+        userName={chatroomName}
+        onClose={handleCloseChat}
+        onHeaderClick={handleHeaderClick}
+        {...{ isMinimized }}
       />
       <ContentContainer>
         <MessageDisplayContainer>
@@ -98,6 +121,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
             )}
             {!isLoading &&
               messages
+                .slice()
                 .reverse()
                 .map((args) => <Message key={args.chatId} {...args} />)}
           </MessageListScrollable>

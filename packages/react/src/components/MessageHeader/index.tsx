@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { MdMoreHoriz } from 'react-icons/md';
 import { BiEdit } from 'react-icons/bi';
 import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
@@ -140,7 +140,8 @@ export interface ChatHeaderProps {
   status: Status;
   account: string;
   userName?: string;
-  onHeaderClick?: () => void;
+  isMinimized: boolean;
+  onHeaderClick?: MouseEventHandler<any>;
   onClose?: MouseEventHandler<any>;
 }
 
@@ -149,13 +150,19 @@ const TitleContainer = styled.div`
   flex-grow: 1;
   margin-left: 8px;
   padding-left: 4px;
+
+  ${Truncate}
 `;
 
-const UserName = styled.a`
+const UserName = styled.a<{ isMinimized: boolean }>`
   color: ${Colors.text.normal};
   font-weight: ${FontWeights.bold};
   text-decoration: none;
 
+  ${({ isMinimized }) => !isMinimized && linkDecoration}
+`;
+
+const linkDecoration = css`
   &:hover {
     color: ${Colors.text.action};
     text-decoration: underline;
@@ -173,9 +180,15 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   status,
   account,
   userName,
+  isMinimized,
   onHeaderClick,
   onClose,
 }) => {
+  const handleCloseClick = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    onClose && onClose(e);
+  };
+
   return (
     <StyledMessageHeader onClick={onHeaderClick}>
       <ProfileContainer>
@@ -186,18 +199,22 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
           account={account}
         />
         <TitleContainer>
-          <UserName>{userName ?? account}</UserName>
-          <StatusDiv>{status}</StatusDiv>
+          <UserName {...{ isMinimized }}>{userName ?? account}</UserName>
+          {!isMinimized && <StatusDiv>{status}</StatusDiv>}
         </TitleContainer>
       </ProfileContainer>
       <ControlsContainer>
-        <IconButton size={32}>
-          <MdMoreHoriz />
-        </IconButton>
-        <IconButton size={32}>
-          <CgArrowsExpandRight />
-        </IconButton>
-        <IconButton size={32} onClick={onClose}>
+        {!isMinimized && (
+          <>
+            <IconButton size={32}>
+              <MdMoreHoriz />
+            </IconButton>
+            <IconButton size={32}>
+              <CgArrowsExpandRight />
+            </IconButton>
+          </>
+        )}
+        <IconButton size={32} onClick={handleCloseClick}>
           <CgClose />
         </IconButton>
       </ControlsContainer>

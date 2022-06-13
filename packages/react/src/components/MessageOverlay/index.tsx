@@ -5,13 +5,11 @@ import { useBeoble } from '../../hooks';
 import { Colors } from '../../styles';
 import MessageConversation from '../MessageConversation';
 import MessageHeader from '../MessageHeader';
-import { useChatRoom } from '../../hooks/useChatRoom';
 import Spinner from '../Spinner';
+import useChat from '../../hooks/useChat';
 
 /* eslint-disable-next-line */
-export interface MessageOverlayProps {
-  conversations: Conversation[];
-}
+export interface MessageOverlayProps {}
 
 /* eslint-disable-next-line */
 export interface Conversation {}
@@ -67,11 +65,15 @@ export const MessageOverlay: FC<MessageOverlayProps> = () => {
   const [isMinimized, setIsMinimized] = useState(true);
 
   const { account } = useBeoble();
-  const { conversations, isLoading } = useChatRoom();
+  const { conversations, isChatroomsLoading } = useChat();
 
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
   };
+
+  useEffect(() => {
+    console.log('in message overlay', conversations);
+  }, [conversations]);
 
   return (
     <MessageOverlayBubble isMinimized={isMinimized}>
@@ -83,7 +85,7 @@ export const MessageOverlay: FC<MessageOverlayProps> = () => {
         account={account?.address ?? ''}
       />
 
-      {isLoading && (
+      {isChatroomsLoading && (
         <SpinnerContainer>
           <Spinner color={Colors.background.messageTint} />
         </SpinnerContainer>

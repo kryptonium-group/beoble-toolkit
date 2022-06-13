@@ -38,11 +38,11 @@ describe('user test', () => {
   });
 
   it('update', async () => {
-    const userId = (await core.user.get({ wallet_address: walletToCreate }))
-      .data[0].user_id;
+    //const userId = (await core.user.get({ wallet_address: walletToCreate }))
+    //  .data[0].user_id;
 
     const timestamp = Date.now().toString();
-    const res = await core.user.update(userId, {
+    const res = await core.user.update('36bea95d-546b-4874-8ff0-0815b02a6c7a', {
       display_name: timestamp,
     });
     console.log(res);

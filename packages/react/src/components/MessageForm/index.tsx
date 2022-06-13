@@ -9,8 +9,8 @@ import React, {
   ChangeEvent,
   FC,
   SyntheticEvent,
-  useEffect,
   useState,
+  KeyboardEvent,
 } from 'react';
 
 /* eslint-disable-next-line */
@@ -101,14 +101,25 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
     setMessageContent(e.target.value);
   };
 
-  const handleSendMessage = (e: SyntheticEvent) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    handleSendMessage();
+  };
+
+  const handleSendMessage = () => {
     onSend(messageContent);
     setMessageContent('');
   };
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
-    <FormContainer onSubmit={handleSendMessage}>
+    <FormContainer onSubmit={handleSubmit}>
       <TextEditorContainer {...{ isFocused }}>
         <TextEditor
           placeholder="Write a mesage..."
@@ -116,29 +127,30 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
           onBlur={() => setIsFoucesd(false)}
           onChange={handleMessageChange}
           value={messageContent}
+          onKeyDown={handleKeyDown}
           {...{ disabled }}
         />
       </TextEditorContainer>
       <FormFooter>
         <FooterActionButtonContainer>
-          <IconButton size={32} {...{ disabled }}>
+          <IconButton size={32} {...{ disabled }} type="button">
             <AiOutlinePicture />
           </IconButton>
-          <IconButton size={32} {...{ disabled }}>
+          <IconButton size={32} {...{ disabled }} type="button">
             <AiOutlinePaperClip />
           </IconButton>
-          <IconButton size={32} {...{ disabled }}>
+          <IconButton size={32} {...{ disabled }} type="button">
             <MdGif />
           </IconButton>
-          <IconButton size={32} {...{ disabled }}>
+          <IconButton size={32} {...{ disabled }} type="button">
             <BsEmojiSmile />
           </IconButton>
         </FooterActionButtonContainer>
         <FooterActionButtonContainer>
-          <SendButton disabled={!messageContent && disabled} type="submit">
+          <SendButton disabled={!messageContent || disabled} type="submit">
             Send
           </SendButton>
-          <IconButton size={32} {...{ disabled }}>
+          <IconButton size={32} {...{ disabled }} type="button">
             <MdMoreHoriz />
           </IconButton>
         </FooterActionButtonContainer>

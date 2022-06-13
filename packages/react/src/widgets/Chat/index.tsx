@@ -24,16 +24,13 @@ const ChatContainer = styled.div`
 `;
 
 export const Chat: FC<ChatProps> = (props: ChatProps) => {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [openedConversations, setOpenedConversations] = useState<string[]>([]);
-  const [opened, setOpened] = useState<string>();
-  const { openedChat } = useChat();
+  const { openedChats } = useChat();
 
   return (
     <ChatContainer>
-      <MessageOverlay {...{ conversations }} />
-      {openedChat.length > 0 &&
-        openedChat.map((chat) => <ConversationPopUp chatroomId={chat} />)}
+      <MessageOverlay />
+      {openedChats.length > 0 &&
+        openedChats.map((chat) => <ConversationPopUp chatroomId={chat} />)}
     </ChatContainer>
   );
 };

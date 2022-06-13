@@ -13,6 +13,7 @@ describe('test chatroom api', () => {
     const chatroomRes = await core.chatroom.get({
       chatroom_id: chatroom.chatroom_id,
     });
+    console.log(chatroomRes);
     const chatRoom = chatroomRes.data[0];
     expect(chatRoom.alias).toEqual(chatroom.alias);
   });

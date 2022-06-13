@@ -9,6 +9,7 @@ export interface IChatRoom {
   chatroom_id: string;
   create_time: string | number;
   update_time: string | number;
+  latest_chat_time: number;
   alias: string;
   display_name: string;
   description: string;

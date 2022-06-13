@@ -1,7 +1,6 @@
 import { Paths } from '../constants';
 import {
   IChatRoomsResponse,
-  IGetUserChatRoomParams,
   IGetUserParams,
   IPostUserBody,
   IPutUserBody,
@@ -46,8 +45,16 @@ export class User extends IAPIClass implements IRestEndPoint {
   }
 }
 
+export type SortngOrder = 'ASC' | 'DSC';
+export interface IGetUserChatRoomParams extends IUserIdParam {
+  sort_key?: string;
+  sort_oder?: SortngOrder;
+}
+
 class UserChatRoom extends IAPIClass {
-  public async get(params: IUserIdParam): Promise<IChatRoomsResponse> {
+  public async get(
+    params: IGetUserChatRoomParams
+  ): Promise<IChatRoomsResponse> {
     return await this._client.get(Paths.user.chatroom.base, params);
   }
 
