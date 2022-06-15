@@ -416,7 +416,7 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
   const [isFollowersMenuOpen, setIsFollowersMenuOpen] = useState(false);
   const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
 
-  const { initialized, account } = useBeoble();
+  const { initialized, account, user } = useBeoble();
   const { addRoute } = useBeobleModal();
 
   const handleClickChattingMenu = () => {
@@ -439,7 +439,12 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
             <AddressProfileDiv>
               <Identication diameter={36} account={account?.address ?? ''} />
               <AddressDiv>
-                <AddressSpan>{account?.ensName ?? 'undefined'}</AddressSpan>
+                <AddressSpan>
+                  {user?.display_name ??
+                    account?.ensName ??
+                    account?.address ??
+                    'undefined'}
+                </AddressSpan>
                 <ProfileSpan>
                   {BeobleSDK.utils.truncateString(
                     account?.address ?? ' ',
