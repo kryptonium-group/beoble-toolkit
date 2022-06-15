@@ -37,8 +37,7 @@ const filterOutUser = (members: IUser[], user_id: string): IUser[] => {
   return members.filter((member) => member.user_id !== user_id);
 };
 
-export const useChatRooms = () => {
-  const { Beoble, user } = useBeoble();
+export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
   const [chatrooms, setChatrooms] = useState<IChatRoom[]>([]);
   const [conversations, setConversations] = useState<
     MessageConversationProps[]

@@ -63,7 +63,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
         setUser,
       }}
     >
-      <ChatProvider>
+      <ChatProvider core={Beoble} user={user}>
         <ModalProvider>{children}</ModalProvider>
       </ChatProvider>
     </BeobleContext.Provider>

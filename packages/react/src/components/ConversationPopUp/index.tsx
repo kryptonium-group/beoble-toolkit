@@ -1,7 +1,6 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Colors } from '../../styles';
-import Divider from '../Divider';
 import Message from '../Message';
 import MessageForm from '../MessageForm';
 import { ChatHeader } from '../MessageHeader';
@@ -9,8 +8,6 @@ import { useChannel } from '../../hooks/useChannel';
 import useChat from '../../hooks/useChat';
 import Spinner from '../Spinner';
 import { useChatRoom } from '../../hooks/useChatroom';
-import { useBeoble } from '../../hooks';
-import { getChatroomMemberAccount } from '../../hooks/useChatRooms';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
