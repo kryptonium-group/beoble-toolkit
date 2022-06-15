@@ -132,7 +132,9 @@ export const MessageConversation: React.FC<MessageConversationProps> = ({
         <ConversationContentWrapper>
           <ConversationRow>
             <UserName>{userName}</UserName>
-            <LastMessageTime>{convertTime(timestamp)}</LastMessageTime>
+            <LastMessageTime>
+              {timestamp ? convertTime(timestamp) : ''}
+            </LastMessageTime>
           </ConversationRow>
           <ConversationRow>
             <MessageContainer>

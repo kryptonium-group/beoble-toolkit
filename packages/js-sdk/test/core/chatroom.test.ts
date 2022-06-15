@@ -41,7 +41,7 @@ describe('test chatroom api', () => {
       display_name: 'test',
       creator_id,
       chatroom_type: 'DIRECT_CHAT',
-      members: ['ef6a930d-6c76-455d-a00c-873ab9cd26cc'],
+      members: ['0343d6fe-82df-4ceb-b7c2-3cb4bdcba2f5'],
     });
 
     console.log(res);

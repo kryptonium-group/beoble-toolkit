@@ -12,6 +12,7 @@ const Home: NextPage = () => {
   const { initProvider } = useBeoble();
   const handleConnect = () => {
     connect().then(() => {
+      console.log('connected');
       initProvider();
     });
   };

@@ -18,7 +18,7 @@ export interface Account {
 export const useWeb3 = (): IUseWeb3 => {
   const [provider, setProvider] =
     useState<null | ethers.providers.Web3Provider>(null);
-  const [account, setAccount] = useState<Account>();
+  const [account, setAccount] = useState<Account | undefined>();
 
   // when provider is properly injected into window.ethereum,
   // create ethers provider and save it.
@@ -40,6 +40,7 @@ export const useWeb3 = (): IUseWeb3 => {
 
   const registerProviderEvent = () => {
     window.ethereum.on('accountsChanged', () => {
+      console.log('i');
       initAccount();
     });
   };
@@ -48,15 +49,19 @@ export const useWeb3 = (): IUseWeb3 => {
     if (provider) {
       const signer = provider.getSigner();
       const chainId = (await provider.getNetwork()).chainId;
-      const address = await signer.getAddress();
-      const ensName =
-        chainId === 1 ? await provider.lookupAddress(address) : null;
-      const ensAvatar = ensName ? await provider.getAvatar(ensName) : null;
-      setAccount({
-        address,
-        ensName,
-        ensAvatar,
-      });
+      try {
+        const address = await signer.getAddress();
+        const ensName =
+          chainId === 1 ? await provider.lookupAddress(address) : null;
+        const ensAvatar = ensName ? await provider.getAvatar(ensName) : null;
+        setAccount({
+          address,
+          ensName,
+          ensAvatar,
+        });
+      } catch {
+        setAccount(undefined);
+      }
     }
   };
 
