@@ -5,9 +5,8 @@ import Message from '../Message';
 import MessageForm from '../MessageForm';
 import { ChatHeader } from '../MessageHeader';
 import { useChannel } from '../../hooks/useChannel';
-import useChat from '../../hooks/useChat';
 import Spinner from '../Spinner';
-import { useChatRoom } from '../../hooks/useChatroom';
+import { useChatRoom, useChat } from '../../hooks';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
