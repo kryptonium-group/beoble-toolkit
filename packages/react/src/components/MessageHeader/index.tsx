@@ -23,7 +23,7 @@ const StyledMessageHeader = styled.header`
   flex-direction: row;
   box-sizing: border-box;
   align-items: center;
-  padding: 0 8px;
+  padding: 0px 8px;
   position: relative;
   background-color: #fff;
   border-bottom: 1px solid #00000014;
