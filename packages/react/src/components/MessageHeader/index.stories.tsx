@@ -39,5 +39,5 @@ ChatHeaderPrimary.args = {
   userName: 'bamnenim.eth',
   account: 'bamnenim.eth',
   status: 'online',
-  isMinified: false,
+  isMinimized: false,
 };
