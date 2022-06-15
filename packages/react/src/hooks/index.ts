@@ -2,7 +2,7 @@ export * from './useBeoble';
 export * from './useChannel';
 export * from './useChat';
 export * from './useChatRooms';
-export * from './useChatroom';
+export * from './useChatRoom';
 export * from './useDelayMount';
 export * from './useENS';
 export * from './useEventListener';
