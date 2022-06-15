@@ -56,6 +56,7 @@ export const useChannel = (chatroomId: string) => {
       index > 0 ? ~~array[index - 1].create_time * 1000 : 0;
     const isFollowing =
       isSameUserWithPrevious && isMinEqual(timestamp, previousTimestamp);
+
     return {
       isMine,
       isFollowing,

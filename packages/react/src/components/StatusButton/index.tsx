@@ -19,7 +19,7 @@ const Address = styled.p`
 `;
 
 export const StatusButton = ({ onClick }: StatusButtonProps) => {
-  const { initialized, account } = useBeoble();
+  const { initialized, account, user } = useBeoble();
 
   const handleClickTest = useCallback(async () => {
     onClick && onClick();
@@ -31,7 +31,10 @@ export const StatusButton = ({ onClick }: StatusButtonProps) => {
       <Button onClick={handleClickTest}>
         <Address>
           {BeobleSDK.utils.truncateString(
-            account?.ensName ?? account?.address ?? 'not connected',
+            user?.display_name ??
+              account?.ensName ??
+              account?.address ??
+              'not connected',
             16
           )}
         </Address>
