@@ -22,7 +22,7 @@ describe('test chatroom api', () => {
     const userWalletToCreate = TestWallets[1];
     const audienceUserWallet = TestWallets[10];
     const user = await core.user.get({
-      wallet_address: userWalletToCreate,
+      wallet_address: MyWallet,
     });
 
     const audience = await core.user.get({
@@ -40,8 +40,8 @@ describe('test chatroom api', () => {
       alias: 'test',
       display_name: 'test',
       creator_id,
-      chatroom_type: 'GROUP_CHAT',
-      members: [audience_id, secondAudience.data[0].user_id],
+      chatroom_type: 'DIRECT_CHAT',
+      members: ['ef6a930d-6c76-455d-a00c-873ab9cd26cc'],
     });
 
     console.log(res);

@@ -15,7 +15,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
   const [Beoble, setBeoble] = useState<Core | null>(null);
   const [user, setUser] = useState<IUser | null>(null);
 
-  const { provider, account } = useWeb3();
+  const { provider, account, initProvider } = useWeb3();
 
   // create beoble sdk obj on mount
   // and store
@@ -61,6 +61,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
         Beoble,
         user,
         setUser,
+        initProvider,
       }}
     >
       <ChatProvider core={Beoble} user={user}>

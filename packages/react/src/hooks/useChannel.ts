@@ -41,19 +41,28 @@ export const useChannel = (chatroomId: string) => {
     index: number,
     array: IChat[]
   ): MessageProps => {
-    const { creator_user_id, create_time, content_text, chat_id } = chat;
+    const {
+      creator_user_id,
+      create_time,
+      content_text,
+      chat_id,
+      display_name,
+    } = chat;
     const isMine = user!.user_id === creator_user_id;
+    const isSameUserWithPrevious =
+      index > 0 && creator_user_id === array[index - 1].creator_user_id;
     const timestamp = ~~create_time * 1000;
     const previousTimestamp =
       index > 0 ? ~~array[index - 1].create_time * 1000 : 0;
-    const isFollowing = isMinEqual(timestamp, previousTimestamp);
+    const isFollowing =
+      isSameUserWithPrevious && isMinEqual(timestamp, previousTimestamp);
     return {
       isMine,
       isFollowing,
       content: content_text,
       timestamp,
       account: '',
-      userName: isMine ? 'You' : '',
+      userName: isMine ? 'You' : display_name,
       chatId: chat_id,
     };
   };

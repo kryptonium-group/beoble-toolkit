@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import styled, { css, keyframes } from 'styled-components';
-import { Colors, FontWeights } from '../../styles';
+import { Colors, FontWeights, Truncate } from '../../styles';
 import { convertTime } from '../../utils';
 import Avatar from '../Avatar';
 
@@ -86,6 +86,8 @@ const UserName = styled.p`
   font-size: 14px;
   font-weight: ${FontWeights.bold};
   margin-right: 8px;
+  flex: 1;
+  ${Truncate}
 `;
 
 const TimePhrase = styled.time`

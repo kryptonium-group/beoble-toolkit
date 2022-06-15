@@ -27,7 +27,7 @@ describe('user test', () => {
     const WalletToCheck = TestWallets[1];
 
     const res = await core.user.get({
-      wallet_address: WalletToCheck,
+      wallet_address: '0xcC847f25746Aee67bA796E26D108AF44D0DA4173',
     });
 
     console.log(res, res.data[0]);

@@ -55,10 +55,6 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
     setConversations(converted);
   }, [chatrooms]);
 
-  useEffect(() => {
-    console.log('in use chatroom, conversations', conversations);
-  }, [conversations]);
-
   const initChatrooms = async () => {
     await updateChatrooms();
     setIsLoading(false);
@@ -69,7 +65,8 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
       const res = await Beoble.user.chatroom.get({
         user_id: user.user_id,
       });
-      setChatrooms(res.data);
+
+      setChatrooms(res?.data ?? []);
     }
   };
 

@@ -71,10 +71,6 @@ export const MessageOverlay: FC<MessageOverlayProps> = () => {
     setIsMinimized(!isMinimized);
   };
 
-  useEffect(() => {
-    console.log('in message overlay', conversations);
-  }, [conversations]);
-
   return (
     <MessageOverlayBubble isMinimized={isMinimized}>
       <MessageHeader

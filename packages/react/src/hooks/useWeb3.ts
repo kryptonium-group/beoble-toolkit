@@ -6,6 +6,7 @@ import { WalletNotConnectedError } from '../lib/Errors';
 export interface IUseWeb3 {
   provider: ethers.providers.Web3Provider | null;
   account?: Account;
+  initProvider: () => void;
 }
 
 export interface Account {
@@ -46,8 +47,10 @@ export const useWeb3 = (): IUseWeb3 => {
   const initAccount = async () => {
     if (provider) {
       const signer = provider.getSigner();
+      const chainId = (await provider.getNetwork()).chainId;
       const address = await signer.getAddress();
-      const ensName = await provider.lookupAddress(address);
+      const ensName =
+        chainId === 1 ? await provider.lookupAddress(address) : null;
       const ensAvatar = ensName ? await provider.getAvatar(ensName) : null;
       setAccount({
         address,
@@ -57,7 +60,7 @@ export const useWeb3 = (): IUseWeb3 => {
     }
   };
 
-  return { provider, account };
+  return { provider, account, initProvider };
 };
 
 export default useWeb3;

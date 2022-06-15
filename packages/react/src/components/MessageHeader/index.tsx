@@ -84,6 +84,7 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
 
   const handleNewMessageButtonClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
+    console.log('hi');
   };
 
   return (

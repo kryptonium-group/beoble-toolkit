@@ -35,12 +35,14 @@ export interface IPutChatReportBody {
 
 export interface IChat {
   chat_id: string;
-  create_time: string | number;
-  update_time: string | number;
-  parent_chat_id?: string;
-  creator_user_id: string;
   chatroom_id: string;
-  content_text: string;
   content_media_url: string[];
+  content_text: string;
+  create_time: string | number;
+  creator_user_id: string;
+  display_name: string;
+  parent_chat_id?: string;
   reactions: any;
+  representative_media_url: string[];
+  update_time: string | number;
 }

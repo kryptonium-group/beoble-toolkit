@@ -9,8 +9,11 @@ import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   const { connect, address } = useWeb3Context();
+  const { initProvider } = useBeoble();
   const handleConnect = () => {
-    connect();
+    connect().then(() => {
+      initProvider();
+    });
   };
 
   return (

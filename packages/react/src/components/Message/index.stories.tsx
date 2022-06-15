@@ -27,9 +27,10 @@ MyMessageFollowing.args = {
 
 export const OthersMessage = Template.bind({});
 OthersMessage.args = {
+  userName: '0xcC847f25746Aee67bA796E26D108AF44D0DA4173',
   isMine: false,
   isFollowing: false,
-  content: 'hi',
+  content: LoremIpsum,
   timestamp: 1654852163180,
 };
 
