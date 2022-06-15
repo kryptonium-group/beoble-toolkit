@@ -37,7 +37,7 @@ const ChatHeaderTemplate: Story<ChatHeaderProps> = (args) => (
 export const ChatHeaderPrimary = ChatHeaderTemplate.bind({});
 ChatHeaderPrimary.args = {
   userName: 'bamnenim.eth',
-  account: 'bamnenim.eth',
+  account: 'bamnenim',
   status: 'online',
   isMinimized: false,
 };
