@@ -39,7 +39,8 @@ export const useChannel = (chatroomId: string) => {
   const convertChatToMessageProps = (
     chat: IChat,
     index: number,
-    array: IChat[]
+    array: IChat[],
+    lastChat?: MessageProps
   ): MessageProps => {
     const {
       creator_user_id,
@@ -49,11 +50,16 @@ export const useChannel = (chatroomId: string) => {
       display_name,
     } = chat;
     const isMine = user!.user_id === creator_user_id;
-    const isSameUserWithPrevious =
-      index > 0 && creator_user_id === array[index - 1].creator_user_id;
+
+    const isSameUserWithPrevious = lastChat
+      ? creator_user_id === lastChat.creator_user_id
+      : index > 0 && creator_user_id === array[index - 1].creator_user_id;
+
     const timestamp = ~~create_time * 1000;
+
     const previousTimestamp =
       index > 0 ? ~~array[index - 1].create_time * 1000 : 0;
+
     const isFollowing =
       isSameUserWithPrevious && isMinEqual(timestamp, previousTimestamp);
 
@@ -63,8 +69,9 @@ export const useChannel = (chatroomId: string) => {
       content: content_text,
       timestamp,
       account: '',
-      userName: isMine ? 'You' : display_name,
+      userName: display_name,
       chatId: chat_id,
+      creator_user_id,
     };
   };
 
@@ -73,15 +80,26 @@ export const useChannel = (chatroomId: string) => {
     const firstIncomingElem = incoming.at(0);
     if (!lastPrevElem) return incoming;
     if (!firstIncomingElem) return prev;
-    if (isMinEqual(lastPrevElem.timestamp, firstIncomingElem.timestamp))
+    if (checkIsFollowing(lastPrevElem, firstIncomingElem))
       incoming[0].isFollowing = true;
     return prev.concat(incoming);
   };
 
+  const checkIsFollowing = (prev: MessageProps, incoming: MessageProps) => {
+    const isSameUser = prev.creator_user_id === incoming.creator_user_id;
+    return isSameUser && isMinEqual(prev.timestamp, incoming.timestamp);
+  };
+
   const updateMessage = (message: string) => {
     const parsed: IChat[] = JSON.parse(message);
-    const converted = parsed.map(convertChatToMessageProps);
-    setMessages((prev) => concatMessages(prev, converted));
+    setMessages((prev) =>
+      concatMessages(
+        prev,
+        parsed.map((chat, index, array) =>
+          convertChatToMessageProps(chat, index, array, prev.at(-1))
+        )
+      )
+    );
   };
 
   const sendMessage = (content: string) => {

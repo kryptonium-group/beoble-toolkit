@@ -14,6 +14,7 @@ export interface MessageProps {
   account: string;
   userName: string;
   chatId: string;
+  creator_user_id: string;
 }
 
 const mountAnimation = keyframes`
@@ -126,7 +127,7 @@ export const Message: FC<MessageProps> = ({
       <MessageContentContainer {...{ isMine }}>
         {!isFollowing && (
           <MessageInfoContainer>
-            <UserName>{userName}</UserName>
+            <UserName>{isMine ? 'You' : userName}</UserName>
             <TimePhrase>{convertTime(timestamp)}</TimePhrase>
           </MessageInfoContainer>
         )}

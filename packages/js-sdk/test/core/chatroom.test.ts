@@ -41,7 +41,7 @@ describe('test chatroom api', () => {
       display_name: 'test',
       creator_id,
       chatroom_type: 'DIRECT_CHAT',
-      members: ['0343d6fe-82df-4ceb-b7c2-3cb4bdcba2f5'],
+      members: ['ef6a930d-6c76-455d-a00c-873ab9cd26cc'],
     });
 
     console.log(res);
@@ -50,7 +50,27 @@ describe('test chatroom api', () => {
   });
 
   it('create group chatroom', async () => {
-    return;
+    //test accounts of founders :)
+    const ch = 'f6cc3277-0b2e-44eb-b205-1d9c374d3c80';
+    const sung = 'ef6a930d-6c76-455d-a00c-873ab9cd26cc';
+
+    const user = await core.user.get({
+      wallet_address: MyWallet,
+    });
+
+    const creator_id = user.data[0].user_id;
+
+    const res = await core.chatroom.add({
+      alias: 'test',
+      display_name: 'test',
+      creator_id,
+      chatroom_type: 'GROUP_CHAT',
+      members: [ch, sung],
+    });
+
+    console.log(res);
+    expect(res.data).not.toBeUndefined();
+    expect(res.data.creator_id).toEqual(creator_id);
   });
 
   it('update', async () => {
