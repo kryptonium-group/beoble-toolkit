@@ -117,10 +117,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
               </SpinnerContainer>
             )}
             {!isLoading &&
-              messages
-                .slice()
-                .reverse()
-                .map((args) => <Message key={args.chatId} {...args} />)}
+              messages.map((args) => <Message key={args.chatId} {...args} />)}
           </MessageListScrollable>
         </MessageDisplayContainer>
         <MessageForm onSend={sendMessage} disabled={isLoading} />
