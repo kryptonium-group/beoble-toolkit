@@ -1,2 +1,2 @@
 export * from './Core';
-export { Channel } from './chat';
+export { Channel } from './channel';

@@ -62,6 +62,7 @@ const MessageListScrollable = styled.div`
   overflow-y: auto;
   min-height: auto;
   padding: 0px 8px;
+  box-sizing: content-box;
 `;
 
 const ContentContainer = styled.div`
