@@ -21,7 +21,8 @@ export const ChatProvider: FC<IChatProvider> = ({ children, core, user }) => {
 
   const openChat = (chatroom_id: string) => {
     // console.log(screen?.width);
-    setOpenedChats((prev) => [...prev, chatroom_id]);
+    if (!openedChats.includes(chatroom_id))
+      setOpenedChats((prev) => [...prev, chatroom_id]);
   };
 
   const closeChat = (chatroom_id: string) => {
