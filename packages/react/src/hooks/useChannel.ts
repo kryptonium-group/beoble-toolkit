@@ -4,6 +4,10 @@ import { useBeoble } from './useBeoble';
 import { MessageProps } from '../components/Message';
 import { isMinEqual } from '../utils';
 import useChat from './useChat';
+import {
+  BeobleNotInitizliedError,
+  ProviderNotInitializedError,
+} from '../lib/Errors';
 
 export const useChannel = (chatroomId: string) => {
   const { Beoble, user } = useBeoble();
@@ -27,6 +31,10 @@ export const useChannel = (chatroomId: string) => {
 
       chat.onMessage('RETRIEVED_MESSAGE', (data: IChat[]) => {
         updateMessage(data);
+      });
+
+      chat.onMessage('NEW_MESSAGE', (data: IChat) => {
+        updateMessage([data]);
         updateChatrooms();
       });
 
@@ -49,19 +57,24 @@ export const useChannel = (chatroomId: string) => {
       chat_id,
       display_name,
     } = chat;
-    const isMine = user!.user_id === creator_user_id;
+
+    if (!user) throw new BeobleNotInitizliedError();
+
+    const isMine = user.user_id === creator_user_id;
 
     const isSameUserWithPrevious = lastChat
       ? creator_user_id === lastChat.creator_user_id
       : index > 0 && creator_user_id === array[index - 1].creator_user_id;
 
-    const timestamp = ~~create_time * 1000;
+    const timestamp = create_time * 1000;
 
     const previousTimestamp =
-      index > 0 ? ~~array[index - 1].create_time * 1000 : 0;
+      index > 0 ? array[index - 1].create_time * 1000 : 0;
 
-    const isFollowing =
+    let isFollowing =
       isSameUserWithPrevious && isMinEqual(timestamp, previousTimestamp);
+
+    if (array.length > 1 && index === array.length - 1) isFollowing = false;
 
     return {
       isMine,
@@ -76,13 +89,14 @@ export const useChannel = (chatroomId: string) => {
   };
 
   const concatMessages = (prev: MessageProps[], incoming: MessageProps[]) => {
-    const lastPrevElem = prev.at(-1);
-    const firstIncomingElem = incoming.at(0);
-    if (!lastPrevElem) return incoming;
-    if (!firstIncomingElem) return prev;
-    if (checkIsFollowing(lastPrevElem, firstIncomingElem))
-      incoming[0].isFollowing = true;
-    return prev.concat(incoming);
+    const firstPrevElem = prev.at(0);
+    const lastIncomingElem = incoming.at(-1);
+    if (!firstPrevElem) return incoming;
+    if (!lastIncomingElem) return prev;
+    console.log(checkIsFollowing(firstPrevElem, lastIncomingElem));
+    if (checkIsFollowing(firstPrevElem, lastIncomingElem))
+      lastIncomingElem.isFollowing = true;
+    return incoming.concat(prev);
   };
 
   const checkIsFollowing = (prev: MessageProps, incoming: MessageProps) => {

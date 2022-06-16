@@ -10,4 +10,7 @@ export interface IMessage {
   data: any;
 }
 
-export type ActionType = 'RETRIEVED_MESSAGE' | 'UPDATED_MESSAGE';
+export type ActionType =
+  | 'RETRIEVED_MESSAGE'
+  | 'UPDATED_MESSAGE'
+  | 'NEW_MESSAGE';
