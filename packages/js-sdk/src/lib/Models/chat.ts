@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { UpdateType } from '.';
 import { IResponse } from './response';
 
 export interface IChatResponse extends IResponse<IChat> {}
@@ -18,7 +17,6 @@ export interface IPostChatBody {
 
 export interface IPutChatBody {
   content_text?: string;
-  update_type?: UpdateType;
   content_media_url?: string[];
 }
 

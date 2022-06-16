@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ConversationPopUp from '../../components/ConversationPopUp';
 import MessageOverlay, { Conversation } from '../../components/MessageOverlay';
@@ -24,14 +24,19 @@ const ChatContainer = styled.div`
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 `;
 
-export const Chat: FC<ChatProps> = (props: ChatProps) => {
+export const Chat: FC<ChatProps> = () => {
   const { openedChats } = useChat();
+  useEffect(() => {
+    console.log(openedChats);
+  }, [openedChats]);
 
   return (
     <ChatContainer>
       <MessageOverlay />
       {openedChats.length > 0 &&
-        openedChats.map((chat) => <ConversationPopUp chatroomId={chat} />)}
+        openedChats.map((chat) => (
+          <ConversationPopUp chatroomId={chat} key={chat} />
+        ))}
     </ChatContainer>
   );
 };

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { UpdateType } from '.';
 import { MembershipAction } from './chatroom';
 import { IResponse } from './response';
 
@@ -24,14 +23,13 @@ export interface IPostUserBody {
 
 export interface IPutUserBody {
   wallets?: string;
-  update_type?: UpdateType[];
   alias?: string;
   display_name?: string;
   description?: string;
   representative_media_url?: string[];
 }
 
-export interface IUser extends Partial<Counters> {
+export interface IUser extends Partial<USerCounts> {
   user_id: string;
   create_time: string; // date
   update_time: string; // date
@@ -42,7 +40,7 @@ export interface IUser extends Partial<Counters> {
   representative_media_url: string[];
 }
 
-interface Counters {
+interface USerCounts {
   wallets_count: number;
   chatrooms_count: number;
   friends_count: number;

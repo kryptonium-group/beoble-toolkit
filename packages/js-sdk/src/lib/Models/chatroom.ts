@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { IChat, UpdateType } from '.';
+import { IChat } from '.';
 import { IResponse } from './response';
 import { IUser } from './user';
 
@@ -55,7 +55,6 @@ export interface IPutChatRoomBody {
   display_name?: string;
   description?: string;
   representative_media_url?: string;
-  update_type?: UpdateType;
 }
 
 export interface IPutChatRoomMembershipBody {

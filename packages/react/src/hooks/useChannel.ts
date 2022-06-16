@@ -25,8 +25,8 @@ export const useChannel = (chatroomId: string) => {
         chatroom_id: chatroomId,
       });
 
-      chat.on('message', (e: any) => {
-        updateMessage(e.data);
+      chat.onMessage('RETRIEVED_MESSAGE', (data: IChat[]) => {
+        updateMessage(data);
         updateChatrooms();
       });
 
@@ -90,12 +90,11 @@ export const useChannel = (chatroomId: string) => {
     return isSameUser && isMinEqual(prev.timestamp, incoming.timestamp);
   };
 
-  const updateMessage = (message: string) => {
-    const parsed: IChat[] = JSON.parse(message);
+  const updateMessage = (message: IChat[]) => {
     setMessages((prev) =>
       concatMessages(
         prev,
-        parsed.map((chat, index, array) =>
+        message.map((chat, index, array) =>
           convertChatToMessageProps(chat, index, array, prev.at(-1))
         )
       )
