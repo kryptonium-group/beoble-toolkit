@@ -50,21 +50,16 @@ export const useChannel = (chatroomId: string) => {
     array: IChat[],
     lastChat?: MessageProps
   ): MessageProps => {
-    const {
-      creator_user_id,
-      create_time,
-      content_text,
-      chat_id,
-      display_name,
-    } = chat;
+    const { creator_user, create_time, content_text, chat_id } = chat;
 
     if (!user) throw new BeobleNotInitizliedError();
 
-    const isMine = user.user_id === creator_user_id;
+    const isMine = user.user_id === creator_user.user_id;
 
     const isSameUserWithPrevious = lastChat
-      ? creator_user_id === lastChat.creator_user_id
-      : index > 0 && creator_user_id === array[index - 1].creator_user_id;
+      ? creator_user.user_id === lastChat.creator_user_id
+      : index > 0 &&
+        creator_user.user_id === array[index - 1].creator_user.user_id;
 
     const timestamp = create_time * 1000;
 
@@ -82,9 +77,9 @@ export const useChannel = (chatroomId: string) => {
       content: content_text,
       timestamp,
       account: '',
-      userName: display_name,
+      userName: creator_user.display_name,
       chatId: chat_id,
-      creator_user_id,
+      creator_user_id: creator_user.user_id,
     };
   };
 

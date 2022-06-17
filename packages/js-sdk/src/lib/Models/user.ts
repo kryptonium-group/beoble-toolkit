@@ -29,7 +29,9 @@ export interface IPutUserBody {
   representative_media_url?: string[];
 }
 
-export interface IUser extends Partial<USerCounts> {
+export interface IUser extends UserInfo, Partial<USerCounts> {}
+
+export interface UserInfo {
   user_id: string;
   create_time: string; // date
   update_time: string; // date

@@ -26,12 +26,14 @@ describe('test chatroom api', () => {
     });
 
     const audience = await core.user.get({
-      wallet_address: audienceUserWallet,
+      wallet_address: '0x0A68E9d33bf07E06d657f46cfB17f0955E402adD',
     });
 
     const secondAudience = await core.user.get({
       wallet_address: TestWallets[3],
     });
+
+    console.log(audience);
 
     const creator_id = user.data[0].user_id;
     const audience_id = audience.data[0].user_id;
@@ -41,7 +43,7 @@ describe('test chatroom api', () => {
       display_name: 'test',
       creator_id,
       chatroom_type: 'DIRECT_CHAT',
-      members: ['ef6a930d-6c76-455d-a00c-873ab9cd26cc'],
+      members: [audience_id],
     });
 
     console.log(res);
