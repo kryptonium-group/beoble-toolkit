@@ -76,7 +76,7 @@ export const useChannel = (chatroomId: string) => {
       isFollowing,
       content: content_text,
       timestamp,
-      account: '',
+      account: creator_user.wallets[0],
       userName: creator_user.display_name,
       chatId: chat_id,
       creator_user_id: creator_user.user_id,
@@ -88,7 +88,6 @@ export const useChannel = (chatroomId: string) => {
     const lastIncomingElem = incoming.at(-1);
     if (!firstPrevElem) return incoming;
     if (!lastIncomingElem) return prev;
-    console.log(checkIsFollowing(firstPrevElem, lastIncomingElem));
     if (checkIsFollowing(firstPrevElem, lastIncomingElem))
       lastIncomingElem.isFollowing = true;
     return incoming.concat(prev);
@@ -99,11 +98,12 @@ export const useChannel = (chatroomId: string) => {
     return isSameUser && isMinEqual(prev.timestamp, incoming.timestamp);
   };
 
-  const updateMessage = (message: IChat[]) => {
+  const updateMessage = (data: IChat[] | IChat) => {
+    const messages = Array.isArray(data) ? data : [data];
     setMessages((prev) =>
       concatMessages(
         prev,
-        message.map((chat, index, array) =>
+        messages.map((chat, index, array) =>
           convertChatToMessageProps(chat, index, array, prev.at(-1))
         )
       )
