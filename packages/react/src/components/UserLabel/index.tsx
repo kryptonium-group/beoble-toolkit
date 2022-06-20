@@ -23,6 +23,7 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin: 0 8px 8px 0;
 `;
 
 const TextContainer = styled.div`

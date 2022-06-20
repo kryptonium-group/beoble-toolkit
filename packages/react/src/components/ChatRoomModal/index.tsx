@@ -11,6 +11,7 @@ import Divider from '../Divider';
 import Button from '../Button';
 import Spinner from '../Spinner';
 import { useChatRoomCreator } from '../../hooks/useChatRoomCreator';
+import UserLabel from '../UserLabel';
 
 /* eslint-disable-next-line */
 export interface ChatRoomModalProps {
@@ -133,14 +134,46 @@ const SpinnerContainer = styled.div`
   flex-grow: 1;
 `;
 
-export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
-  const [searchValue, setSearchValue] = useState('');
+const UserLabelContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+  padding: 20px 20px 0px 20px;
+  height: fit-content;
+  flex-wrap: wrap;
+`;
 
-  const { followings, friends, searchResult, reset, isLoading, searchUser } =
-    useChatRoomCreator();
+export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
+  const {
+    followings,
+    friends,
+    searchResult,
+    isLoading,
+    members,
+    searchValue,
+    setSearchValue,
+    searchUser,
+    reset,
+    toggleMember,
+    createChatRoom,
+  } = useChatRoomCreator();
 
   const handleBlockParentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+  };
+
+  const generateUserLabel = (user: IUser) => {
+    return (
+      <UserLabel
+        display_context={user.display_name}
+        key={user.user_id}
+        onClose={() => {
+          toggleMember(user);
+        }}
+      />
+    );
   };
 
   const generateUserItem = (user: IUser) => {
@@ -150,6 +183,10 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
         padding="8px 20px "
         key={user.user_id}
         hasCheckBox
+        onClick={() => {
+          toggleMember(user);
+        }}
+        checked={members.some((member) => member.user_id === user.user_id)}
       />
     );
   };
@@ -159,16 +196,26 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
     onClose && onClose();
   };
 
+  const handleConfirm = () => {
+    createChatRoom();
+    handleCancel();
+  };
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     searchUser(e.target.value);
     setSearchValue(e.target.value);
   };
 
   return (
-    <Container {...{ isOpen }} onClick={onClose}>
+    <Container {...{ isOpen }} onClick={handleCancel}>
       <ChatRoomModalContainer {...{ isOpen }} onClick={handleBlockParentClick}>
         <ChatRoomModalCard>
-          <CreateChatRoomHeader {...{ onClose }} />
+          <CreateChatRoomHeader onClose={handleCancel} />
+          {members.length > 0 && (
+            <UserLabelContainer>
+              {members.map(generateUserLabel)}
+            </UserLabelContainer>
+          )}
           <InputContainer>
             <Input
               name="user_search"
@@ -221,7 +268,11 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
             </ScrollableSection>
           )}
           <FooterContainer>
-            <Button style={{ marginRight: 5 }} disabled>
+            <Button
+              style={{ marginRight: 5 }}
+              disabled={members.length < 1}
+              onClick={handleConfirm}
+            >
               Confirm
             </Button>
             <Button onClick={handleCancel}>Cancel</Button>

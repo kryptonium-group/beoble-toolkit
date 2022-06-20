@@ -58,6 +58,8 @@ export interface InputStyleProps {
 export const InputContainer = styled.div<ContainerProps>`
   cursor: text;
   display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: ${({ borderRadius }) => borderRadius ?? '10'}px;
   border: 1px solid
     ${({ backgroundColor }) => backgroundColor ?? `rgb(29 31 34)`};

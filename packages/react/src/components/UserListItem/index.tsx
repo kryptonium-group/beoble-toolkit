@@ -14,6 +14,8 @@ export interface UserListItemProps {
   padding?: string | number;
   onClick?: () => void;
   hasCheckBox?: boolean;
+  checked?: boolean;
+  onCheckChange?: (value: boolean) => void;
 }
 
 const Container = styled.div<SpaceProps>`
@@ -59,19 +61,21 @@ export const UserListItem: FC<UserListItemProps> = ({
   padding,
   onClick,
   hasCheckBox,
+  checked,
+  onCheckChange,
 }) => {
   const { provider } = useBeoble();
   const { ENSName, ENSAvatar } = useENS(provider, user.wallets[0]);
-  const [clicked, setClicked] = useState(false);
+  const [clicked, setClicked] = useState(checked ?? false);
 
   const handleChange = (value: boolean) => {
     setClicked(value);
+    onCheckChange && onCheckChange(value);
   };
 
   const handleClick = () => {
     setClicked(!clicked);
     onClick && onClick();
-    console.log('hi');
   };
 
   return (
@@ -88,7 +92,11 @@ export const UserListItem: FC<UserListItemProps> = ({
       </ProfileContainer>
       {hasCheckBox && (
         <CheckBoxContainer>
-          <CheckBox size={20} value={clicked} onChange={handleChange} />
+          <CheckBox
+            size={20}
+            value={checked ?? clicked}
+            onChange={handleChange}
+          />
         </CheckBoxContainer>
       )}
     </Container>

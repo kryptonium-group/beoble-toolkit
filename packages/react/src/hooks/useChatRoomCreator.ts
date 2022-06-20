@@ -6,12 +6,16 @@ import { useBeoble } from './useBeoble';
 export const useChatRoomCreator = () => {
   const [friends, setFriends] = useState<IUser[]>([]);
   const [followings, setFollowings] = useState<IUser[]>([]);
-  const [members, setMembers] = useState<string[]>([]);
+  const [members, setMembers] = useState<IUser[]>([]);
   const [searchResult, setSearchResult] = useState<IUser[]>([]);
+
   const [isFriendFetching, setIsFriendFetching] = useState(true);
   const [isFollowerFetching, setIsFollowerFetching] = useState(true);
   const [isFollowingFetching, setIsFollowingFetching] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
+
+  const [searchValue, setSearchValue] = useState('');
+
   const isLoading = isFriendFetching || isFollowingFetching || isSearching;
 
   const { Beoble, user } = useBeoble();
@@ -70,6 +74,38 @@ export const useChatRoomCreator = () => {
 
   const reset = () => {
     setMembers([]);
+    setSearchResult([]);
+  };
+
+  const toggleMember = (user: IUser) => {
+    // remove member
+    if (members.find((member) => member.user_id === user.user_id)) {
+      setMembers((prev) =>
+        prev.filter((member) => member.user_id !== user.user_id)
+      );
+    }
+    // add member
+    else {
+      setMembers([...members, user]);
+    }
+  };
+
+  const createChatRoom = async (callback?: () => void) => {
+    if (members.length < 1)
+      throw new Error(
+        'You should have at least one user with to create chat room'
+      );
+    if (Beoble && user) {
+      const res = await Beoble.chatroom.add({
+        alias: '',
+        display_name: '',
+        creator_id: user.user_id,
+        chatroom_type: members.length > 1 ? 'GROUP_CHAT' : 'DIRECT_CHAT',
+        members: members.map((member) => member.user_id),
+      });
+      console.log(res);
+      callback && callback();
+    }
   };
 
   return {
@@ -78,7 +114,11 @@ export const useChatRoomCreator = () => {
     members,
     isLoading,
     searchResult,
+    searchValue,
+    setSearchValue,
     reset,
     searchUser,
+    createChatRoom,
+    toggleMember,
   };
 };
