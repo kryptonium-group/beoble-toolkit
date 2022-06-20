@@ -1,3 +1,6 @@
+export * from './components/CheckBox/index';
+export * from './components/UserListItem/index';
+export * from './components/ChatRoomModal/index';
 export * from './components/Divider/index';
 export * from './components/Message/index';
 export * from './components/MessageForm/index';

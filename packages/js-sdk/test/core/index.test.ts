@@ -5,6 +5,10 @@ export const MyWallet = '0xb033fB14cF7Dc769488Ad34Ae90D4b3AD810BB25';
 export const MasterKeyAuthToken = 'sungmingodsungmingod';
 export const TestChatRoomId = '503fb3af-b006-460b-862b-efb47184a2cb';
 
+//test accounts of founders :)
+export const ch = 'f6cc3277-0b2e-44eb-b205-1d9c374d3c80';
+export const sung = 'ef6a930d-6c76-455d-a00c-873ab9cd26cc';
+
 export const getUser = async (core: Core, wallet_address: string) => {
   const res = await core.user.get({
     wallet_address,

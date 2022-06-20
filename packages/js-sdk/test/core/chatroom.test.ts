@@ -1,6 +1,12 @@
 import { Core } from '../../src/core';
 import { TestWallets } from '../constants';
-import { getUserChatRoom, MasterKeyAuthToken, MyWallet } from './index.test';
+import {
+  ch,
+  getUserChatRoom,
+  MasterKeyAuthToken,
+  MyWallet,
+  sung,
+} from './index.test';
 
 const core = new Core({
   authToken: MasterKeyAuthToken,
@@ -52,10 +58,6 @@ describe('test chatroom api', () => {
   });
 
   it('create group chatroom', async () => {
-    //test accounts of founders :)
-    const ch = 'f6cc3277-0b2e-44eb-b205-1d9c374d3c80';
-    const sung = 'ef6a930d-6c76-455d-a00c-873ab9cd26cc';
-
     const user = await core.user.get({
       wallet_address: MyWallet,
     });

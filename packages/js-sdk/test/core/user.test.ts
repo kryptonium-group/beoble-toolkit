@@ -1,6 +1,6 @@
 import { createComponentStoriesFile } from '@nrwl/react/src/generators/component-story/component-story';
 import { Core } from '../../src/core';
-import { MyWallet, MasterKeyAuthToken, getUser } from './index.test';
+import { MyWallet, MasterKeyAuthToken, getUser, ch } from './index.test';
 import { MyWallets, TestWallets } from '../constants';
 
 const core = new Core({
@@ -27,7 +27,7 @@ describe('user test', () => {
     const WalletToCheck = TestWallets[1];
 
     const res = await core.user.get({
-      wallet_address: '0xcC847f25746Aee67bA796E26D108AF44D0DA4173',
+      wallet_address: WalletToCheck,
     });
 
     console.log(res, res.data[0]);
@@ -100,7 +100,7 @@ describe('User Follow Test', () => {
   it('test follow', async () => {
     const { user_id } = await getUser(core, MyWallet);
     const res = await core.user.follow.follow(user_id, {
-      target_user_id: user_id,
+      target_user_id: ch,
     });
     console.log(res);
   });

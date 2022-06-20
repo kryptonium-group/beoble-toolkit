@@ -1,16 +1,22 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
+import { SortngOrder } from '../../core/user';
 import { MembershipAction } from './chatroom';
 import { IResponse } from './response';
 
-export interface IUserResponse extends IResponse<IUser[]> {}
+export interface IUsersResponse extends IResponse<IUser[]> {}
 
-export interface IUserPutResponse extends IResponse<IUser> {}
+export interface IUserResponse extends IResponse<IUser> {}
+
+export interface IUserWithCountResponse extends IResponse<IUserWithCount> {}
 
 export interface IGetUserParams {
   user_id?: string;
   wallet_address?: string;
   alias?: string;
   alias_search?: string;
+  full_detail?: boolean;
+  sort_key?: string;
+  sort_order?: SortngOrder;
 }
 
 export interface IPostUserBody {
@@ -29,12 +35,12 @@ export interface IPutUserBody {
   representative_media_url?: string[];
 }
 
-export interface IUser extends UserInfo, Partial<USerCounts> {}
+export interface IUserWithCount extends IUser, Partial<UserCounts> {}
 
-export interface UserInfo {
+export interface IUser {
   user_id: string;
-  create_time: string; // date
-  update_time: string; // date
+  create_time: number;
+  update_time: number;
   wallets: string[];
   alias: string;
   display_name: string;
@@ -42,7 +48,7 @@ export interface UserInfo {
   representative_media_url: string[];
 }
 
-interface USerCounts {
+interface UserCounts {
   wallets_count: number;
   chatrooms_count: number;
   friends_count: number;

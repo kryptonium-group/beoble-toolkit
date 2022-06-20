@@ -6,31 +6,13 @@ import Button from '../Button';
 import { EditProfile, ProfileContent } from './Contents';
 import useBeobleModal from '../../hooks/useBeoble/useBeobleModal';
 import { zIndex } from '../../styles';
+import { flexStretch, noBorder } from '../../styles/commons';
 
 /* eslint-disable-next-line */
 export interface ProfileModalProps {
   isOpen: boolean;
   close?: () => void;
 }
-
-const flexStretch = css`
-  vertical-align: inherit;
-  max-width: 100%;
-  min-height: 0px;
-  min-width: 0px;
-  flex-shrink: 0;
-  flex-direction: column;
-  flex-basis: auto;
-  display: flex;
-  -webkit-box-align: stretch;
-  align-items: stretch;
-`;
-
-const noBorder = css`
-  border-width: 0px;
-  border-style: solid;
-  border-color: rgb(255, 255, 255);
-`;
 
 const Sidebar = keyframes`
   0% {
@@ -138,10 +120,7 @@ export const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
 
   return (
     <Container onClick={close} isOpen={isOpen}>
-      <ProfileModalContainer
-        isOpen={isOpen}
-        onClick={(e) => handleBlockParentClick(e)}
-      >
+      <ProfileModalContainer isOpen={isOpen} onClick={handleBlockParentClick}>
         <ProfileModalCard>
           <ModalControlContainer>
             {route.length > 1 ? (

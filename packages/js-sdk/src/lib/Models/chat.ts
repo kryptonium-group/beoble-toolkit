@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { IResponse } from './response';
-import { UserInfo } from './user';
+import { IUser } from './user';
 
 export interface IChatResponse extends IResponse<IChat> {}
 
@@ -38,7 +38,7 @@ export interface IChat {
   content_media_url: string[];
   content_text: string;
   create_time: number;
-  creator_user: UserInfo;
+  creator_user: IUser;
   parent_chat_id?: string;
   reactions: any;
   update_time: number;

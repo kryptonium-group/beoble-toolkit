@@ -34,7 +34,7 @@ export const useChannel = (chatroomId: string) => {
       });
 
       chat.onMessage('NEW_MESSAGE', (data: IChat) => {
-        updateMessage([data]);
+        updateMessage(data);
         updateChatrooms();
       });
 

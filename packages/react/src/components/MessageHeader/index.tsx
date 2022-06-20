@@ -14,6 +14,7 @@ export interface MessageHeaderProps {
   status: Status;
   onMinimizeButtonClick?: () => void;
   onHeaderClick?: () => void;
+  onNewChatRoomClick?: () => void;
   isMinimized: boolean;
   account: string;
 }
@@ -75,6 +76,7 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
   status,
   onMinimizeButtonClick,
   onHeaderClick,
+  onNewChatRoomClick,
   isMinimized,
   account,
 }) => {
@@ -84,7 +86,7 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
 
   const handleNewMessageButtonClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    console.log('hi');
+    onNewChatRoomClick && onNewChatRoomClick();
   };
 
   return (
@@ -216,6 +218,29 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
           </>
         )}
         <IconButton size={32} onClick={handleCloseClick}>
+          <CgClose />
+        </IconButton>
+      </ControlsContainer>
+    </StyledMessageHeader>
+  );
+};
+
+export interface CreateChatRoomHeaderProps {
+  onClose: () => void;
+}
+
+export const CreateChatRoomHeader: FC<CreateChatRoomHeaderProps> = ({
+  onClose,
+}) => {
+  return (
+    <StyledMessageHeader>
+      <ProfileContainer>
+        <TitleContainer>
+          <HeaderTitle>Invite</HeaderTitle>
+        </TitleContainer>
+      </ProfileContainer>
+      <ControlsContainer>
+        <IconButton size={32} onClick={onClose}>
           <CgClose />
         </IconButton>
       </ControlsContainer>

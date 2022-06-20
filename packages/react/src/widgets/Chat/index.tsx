@@ -1,8 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import ChatRoomModal from '../../components/ChatRoomModal';
 import ConversationPopUp from '../../components/ConversationPopUp';
-import MessageOverlay, { Conversation } from '../../components/MessageOverlay';
+import MessageOverlay from '../../components/MessageOverlay';
 import useChat from '../../hooks/useChat';
+import { useDelayOpen } from '../../hooks/useDelayOpen';
 import { zIndex } from '../../styles';
 
 /* eslint-disable-next-line */
@@ -26,13 +28,12 @@ const ChatContainer = styled.div`
 
 export const Chat: FC<ChatProps> = () => {
   const { openedChats } = useChat();
-  useEffect(() => {
-    console.log(openedChats);
-  }, [openedChats]);
+  const { open, close, isOpen, render } = useDelayOpen(300);
 
   return (
     <ChatContainer>
-      <MessageOverlay />
+      {render && <ChatRoomModal onClose={close} {...{ isOpen }} />}
+      <MessageOverlay onNewChatRoomClick={open} />
       {openedChats.length > 0 &&
         openedChats.map((chat) => (
           <ConversationPopUp chatroomId={chat} key={chat} />

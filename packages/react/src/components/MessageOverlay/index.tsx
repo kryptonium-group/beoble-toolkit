@@ -9,10 +9,9 @@ import Spinner from '../Spinner';
 import useChat from '../../hooks/useChat';
 
 /* eslint-disable-next-line */
-export interface MessageOverlayProps {}
-
-/* eslint-disable-next-line */
-export interface Conversation {}
+export interface MessageOverlayProps {
+  onNewChatRoomClick?: () => void;
+}
 
 const MessageOverlayBubble = styled.div<{
   isMinimized: boolean;
@@ -61,7 +60,9 @@ const SpinnerContainer = styled.div`
   flex-grow: 1;
 `;
 
-export const MessageOverlay: FC<MessageOverlayProps> = () => {
+export const MessageOverlay: FC<MessageOverlayProps> = ({
+  onNewChatRoomClick,
+}) => {
   const [isMinimized, setIsMinimized] = useState(true);
 
   const { account } = useBeoble();
@@ -79,6 +80,7 @@ export const MessageOverlay: FC<MessageOverlayProps> = () => {
         onMinimizeButtonClick={toggleMinimize}
         onHeaderClick={toggleMinimize}
         account={account?.address ?? ''}
+        {...{ onNewChatRoomClick }}
       />
 
       {isChatroomsLoading && (

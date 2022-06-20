@@ -9,6 +9,7 @@ import ProfileDrawer from '../../components/ProfileDrawer';
 import { ProfileModal } from '../../components/ProfileModal';
 import StatusButton from '../../components/StatusButton';
 import { ProfileType } from './type';
+import { useDelayOpen } from '../../hooks/useDelayOpen';
 
 /* eslint-disable-next-line */
 export interface ProfileProps {
@@ -18,8 +19,7 @@ export interface ProfileProps {
 const StyledProfile = styled.div``;
 
 export const Profile = ({ detailElement }: ProfileProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [doRenderModal, setDoRenderModal] = useState(false);
+  const { isOpen, toggle, render, close } = useDelayOpen(300);
 
   const renderModal = () => {
     const modalContainer = document.createElement('div');
@@ -43,33 +43,14 @@ export const Profile = ({ detailElement }: ProfileProps) => {
     return nextBody ?? reactBody ?? document.body;
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setTimeout(() => {
-      setDoRenderModal(false);
-    }, 300);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-    setDoRenderModal(true);
-  };
-
-  const toggleModal = () => {
-    if (isModalOpen) closeModal();
-    else openModal();
-  };
-
   useEffect(() => {
     //  detailElement === 'drawer' ? renderDrawer() : renderModal();
   }, [detailElement]);
 
   return (
     <StyledProfile>
-      <StatusButton onClick={toggleModal} />
-      {doRenderModal && (
-        <ProfileModal isOpen={isModalOpen} close={closeModal} />
-      )}
+      <StatusButton onClick={toggle} />
+      {render && <ProfileModal isOpen={isOpen} close={close} />}
     </StyledProfile>
   );
 };

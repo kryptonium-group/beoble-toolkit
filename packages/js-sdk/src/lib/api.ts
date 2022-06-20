@@ -76,6 +76,7 @@ export default class ApiClient {
       async () =>
         await this.client.delete(path, {
           data,
+          params,
         })
     );
   }
