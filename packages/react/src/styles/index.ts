@@ -34,7 +34,8 @@ export const Colors = {
     positiveActive: '#004d2a',
   },
   border: {
-    faint: '#00000014',
+    faint: '#00000036',
+    highlight: '#0000004d',
   },
 };
 

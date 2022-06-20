@@ -9,4 +9,6 @@ export default {
 const Template: Story<CheckBoxProps> = (args) => <CheckBox {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  size: 30,
+};

@@ -145,7 +145,12 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
 
   const generateUserItem = (user: IUser) => {
     return (
-      <UserListItem {...{ user }} padding="8px 20px " key={user.user_id} />
+      <UserListItem
+        {...{ user }}
+        padding="8px 20px "
+        key={user.user_id}
+        hasCheckBox
+      />
     );
   };
 

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { SpaceProps, space } from 'styled-system';
 import { IUser } from '@beoble/js-sdk';
@@ -6,6 +6,7 @@ import { useBeoble, useENS } from '../../hooks';
 import { Colors, Truncate } from '../../styles';
 import { Appear } from '../../styles/commons';
 import Avatar from '../Avatar';
+import CheckBox from '../CheckBox';
 
 /* eslint-disable-next-line */
 export interface UserListItemProps {
@@ -61,20 +62,35 @@ export const UserListItem: FC<UserListItemProps> = ({
 }) => {
   const { provider } = useBeoble();
   const { ENSName, ENSAvatar } = useENS(provider, user.wallets[0]);
+  const [clicked, setClicked] = useState(false);
+
+  const handleChange = (value: boolean) => {
+    setClicked(value);
+  };
+
+  const handleClick = () => {
+    setClicked(!clicked);
+    onClick && onClick();
+    console.log('hi');
+  };
 
   return (
-    <Container padding={padding} {...{ onClick }}>
+    <Container padding={padding} onClick={handleClick}>
       <ProfileContainer>
         <Avatar
           account={user.wallets[0]}
           profileImg={user.representative_media_url[0] ?? ENSAvatar}
-          size={30}
+          size={36}
         />
         <DisplayName>
           {user.display_name ?? (!ENSName ? user.wallets[0] : ENSName)}
         </DisplayName>
       </ProfileContainer>
-      {hasCheckBox && <CheckBoxContainer></CheckBoxContainer>}
+      {hasCheckBox && (
+        <CheckBoxContainer>
+          <CheckBox size={20} value={clicked} onChange={handleChange} />
+        </CheckBoxContainer>
+      )}
     </Container>
   );
 };
