@@ -600,9 +600,7 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
           </ListContainer>
         )}
       </MenuContainer>
-      <Footer>
-        <OutlinedButton>Sign out</OutlinedButton>
-      </Footer>
+      <Footer></Footer>
     </ModalContent>
   );
 };

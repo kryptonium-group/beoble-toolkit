@@ -101,7 +101,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   return (
     <Container {...{ isMinimized }}>
       <ChatHeader
-        status={'online'}
+        status={'none'}
         account={chatroomAccount}
         userName={chatroomName}
         onClose={handleCloseChat}

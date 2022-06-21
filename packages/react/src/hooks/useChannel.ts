@@ -50,26 +50,22 @@ export const useChannel = (chatroomId: string) => {
     array: IChat[],
     lastChat?: MessageProps
   ): MessageProps => {
-    const { creator_user, create_time, content_text, chat_id } = chat;
-
     if (!user) throw new BeobleNotInitizliedError();
+
+    const { creator_user, create_time, content_text, chat_id } = chat;
+    const previousChat = array[index - 1];
 
     const isMine = user.user_id === creator_user.user_id;
 
     const isSameUserWithPrevious = lastChat
       ? creator_user.user_id === lastChat.creator_user_id
-      : index > 0 &&
-        creator_user.user_id === array[index - 1].creator_user.user_id;
+      : creator_user.user_id === previousChat?.creator_user.user_id;
 
     const timestamp = create_time * 1000;
+    const previousTimestamp = previousChat?.create_time * 1000 ?? 0;
 
-    const previousTimestamp =
-      index > 0 ? array[index - 1].create_time * 1000 : 0;
-
-    let isFollowing =
+    const isFollowing =
       isSameUserWithPrevious && isMinEqual(timestamp, previousTimestamp);
-
-    if (array.length > 1 && index === array.length - 1) isFollowing = false;
 
     return {
       isMine,
@@ -108,6 +104,11 @@ export const useChannel = (chatroomId: string) => {
         )
       )
     );
+  };
+
+  const retrieveMessages = () => {
+    const res: MessageProps[] = [];
+    setMessages((prev) => concatMessages(res, prev));
   };
 
   const sendMessage = (content: string) => {
