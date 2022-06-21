@@ -67,6 +67,8 @@ const MessageBox = styled.div<{ isMine: boolean }>`
   padding: 8px 12px;
   width: fit-content;
   min-width: 10px;
+  max-width: 100%;
+  overflow-wrap: break-word;
 `;
 
 const MyMessage = css`
