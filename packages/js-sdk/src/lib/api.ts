@@ -9,7 +9,7 @@ export default class ApiClient {
   constructor(authToken?: string) {
     this.client = axios.create({
       baseURL: Paths.dev,
-      timeout: 10000,
+      timeout: 30000,
     });
 
     if (authToken) {

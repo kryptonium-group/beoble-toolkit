@@ -91,7 +91,7 @@ export const MessageOverlay: FC<MessageOverlayProps> = ({
       <ScrollSection>
         <ConversationContainer>
           {conversations.map((args) => (
-            <MessageConversation {...args} />
+            <MessageConversation {...args} key={args.chatroomId} />
           ))}
         </ConversationContainer>
       </ScrollSection>
