@@ -27,8 +27,8 @@ export const useChatRoomCreator = () => {
 
   useEffect(() => {
     if (Beoble && user) {
-      getFriends(user.user_id);
-      getFollowings(user.user_id);
+      getFriends();
+      getFollowings();
     }
   }, [Beoble, user]);
 
