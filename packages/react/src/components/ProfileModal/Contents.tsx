@@ -6,7 +6,7 @@ import {
   RiArrowDownSLine,
   RiUserHeartLine,
 } from 'react-icons/ri';
-import { BeobleSDK, IPutUserBody } from '@beoble/js-sdk';
+import { BeobleSDK, IPutUserBody, IUser } from '@beoble/js-sdk';
 import Button from '../Button';
 import Identication from '../Identication';
 import useBeoble from '../../hooks/useBeoble/useBeoble';
@@ -17,6 +17,9 @@ import { useBeobleSDK } from '../../hooks/useBeoble/useBeobleSDK';
 import Spinner from '../Spinner';
 import NftPicker from '../NftPicker';
 import UserListItem from '../UserListItem';
+import { useUser } from '../../hooks/useUser';
+import { Colors } from '../../styles';
+import { Appear } from '../../styles/commons';
 
 const OutlinedButton = styled(Button)`
   display: flex;
@@ -415,29 +418,74 @@ const ListContainer = styled.div`
   padding: 0px;
 `;
 
+const NoResultContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding: 8px;
+  animation: ${Appear};
+`;
+
+const NoResultText = styled.span`
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+`;
+
 export interface ContentProps {
   userAddress?: string;
   userId?: string;
 }
 
 export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
-  const [isChattingMenuOpen, setIsChattingMenuOpen] = useState(false);
+  const [isFriendsMenuOpen, setIsFriendsMenuOpen] = useState(false);
   const [isFollowersMenuOpen, setIsFollowersMenuOpen] = useState(false);
   const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
 
   const { initialized, account, user } = useBeoble();
   const { addRoute } = useBeobleModal();
+  const {
+    friends,
+    followers,
+    followings,
+    isFollowerFetching,
+    isFollowingFetching,
+    isFriendFetching,
+    getFollowers,
+    getFollowings,
+    getFriends,
+  } = useUser();
 
   const handleClickFriendsMenu = () => {
-    setIsChattingMenuOpen(!isChattingMenuOpen);
+    const nextState = !isFriendsMenuOpen;
+    nextState && getFriends();
+    setIsFriendsMenuOpen(nextState);
   };
 
   const handleClickFollowersMenu = () => {
-    setIsFollowersMenuOpen(!isFollowersMenuOpen);
+    const nextState = !isFollowersMenuOpen;
+    nextState && getFollowers();
+    setIsFollowersMenuOpen(nextState);
   };
 
   const handleClickFollowingMenu = () => {
-    setIsFollowingMenuOpen(!isFollowingMenuOpen);
+    const nextState = !isFollowingMenuOpen;
+    nextState && getFollowings();
+    setIsFollowingMenuOpen(nextState);
+  };
+
+  const generateUserListItem = (user: IUser) => {
+    return (
+      <UserListItem
+        {...{ user }}
+        padding="8px 28px"
+        size={'sm'}
+        key={user.user_id}
+      />
+    );
   };
 
   return (
@@ -478,32 +526,79 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
         </AddressContainer>
       </ProfileInfoContainer>
       <MenuContainer>
-        <MenuButton type="button" onClick={handleClickFollowersMenu}>
+        <MenuButton
+          type="button"
+          onClick={handleClickFollowersMenu}
+          disabled={!initialized}
+        >
           <MenuItemContainer>
             <RiUserReceived2Line size={20} />
             <MEnuItemName>Followers</MEnuItemName>
             <MenuArrow isOpen={isFollowersMenuOpen} size={16} />
           </MenuItemContainer>
         </MenuButton>
-        <ListContainer>
-          {user && <UserListItem user={user} padding="8px 28px" size={'sm'} />}
-          {user && <UserListItem user={user} padding="8px 28px" size={'sm'} />}
-          {user && <UserListItem user={user} padding="8px 28px" size={'sm'} />}
-        </ListContainer>
-        <MenuButton type="button" onClick={handleClickFollowingMenu}>
+
+        {isFollowersMenuOpen && (
+          <ListContainer>
+            {isFollowerFetching ? (
+              <Spinner color={Colors.background.white} size={20} />
+            ) : followers.length > 0 ? (
+              followers.map(generateUserListItem)
+            ) : (
+              <NoResultContainer>
+                <NoResultText>No Followers Yet</NoResultText>
+              </NoResultContainer>
+            )}
+          </ListContainer>
+        )}
+        <MenuButton
+          type="button"
+          onClick={handleClickFollowingMenu}
+          disabled={!initialized}
+        >
           <MenuItemContainer>
             <RiUserShared2Line size={20} />
             <MEnuItemName>Following</MEnuItemName>
             <MenuArrow isOpen={isFollowingMenuOpen} size={16} />
           </MenuItemContainer>
         </MenuButton>
-        <MenuButton type="button" onClick={handleClickFriendsMenu}>
+        {isFollowingMenuOpen && (
+          <ListContainer>
+            {isFollowingFetching ? (
+              <Spinner color={Colors.background.white} size={20} />
+            ) : followings.length > 0 ? (
+              followings.map(generateUserListItem)
+            ) : (
+              <NoResultContainer>
+                <NoResultText>No Followings Yet</NoResultText>
+              </NoResultContainer>
+            )}
+          </ListContainer>
+        )}
+        <MenuButton
+          type="button"
+          onClick={handleClickFriendsMenu}
+          disabled={!initialized}
+        >
           <MenuItemContainer>
             <RiUserHeartLine size={20} />
             <MEnuItemName>Friends</MEnuItemName>
-            <MenuArrow isOpen={isChattingMenuOpen} size={16} />
+            <MenuArrow isOpen={isFriendsMenuOpen} size={16} />
           </MenuItemContainer>
         </MenuButton>
+        {isFriendsMenuOpen && (
+          <ListContainer>
+            {isFriendFetching ? (
+              <Spinner color={Colors.background.white} size={20} />
+            ) : friends.length > 0 ? (
+              friends.map(generateUserListItem)
+            ) : (
+              <NoResultContainer>
+                <NoResultText>No Friends Yet</NoResultText>
+              </NoResultContainer>
+            )}
+          </ListContainer>
+        )}
       </MenuContainer>
       <Footer>
         <OutlinedButton>Sign out</OutlinedButton>

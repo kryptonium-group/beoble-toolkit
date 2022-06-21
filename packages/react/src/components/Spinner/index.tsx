@@ -22,7 +22,7 @@ export const Spinner = styled.div<SpinnerProps>`
   border-radius: 50%;
   border-top: none;
   border-right: none;
-  margin: 16px auto;
+  margin: 7.5px auto;
   animation: ${rotation} 1s linear infinite;
 `;
 
