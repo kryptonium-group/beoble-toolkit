@@ -7,11 +7,7 @@ export default {
   title: 'components/NftPicker',
 } as Meta;
 
-const Template: Story<NftPickerProps> = (args) => (
-  <BeobleProvider>
-    <NftPicker {...args} />
-  </BeobleProvider>
-);
+const Template: Story<NftPickerProps> = (args) => <NftPicker {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {};

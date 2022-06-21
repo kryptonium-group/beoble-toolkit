@@ -7,11 +7,7 @@ export default {
   title: 'components/StatusButton',
 } as Meta;
 
-const Template: Story = (args) => (
-  <BeobleProvider>
-    <StatusButton {...args} />
-  </BeobleProvider>
-);
+const Template: Story = (args) => <StatusButton {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {};

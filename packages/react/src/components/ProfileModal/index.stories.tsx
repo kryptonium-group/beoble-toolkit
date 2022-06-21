@@ -8,11 +8,7 @@ export default {
 } as Meta;
 
 const Template: Story<ProfileModalProps> = (args: ProfileModalProps) => {
-  return (
-    <BeobleProvider>
-      <ProfileModal {...args} />
-    </BeobleProvider>
-  );
+  return <ProfileModal {...args} />;
 };
 
 export const Profile = Template.bind({});

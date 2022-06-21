@@ -1,5 +1,4 @@
 import { Story, Meta } from '@storybook/react';
-import { BeobleProvider } from '../../contexts';
 import { ChatRoomModal, ChatRoomModalProps } from './index';
 
 export default {
@@ -8,9 +7,7 @@ export default {
 } as Meta;
 
 const Template: Story<ChatRoomModalProps> = (args) => (
-  <BeobleProvider>
-    <ChatRoomModal {...args} />
-  </BeobleProvider>
+  <ChatRoomModal {...args} />
 );
 
 export const Primary = Template.bind({});

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { SpaceProps, space } from 'styled-system';
 import { IUser } from '@beoble/js-sdk';
 import { useBeoble, useENS } from '../../hooks';
-import { Colors, Truncate } from '../../styles';
+import { Colors, handleSize, Size, Truncate } from '../../styles';
 import { Appear } from '../../styles/commons';
 import Avatar from '../Avatar';
 import CheckBox from '../CheckBox';
@@ -12,6 +12,7 @@ import CheckBox from '../CheckBox';
 export interface UserListItemProps {
   user: IUser;
   padding?: string | number;
+  size?: Size;
   onClick?: () => void;
   hasCheckBox?: boolean;
   checked?: boolean;
@@ -59,6 +60,7 @@ const CheckBoxContainer = styled.div``;
 export const UserListItem: FC<UserListItemProps> = ({
   user,
   padding,
+  size = 'md',
   onClick,
   hasCheckBox,
   checked,
@@ -84,9 +86,9 @@ export const UserListItem: FC<UserListItemProps> = ({
         <Avatar
           account={user.wallets[0]}
           profileImg={user.representative_media_url[0] ?? ENSAvatar}
-          size={36}
+          size={handleSize(size, [48, 36, 20])}
         />
-        <DisplayName>
+        <DisplayName style={{ fontSize: handleSize(size, [20, 16, 14]) }}>
           {user.display_name ?? (!ENSName ? user.wallets[0] : ENSName)}
         </DisplayName>
       </ProfileContainer>

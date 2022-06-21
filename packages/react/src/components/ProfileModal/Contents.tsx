@@ -1,10 +1,10 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   RiUserReceived2Line,
   RiUserShared2Line,
-  RiChat3Line,
   RiArrowDownSLine,
+  RiUserHeartLine,
 } from 'react-icons/ri';
 import { BeobleSDK, IPutUserBody } from '@beoble/js-sdk';
 import Button from '../Button';
@@ -16,6 +16,7 @@ import useBeobleModal from '../../hooks/useBeoble/useBeobleModal';
 import { useBeobleSDK } from '../../hooks/useBeoble/useBeobleSDK';
 import Spinner from '../Spinner';
 import NftPicker from '../NftPicker';
+import UserListItem from '../UserListItem';
 
 const OutlinedButton = styled(Button)`
   display: flex;
@@ -406,6 +407,14 @@ const MenuArrow = styled(RiArrowDownSLine)<{ isOpen: boolean }>`
   transition: transform 150ms ease;
 `;
 
+const ListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 0 12px;
+  padding: 0px;
+`;
+
 export interface ContentProps {
   userAddress?: string;
   userId?: string;
@@ -419,7 +428,7 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
   const { initialized, account, user } = useBeoble();
   const { addRoute } = useBeobleModal();
 
-  const handleClickChattingMenu = () => {
+  const handleClickFriendsMenu = () => {
     setIsChattingMenuOpen(!isChattingMenuOpen);
   };
 
@@ -476,6 +485,11 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
             <MenuArrow isOpen={isFollowersMenuOpen} size={16} />
           </MenuItemContainer>
         </MenuButton>
+        <ListContainer>
+          {user && <UserListItem user={user} padding="8px 28px" size={'sm'} />}
+          {user && <UserListItem user={user} padding="8px 28px" size={'sm'} />}
+          {user && <UserListItem user={user} padding="8px 28px" size={'sm'} />}
+        </ListContainer>
         <MenuButton type="button" onClick={handleClickFollowingMenu}>
           <MenuItemContainer>
             <RiUserShared2Line size={20} />
@@ -483,10 +497,10 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
             <MenuArrow isOpen={isFollowingMenuOpen} size={16} />
           </MenuItemContainer>
         </MenuButton>
-        <MenuButton type="button" onClick={handleClickChattingMenu}>
+        <MenuButton type="button" onClick={handleClickFriendsMenu}>
           <MenuItemContainer>
-            <RiChat3Line size={20} />
-            <MEnuItemName>Chattings</MEnuItemName>
+            <RiUserHeartLine size={20} />
+            <MEnuItemName>Friends</MEnuItemName>
             <MenuArrow isOpen={isChattingMenuOpen} size={16} />
           </MenuItemContainer>
         </MenuButton>

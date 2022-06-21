@@ -8,9 +8,7 @@ export default {
 } as Meta;
 
 const Template: Story<ConversationPopUpProps> = (args) => (
-  <BeobleProvider>
-    <ConversationPopUp {...args} />
-  </BeobleProvider>
+  <ConversationPopUp {...args} />
 );
 
 const TestChatRooms = {

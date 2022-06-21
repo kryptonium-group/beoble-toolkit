@@ -8,9 +8,7 @@ export default {
 } as Meta;
 
 const Template: Story<MessageOverlayProps> = (args) => (
-  <BeobleProvider>
-    <MessageOverlay {...args} />
-  </BeobleProvider>
+  <MessageOverlay {...args} />
 );
 
 export const Primary = Template.bind({});

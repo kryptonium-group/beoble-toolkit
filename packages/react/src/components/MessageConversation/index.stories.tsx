@@ -8,9 +8,7 @@ export default {
 } as Meta;
 
 const Template: Story<MessageConversationProps> = (args) => (
-  <BeobleProvider>
-    <MessageConversation {...args} />
-  </BeobleProvider>
+  <MessageConversation {...args} />
 );
 
 export const Primary = Template.bind({});

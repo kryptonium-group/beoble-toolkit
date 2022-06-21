@@ -4,6 +4,21 @@ export interface SizeProps {
   size?: number;
 }
 
+export type Size = 'lg' | 'md' | 'sm';
+
+export const handleSize = <T>(size: Size, values: T[]): T => {
+  switch (size) {
+    case 'lg':
+      return values[0];
+    case 'md':
+      return values[1];
+    case 'sm':
+      return values[2];
+    default:
+      return values[1];
+  }
+};
+
 export const SizeCss = css<SizeProps>`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;

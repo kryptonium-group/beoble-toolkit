@@ -7,11 +7,7 @@ export default {
   title: 'UserListItem',
 } as Meta;
 
-const Template: Story<UserListItemProps> = (args) => (
-  <BeobleProvider>
-    <UserListItem {...args} />
-  </BeobleProvider>
-);
+const Template: Story<UserListItemProps> = (args) => <UserListItem {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
