@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import React, { useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { RiCloseFill } from 'react-icons/ri';
 import { MdArrowBack } from 'react-icons/md';
 import Button from '../Button';
-import { EditProfile, ProfileContent } from './Contents';
+import { ProfileContent } from './Contents';
 import useBeobleModal from '../../hooks/useBeoble/useBeobleModal';
 import { zIndex } from '../../styles';
 import { flexStretch, noBorder } from '../../styles/commons';
+import { EditProfile } from './Edit';
 
 /* eslint-disable-next-line */
 export interface ProfileModalProps {

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 import styled from 'styled-components';
 import {
   PROFILE_DRAWER_CLASSNAME,
@@ -20,7 +19,7 @@ const StyledProfile = styled.div``;
 
 export const Profile = ({ detailElement }: ProfileProps) => {
   const { isOpen, toggle, render, close } = useDelayOpen(300);
-
+  /*
   const renderModal = () => {
     const modalContainer = document.createElement('div');
     modalContainer.id = PROFILE_MODAL_CLASSNAME;
@@ -36,7 +35,7 @@ export const Profile = ({ detailElement }: ProfileProps) => {
     const root = createRoot(drawerContainer);
     root.render(<ProfileDrawer />);
   };
-
+  */
   const getDocumentRoot = () => {
     const nextBody = document.getElementById('__next');
     const reactBody = document.getElementById('root');
