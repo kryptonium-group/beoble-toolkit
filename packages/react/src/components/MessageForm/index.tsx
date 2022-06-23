@@ -117,6 +117,8 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pictureInputRef = useRef<HTMLInputElement>(null);
 
+  const isBrowers = typeof window !== 'undefined';
+
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessageContent(e.target.value);
   };
@@ -207,7 +209,7 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
           </IconButton>
              */}
           <IconContainer>
-            {isEmojiPickerOpen && (
+            {isEmojiPickerOpen && isBrowers && (
               <PickerContainer>
                 <Picker onEmojiClick={handleEmojiClick} />
               </PickerContainer>

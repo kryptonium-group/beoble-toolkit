@@ -103,12 +103,8 @@ export const ProfileContent: FC<ContentProps> = ({ profileUser }) => {
   };
 
   const getTruncatedAddress = () => {
-    return BeobleSDK.utils.truncateString(
-      (isUserProfile ? account?.address : profileUser?.wallets[0]) ?? ' ',
-      16,
-      4,
-      4
-    );
+    const address = isUserProfile ? account?.address : profileUser?.wallets[0];
+    return BeobleSDK.utils.truncateString(address ?? '', 16, 4, 4);
   };
 
   return (
