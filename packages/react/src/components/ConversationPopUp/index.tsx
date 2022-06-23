@@ -13,12 +13,12 @@ export interface ConversationPopUpProps {
   chatroomId: string;
 }
 
-const Container = styled.div<{ isMinimized: boolean }>`
+const Container = styled.div<{ isMinimized: boolean; isExpanded: boolean }>`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
-  height: 400px;
-  width: 336px;
+  ${({ isExpanded }) => (isExpanded ? enlargedContainer : normalContainer)}
+
   background-color: ${Colors.background.white};
   display: flex;
   flex: 0 0 auto;
@@ -43,6 +43,16 @@ const minimizedContainer = css`
   transform: translateY(100%) translateY(-48px);
   transition-duration: 167ms;
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+`;
+
+const normalContainer = css`
+  height: 400px;
+  width: 336px;
+`;
+
+const enlargedContainer = css`
+  height: 696px;
+  width: 500px;
 `;
 
 const MessageDisplayContainer = styled.div`
@@ -87,6 +97,8 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   chatroomId,
 }) => {
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const { sendMessage, messages, isLoading } = useChannel(chatroomId);
   const { closeChat } = useChat();
   const { chatroomAccount, chatroomName } = useChatRoom(chatroomId);
@@ -99,15 +111,20 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     setIsMinimized(!isMinimized);
   };
 
+  const handleEnlargeChat = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <Container {...{ isMinimized }}>
+    <Container {...{ isMinimized, isExpanded }}>
       <ChatHeader
         status={'none'}
         account={chatroomAccount}
         userName={chatroomName}
         onClose={handleCloseChat}
         onHeaderClick={handleHeaderClick}
-        {...{ isMinimized }}
+        onExpand={handleEnlargeChat}
+        {...{ isMinimized, isExpanded }}
       />
       <ContentContainer>
         <MessageDisplayContainer>

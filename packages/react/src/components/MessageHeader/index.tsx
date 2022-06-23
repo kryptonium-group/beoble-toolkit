@@ -8,6 +8,7 @@ import Avatar from '../Avatar';
 import { Status } from '../OnlineStatus';
 import { FC, MouseEventHandler, MouseEvent } from 'react';
 import { Colors, FontWeights, Truncate } from '../../styles';
+import { FiMinimize2 } from 'react-icons/fi';
 
 export interface MessageHeaderProps {
   profileImage?: string;
@@ -144,8 +145,11 @@ export interface ChatHeaderProps {
   account: string;
   userName?: string;
   isMinimized: boolean;
+  isExpanded: boolean;
   onHeaderClick?: MouseEventHandler<any>;
   onClose?: MouseEventHandler<any>;
+  onExpand?: MouseEventHandler<any>;
+  onMore?: MouseEventHandler<any>;
 }
 
 const TitleContainer = styled.div`
@@ -184,9 +188,22 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   account,
   userName,
   isMinimized,
+  isExpanded,
   onHeaderClick,
   onClose,
+  onExpand,
+  onMore,
 }) => {
+  const handleExpandButtonClick = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    onExpand && onExpand(e);
+  };
+
+  const handleMoreButtonClick = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    onMore && onMore(e);
+  };
+
   const handleCloseClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     onClose && onClose(e);
@@ -209,11 +226,11 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
       <ControlsContainer>
         {!isMinimized && (
           <>
-            <IconButton size={32}>
+            <IconButton size={32} onClick={handleMoreButtonClick}>
               <MdMoreHoriz />
             </IconButton>
-            <IconButton size={32}>
-              <CgArrowsExpandRight />
+            <IconButton size={32} onClick={handleExpandButtonClick}>
+              {isExpanded ? <FiMinimize2 /> : <CgArrowsExpandRight />}
             </IconButton>
           </>
         )}
