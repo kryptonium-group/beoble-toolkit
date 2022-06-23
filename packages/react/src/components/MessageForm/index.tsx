@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { AiOutlinePaperClip, AiOutlinePicture } from 'react-icons/ai';
+import dynamic from 'next/dynamic';
 import { MdGif, MdMoreHoriz } from 'react-icons/md';
 import { BsEmojiSmile } from 'react-icons/bs';
-import Picker, { IEmojiData } from 'emoji-picker-react';
+import { IEmojiData } from 'emoji-picker-react';
 import { Colors } from '../../styles';
 import IconButton from '../IconButton';
 import Button from '../Button';
@@ -22,6 +23,7 @@ export interface MessageFormProps {
   disabled?: boolean;
 }
 
+const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 const FormContainer = styled.form`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -117,8 +119,6 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pictureInputRef = useRef<HTMLInputElement>(null);
 
-  const isBrowers = typeof window !== 'undefined';
-
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessageContent(e.target.value);
   };
@@ -209,7 +209,7 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
           </IconButton>
              */}
           <IconContainer>
-            {isEmojiPickerOpen && isBrowers && (
+            {isEmojiPickerOpen && (
               <PickerContainer>
                 <Picker onEmojiClick={handleEmojiClick} />
               </PickerContainer>
