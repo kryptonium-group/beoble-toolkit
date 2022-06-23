@@ -36,16 +36,16 @@ import {
 } from './style';
 
 export interface ContentProps {
-  userAddress?: string;
-  userId?: string;
+  profileUser?: IUser;
 }
 
-export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
+export const ProfileContent: FC<ContentProps> = ({ profileUser }) => {
   const [isFriendsMenuOpen, setIsFriendsMenuOpen] = useState(false);
   const [isFollowersMenuOpen, setIsFollowersMenuOpen] = useState(false);
   const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
 
   const { initialized, account, user } = useBeoble();
+  const isUserProfile = !profileUser || user?.user_id === profileUser?.user_id;
   const { addRoute } = useBeobleModal();
   const {
     friends,
@@ -88,6 +88,29 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
     );
   };
 
+  const getDisplayName = () => {
+    console.log(isUserProfile, user, profileUser);
+    if (isUserProfile) {
+      return (
+        user?.display_name ??
+        account?.ensName ??
+        account?.address ??
+        'undefined'
+      );
+    } else {
+      return '';
+    }
+  };
+
+  const getTruncatedAddress = () => {
+    return BeobleSDK.utils.truncateString(
+      (isUserProfile ? account?.address : profileUser?.wallets[0]) ?? ' ',
+      16,
+      4,
+      4
+    );
+  };
+
   return (
     <ModalContent>
       <ProfileInfoContainer>
@@ -96,20 +119,8 @@ export const ProfileContent: FC<ContentProps> = ({ userAddress, userId }) => {
             <AddressProfileDiv>
               <Identication diameter={36} account={account?.address ?? ''} />
               <AddressDiv>
-                <AddressSpan>
-                  {user?.display_name ??
-                    account?.ensName ??
-                    account?.address ??
-                    'undefined'}
-                </AddressSpan>
-                <ProfileSpan>
-                  {BeobleSDK.utils.truncateString(
-                    account?.address ?? ' ',
-                    16,
-                    4,
-                    4
-                  )}
-                </ProfileSpan>
+                <AddressSpan>{getDisplayName()}</AddressSpan>
+                <ProfileSpan>{getTruncatedAddress()}</ProfileSpan>
               </AddressDiv>
             </AddressProfileDiv>
           </AddressProfileButton>

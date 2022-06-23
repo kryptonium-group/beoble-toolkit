@@ -5,6 +5,10 @@ export interface IModalContext {
   isOpen: boolean;
   addRoute: (page: ModalPages) => void;
   popRoute: () => void;
+  toggle: () => void;
+  render: boolean;
+  close: () => void;
+  open: () => void;
 }
 
 export type ModalPages = 'default' | 'edit' | 'others';

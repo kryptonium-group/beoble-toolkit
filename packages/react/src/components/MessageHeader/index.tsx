@@ -150,6 +150,7 @@ export interface ChatHeaderProps {
   onClose?: MouseEventHandler<any>;
   onExpand?: MouseEventHandler<any>;
   onMore?: MouseEventHandler<any>;
+  onProfileClick?: MouseEventHandler<any>;
 }
 
 const TitleContainer = styled.div`
@@ -193,6 +194,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   onClose,
   onExpand,
   onMore,
+  onProfileClick,
 }) => {
   const handleExpandButtonClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -209,6 +211,13 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
     onClose && onClose(e);
   };
 
+  const handleProfileClick = (e: MouseEvent<HTMLElement>) => {
+    if (!isMinimized) {
+      e.stopPropagation();
+      onProfileClick && onProfileClick(e);
+    }
+  };
+
   return (
     <StyledMessageHeader onClick={onHeaderClick}>
       <ProfileContainer>
@@ -219,7 +228,9 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
           account={account}
         />
         <TitleContainer>
-          <UserName {...{ isMinimized }}>{userName ?? account}</UserName>
+          <UserName {...{ isMinimized }} onClick={handleProfileClick}>
+            {userName ?? account}
+          </UserName>
           {!isMinimized && <StatusDiv>{status}</StatusDiv>}
         </TitleContainer>
       </ProfileContainer>

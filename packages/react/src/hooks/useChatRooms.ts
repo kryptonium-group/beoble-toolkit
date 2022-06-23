@@ -33,7 +33,7 @@ export const getChatroomLatestMessage = (chatroom: IChatRoom) => {
     : 'Type anything to start!';
 };
 
-const filterOutUser = (members: IUser[], user_id: string): IUser[] => {
+export const filterOutUser = (members: IUser[], user_id: string): IUser[] => {
   return members.filter((member) => member.user_id !== user_id);
 };
 

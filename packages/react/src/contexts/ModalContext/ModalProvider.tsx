@@ -1,4 +1,5 @@
 import { FC, ReactNode, useState } from 'react';
+import { useDelayOpen } from '../../hooks/useDelayOpen';
 import { ModalContext, ModalPages } from './ModalContext';
 
 export interface ModalProvider {
@@ -7,7 +8,7 @@ export interface ModalProvider {
 
 export const ModalProvider: FC<ModalProvider> = ({ children }) => {
   const [route, setRoute] = useState<ModalPages[]>(['default']);
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, toggle, render, close, open } = useDelayOpen(300);
 
   const addRoute = (page: ModalPages) => {
     setRoute([...route, page]);
@@ -26,8 +27,12 @@ export const ModalProvider: FC<ModalProvider> = ({ children }) => {
       value={{
         route,
         isOpen,
+        render,
         addRoute,
         popRoute,
+        toggle,
+        open,
+        close,
       }}
     >
       {children}

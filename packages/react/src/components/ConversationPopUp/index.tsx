@@ -7,7 +7,7 @@ import MessageForm from '../MessageForm';
 import { ChatHeader } from '../MessageHeader';
 import { useChannel } from '../../hooks/useChannel';
 import Spinner from '../Spinner';
-import { useChatRoom, useChat } from '../../hooks';
+import { useChatRoom, useChat, useBeobleModal } from '../../hooks';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
@@ -101,7 +101,9 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
 
   const { sendMessage, messages, isLoading } = useChannel(chatroomId);
   const { closeChat } = useChat();
-  const { chatroomAccount, chatroomName } = useChatRoom(chatroomId);
+  const { open } = useBeobleModal();
+  const { chatroomAccount, chatroomName, otherMembers } =
+    useChatRoom(chatroomId);
 
   const handleCloseChat = useCallback(() => {
     closeChat(chatroomId);
@@ -111,8 +113,14 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     setIsMinimized(!isMinimized);
   };
 
-  const handleEnlargeChat = () => {
+  const handleExpandChat = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const handleProfileClick = () => {
+    if (otherMembers.length > 0) {
+      open();
+    }
   };
 
   return (
@@ -123,7 +131,8 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
         userName={chatroomName}
         onClose={handleCloseChat}
         onHeaderClick={handleHeaderClick}
-        onExpand={handleEnlargeChat}
+        onExpand={handleExpandChat}
+        onProfileClick={handleProfileClick}
         {...{ isMinimized, isExpanded }}
       />
       <ContentContainer>

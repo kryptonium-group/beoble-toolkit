@@ -1,16 +1,25 @@
 import { IChatRoom, IUser } from '@beoble/js-sdk';
 import { useEffect, useState } from 'react';
 import { useBeoble } from './useBeoble';
-import { getChatroomMemberAccount, getChatroomName } from './useChatRooms';
+import {
+  filterOutUser,
+  getChatroomMemberAccount,
+  getChatroomName,
+} from './useChatRooms';
 
 export const useChatRoom = (chatroom_id: string) => {
   const { Beoble, user } = useBeoble();
   const [chatroom, setChatroom] = useState<IChatRoom>();
   const [isLoading, setIsLoading] = useState(true);
+
   const chatroomAccount =
     chatroom && user ? getChatroomMemberAccount(chatroom, user.user_id) : '';
+
   const chatroomName =
     chatroom && user ? getChatroomName(chatroom, user.user_id) : '';
+
+  const otherMembers =
+    chatroom && user ? filterOutUser(chatroom?.members, user?.user_id) : [];
 
   useEffect(() => {
     if (Beoble) updateChatroom(chatroom_id);
@@ -22,9 +31,17 @@ export const useChatRoom = (chatroom_id: string) => {
     const res = await Beoble.chatroom.get({
       chatroom_id,
     });
+    console.log(res);
     setChatroom(res.data.length > 0 ? res.data[0] : undefined);
     setIsLoading(false);
   };
 
-  return { chatroom, isLoading, updateChatroom, chatroomAccount, chatroomName };
+  return {
+    chatroom,
+    isLoading,
+    updateChatroom,
+    chatroomAccount,
+    chatroomName,
+    otherMembers,
+  };
 };

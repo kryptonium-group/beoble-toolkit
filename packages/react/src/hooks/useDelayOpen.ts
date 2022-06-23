@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const useDelayOpen = (timeout: number) => {
   const [isOpen, setIsOpen] = useState(false);
