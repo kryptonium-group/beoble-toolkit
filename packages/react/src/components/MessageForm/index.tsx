@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { AiOutlinePaperClip, AiOutlinePicture } from 'react-icons/ai';
 import { MdGif, MdMoreHoriz } from 'react-icons/md';
 import { BsEmojiSmile } from 'react-icons/bs';
+import Picker, { IEmojiData } from 'emoji-picker-react';
 import { Colors } from '../../styles';
 import IconButton from '../IconButton';
 import Button from '../Button';
@@ -11,6 +12,8 @@ import React, {
   SyntheticEvent,
   useState,
   KeyboardEvent,
+  MouseEvent,
+  useRef,
 } from 'react';
 
 /* eslint-disable-next-line */
@@ -95,9 +98,24 @@ const SendButton = styled(Button)`
   margin-right: 8px;
 `;
 
+const PickerContainer = styled.div`
+  position: fixed;
+  transform: translateY(calc(-100% - 8px)) translateX(-30%);
+`;
+
+const IconContainer = styled.div``;
+
+const UploadInput = styled.input`
+  display: none;
+`;
+
 export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
   const [isFocused, setIsFoucesd] = useState(false);
   const [messageContent, setMessageContent] = useState('');
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const pictureInputRef = useRef<HTMLInputElement>(null);
 
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessageContent(e.target.value);
@@ -120,6 +138,24 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
     }
   };
 
+  const handleEmojiClick = (e: MouseEvent, emoji: IEmojiData) => {
+    setIsEmojiPickerOpen(false);
+    console.log(emoji);
+    setMessageContent((prev) => prev + emoji.emoji);
+  };
+
+  const toggleEmojiPicker = () => {
+    setIsEmojiPickerOpen((prev) => !prev);
+  };
+
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target?.files);
+  };
+
+  const handlePictureUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target?.files);
+  };
+
   return (
     <FormContainer onSubmit={handleSubmit}>
       <TextEditorContainer {...{ isFocused }}>
@@ -135,18 +171,56 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
       </TextEditorContainer>
       <FormFooter>
         <FooterActionButtonContainer>
-          <IconButton size={32} {...{ disabled }} type="button">
+          <UploadInput
+            ref={pictureInputRef}
+            type="file"
+            accept="image/png, image/jpeg, image/gif"
+            name="image_upload"
+            onChange={handlePictureUpload}
+          />
+          <IconButton
+            size={32}
+            {...{ disabled }}
+            type="button"
+            onClick={() => pictureInputRef.current?.click()}
+          >
             <AiOutlinePicture />
           </IconButton>
-          <IconButton size={32} {...{ disabled }} type="button">
+          <UploadInput
+            ref={fileInputRef}
+            type="file"
+            name="file_upload"
+            onChange={handleFileUpload}
+          />
+          <IconButton
+            size={32}
+            {...{ disabled }}
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+          >
             <AiOutlinePaperClip />
           </IconButton>
+          {/**
+             * 
           <IconButton size={32} {...{ disabled }} type="button">
             <MdGif />
           </IconButton>
-          <IconButton size={32} {...{ disabled }} type="button">
-            <BsEmojiSmile />
-          </IconButton>
+             */}
+          <IconContainer>
+            {isEmojiPickerOpen && (
+              <PickerContainer>
+                <Picker onEmojiClick={handleEmojiClick} />
+              </PickerContainer>
+            )}
+            <IconButton
+              size={32}
+              {...{ disabled }}
+              type="button"
+              onClick={toggleEmojiPicker}
+            >
+              <BsEmojiSmile />
+            </IconButton>
+          </IconContainer>
         </FooterActionButtonContainer>
         <FooterActionButtonContainer>
           <SendButton disabled={!messageContent || disabled} type="submit">

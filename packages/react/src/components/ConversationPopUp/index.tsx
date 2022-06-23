@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
+import Picker from 'emoji-picker-react';
 import { Colors } from '../../styles';
 import Message from '../Message';
 import MessageForm from '../MessageForm';
