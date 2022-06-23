@@ -22,7 +22,8 @@ export const useENS = (
     provider: ethers.providers.Web3Provider,
     address: string
   ) => {
-    if (ethers.utils.isAddress(address)) {
+    const currentChain = (await provider.getNetwork()).chainId;
+    if (ethers.utils.isAddress(address) && currentChain === 1) {
       const ensName = (await provider.lookupAddress(address)) ?? '';
       setENSName(ensName);
       if (ensName) {

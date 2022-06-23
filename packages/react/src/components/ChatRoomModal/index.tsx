@@ -202,7 +202,6 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    searchUser(e.target.value);
     setSearchValue(e.target.value);
   };
 

@@ -67,6 +67,8 @@ const TextEditor = styled.textarea`
   overflow: auto;
   padding: 12px 48px 0 12px;
   resize: none;
+  background-color: #fff;
+  color: ${Colors.text.normal};
 
   &:disabled {
     cursor: not-allowed;

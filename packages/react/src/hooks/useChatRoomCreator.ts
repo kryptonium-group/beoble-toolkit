@@ -2,6 +2,7 @@ import { Core, IUser, IUsersResponse } from '@beoble/js-sdk';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { useBeoble } from './useBeoble';
+import useDebounce from './useDebounce';
 import { useUser } from './useUser';
 
 export const useChatRoomCreator = () => {
@@ -11,6 +12,7 @@ export const useChatRoomCreator = () => {
   const [searchResult, setSearchResult] = useState<IUser[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [isDebouncing, debouncedSearchValue] = useDebounce(searchValue);
 
   const {
     friends,
@@ -21,7 +23,8 @@ export const useChatRoomCreator = () => {
     isFollowingFetching,
   } = useUser();
 
-  const isLoading = isFriendFetching || isFollowingFetching || isSearching;
+  const isLoading =
+    isFriendFetching || isFollowingFetching || isSearching || isDebouncing;
 
   const { Beoble, user } = useBeoble();
 
@@ -31,6 +34,11 @@ export const useChatRoomCreator = () => {
       getFollowings();
     }
   }, [Beoble, user]);
+
+  // upadte this with useTransition or useDefferedValue in react 18
+  useEffect(() => {
+    searchUser(debouncedSearchValue);
+  }, [debouncedSearchValue]);
 
   const searchUser = async (input: string) => {
     if (Beoble) {
