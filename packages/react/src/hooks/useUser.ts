@@ -19,6 +19,12 @@ export const useUser = (user_id?: string) => {
     if (user_id) getUserInfo(user_id);
   }, [user_id]);
 
+  useEffect(() => {
+    if (Beoble && user) {
+      getUserGraph();
+    }
+  }, [Beoble, user]);
+
   const getUserInfo = async (user_id: string) => {
     if (!Beoble) throw new BeobleNotInitizliedError();
     const res = await Beoble?.user.get({ user_id });
@@ -55,6 +61,11 @@ export const useUser = (user_id?: string) => {
     });
     setFollowers(followers.data);
     setIsFollowerFetching(false);
+  };
+
+  const getUserGraph = () => {
+    getFriends();
+    getFollowings();
   };
 
   return {

@@ -1,17 +1,14 @@
-import { ChangeEvent, FC, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import { ChangeEvent, FC } from 'react';
 import { FiSearch } from 'react-icons/fi';
+import styled from 'styled-components';
 import { IUser } from '@beoble/js-sdk';
-import { Colors, zIndex } from '../../styles';
-import { Appear, flexStretch, noBorder } from '../../styles/commons';
+import { useSearch } from '../../hooks/useSearch';
+import { Colors } from '../../styles';
+import Button from '../Button';
+import Divider from '../Divider';
 import Input from '../Input';
 import { ModalHeader } from '../MessageHeader';
-import UserListItem from '../UserListItem';
-import Divider from '../Divider';
-import Button from '../Button';
 import Spinner from '../Spinner';
-import { useChatRoomCreator } from '../../hooks/useChatRoomCreator';
-import UserLabel from '../UserLabel';
 import {
   ChatRoomModalCard,
   ChatRoomModalContainer,
@@ -23,41 +20,41 @@ import {
   TitleContainer,
   UserLabelContainer,
   UserTypeTitle,
-} from '../Modal/style';
+} from './style';
+import UserListItem from '../UserListItem';
+import { useBeobleModal, useChat } from '../../hooks';
+import { useUser } from '../../hooks/useUser';
 
-export interface ChatRoomModalProps {
+export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
+export const Modal: FC<ModalProps> = ({ onClose, isOpen }) => {
   const {
-    followings,
-    friends,
+    isSearching,
+    isDebouncing,
     searchResult,
-    isLoading,
-    members,
     searchValue,
     setSearchValue,
-    reset,
-    toggleMember,
-    createChatRoom,
-  } = useChatRoomCreator();
+    restSearchValue,
+  } = useSearch();
+
+  const {
+    friends,
+    followings,
+    getFriends,
+    getFollowings,
+    isFriendFetching,
+    isFollowingFetching,
+  } = useUser();
+
+  const { openRoute, closeSearchModal } = useBeobleModal();
+
+  const isLoading = isSearching || isDebouncing;
 
   const handleBlockParentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-  };
-
-  const generateUserLabel = (user: IUser) => {
-    return (
-      <UserLabel
-        display_context={user.display_name}
-        key={user.user_id}
-        onClose={() => {
-          toggleMember(user);
-        }}
-      />
-    );
   };
 
   const generateUserItem = (user: IUser) => {
@@ -66,23 +63,17 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
         {...{ user }}
         padding="8px 20px "
         key={user.user_id}
-        hasCheckBox
         onClick={() => {
-          toggleMember(user);
+          openRoute(user.user_id);
+          closeSearchModal();
         }}
-        checked={members.some((member) => member.user_id === user.user_id)}
       />
     );
   };
 
-  const handleCancel = () => {
-    reset();
+  const handleClose = () => {
     onClose && onClose();
-  };
-
-  const handleConfirm = () => {
-    createChatRoom();
-    handleCancel();
+    restSearchValue();
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -90,15 +81,10 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
   };
 
   return (
-    <Container {...{ isOpen }} onClick={handleCancel}>
+    <Container {...{ isOpen }}>
       <ChatRoomModalContainer {...{ isOpen }} onClick={handleBlockParentClick}>
         <ChatRoomModalCard>
-          <ModalHeader onClose={handleCancel} title="invite" />
-          {members.length > 0 && (
-            <UserLabelContainer>
-              {members.map(generateUserLabel)}
-            </UserLabelContainer>
-          )}
+          <ModalHeader onClose={handleClose} title="Search User" />
           <InputContainer>
             <Input
               name="user_search"
@@ -151,14 +137,7 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
             </ScrollableSection>
           )}
           <FooterContainer>
-            <Button
-              style={{ marginRight: 5 }}
-              disabled={members.length < 1}
-              onClick={handleConfirm}
-            >
-              Confirm
-            </Button>
-            <Button onClick={handleCancel}>Cancel</Button>
+            <Button onClick={handleClose}>Close</Button>
           </FooterContainer>
         </ChatRoomModalCard>
       </ChatRoomModalContainer>
@@ -166,4 +145,4 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
   );
 };
 
-export default ChatRoomModal;
+export default Modal;

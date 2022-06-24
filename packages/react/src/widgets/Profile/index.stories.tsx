@@ -18,9 +18,3 @@ export const Primary = Template.bind({});
 Primary.args = {
   detailElement: 'modal',
 };
-
-const ProviderTemplate = (prop: ReactNode) => (
-  <div style={{ height: '100vh' }}>
-    <BeobleProvider>{prop}</BeobleProvider>
-  </div>
-);

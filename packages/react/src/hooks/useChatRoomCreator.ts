@@ -1,18 +1,14 @@
-import { Core, IUser, IUsersResponse } from '@beoble/js-sdk';
+import { IUser } from '@beoble/js-sdk';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { useBeoble } from './useBeoble';
+import useChat from './useChat';
 import useDebounce from './useDebounce';
+import { useSearch } from './useSearch';
 import { useUser } from './useUser';
 
 export const useChatRoomCreator = () => {
   const [members, setMembers] = useState<IUser[]>([]);
-
-  //searches
-  const [searchResult, setSearchResult] = useState<IUser[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const [isDebouncing, debouncedSearchValue] = useDebounce(searchValue);
 
   const {
     friends,
@@ -23,45 +19,24 @@ export const useChatRoomCreator = () => {
     isFollowingFetching,
   } = useUser();
 
+  const { openChat, updateChatrooms } = useChat();
+  const {
+    searchResult,
+    isSearching,
+    searchValue,
+    isDebouncing,
+    restSearchValue,
+    setSearchValue,
+  } = useSearch();
+
   const isLoading =
     isFriendFetching || isFollowingFetching || isSearching || isDebouncing;
 
   const { Beoble, user } = useBeoble();
 
-  useEffect(() => {
-    if (Beoble && user) {
-      getFriends();
-      getFollowings();
-    }
-  }, [Beoble, user]);
-
-  // upadte this with useTransition or useDefferedValue in react 18
-  useEffect(() => {
-    searchUser(debouncedSearchValue);
-  }, [debouncedSearchValue]);
-
-  const searchUser = async (input: string) => {
-    if (Beoble) {
-      setIsSearching(true);
-      if (ethers.utils.isAddress(input)) {
-        const user = await Beoble.user.get({
-          wallet_address: input,
-        });
-        setIsSearching(false);
-        setSearchResult(user.data);
-      } else {
-        const user = await Beoble.user.get({
-          alias_search: input,
-        });
-        setIsSearching(false);
-        setSearchResult(user.data);
-      }
-    }
-  };
-
   const reset = () => {
     setMembers([]);
-    setSearchResult([]);
+    restSearchValue();
   };
 
   const toggleMember = (user: IUser) => {
@@ -91,6 +66,8 @@ export const useChatRoomCreator = () => {
         members: members.map((member) => member.user_id),
       });
       console.log(res);
+      openChat(res.data.chatroom_id);
+      updateChatrooms();
       callback && callback();
     }
   };
@@ -104,7 +81,6 @@ export const useChatRoomCreator = () => {
     searchValue,
     setSearchValue,
     reset,
-    searchUser,
     createChatRoom,
     toggleMember,
   };

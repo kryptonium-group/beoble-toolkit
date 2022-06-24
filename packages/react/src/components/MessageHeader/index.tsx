@@ -255,16 +255,18 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
 
 export interface CreateChatRoomHeaderProps {
   onClose: () => void;
+  title: string;
 }
 
-export const CreateChatRoomHeader: FC<CreateChatRoomHeaderProps> = ({
+export const ModalHeader: FC<CreateChatRoomHeaderProps> = ({
   onClose,
+  title,
 }) => {
   return (
     <StyledMessageHeader>
       <ProfileContainer>
         <TitleContainer>
-          <HeaderTitle>Invite</HeaderTitle>
+          <HeaderTitle>{title}</HeaderTitle>
         </TitleContainer>
       </ProfileContainer>
       <ControlsContainer>

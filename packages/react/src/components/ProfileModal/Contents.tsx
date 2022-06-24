@@ -41,6 +41,10 @@ import { useENS } from '../../hooks';
 import Button from '../Button';
 import styled from 'styled-components';
 import { useGraph } from '../../hooks/useGraph';
+import Input from '../Input';
+import { FiSearch } from 'react-icons/fi';
+import { InputContainer } from '../Modal/style';
+import Avatar from '../Avatar';
 
 export interface ContentProps {
   profileUserId?: string;
@@ -68,6 +72,20 @@ export const FriendButton = styled(Button)`
   font-size: 1rem;
 `;
 
+const SearchContainer = styled.div`
+  display: flex;
+  padding: 20px 36px 0px 36px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SearchClicker = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+`;
+
 export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
   const [isFriendsMenuOpen, setIsFriendsMenuOpen] = useState(false);
   const [isFollowersMenuOpen, setIsFollowersMenuOpen] = useState(false);
@@ -75,7 +93,7 @@ export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
 
   const { initialized, account, user, Beoble, provider } = useBeoble();
   const isUserProfile = !profileUserId || user?.user_id === profileUserId;
-  const { addRoute } = useBeobleModal();
+  const { addRoute, openSearchModal } = useBeobleModal();
   const {
     friends,
     followers,
@@ -167,7 +185,7 @@ export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
         <AddressContainer>
           <AddressProfileButton>
             <AddressProfileDiv>
-              <Identication diameter={36} account={getAddress()} />
+              <Avatar size={36} account={getAddress()} profileImg={ENSAvatar} />
               <AddressDiv>
                 <AddressSpan>{getDisplayName()}</AddressSpan>
                 <ProfileSpan>{getTruncatedAddress()}</ProfileSpan>
@@ -203,6 +221,30 @@ export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
           )}
         </AddressContainer>
       </ProfileInfoContainer>
+      {isUserProfile && (
+        <SearchContainer>
+          <SearchClicker onClick={openSearchModal}>
+            <Input
+              disabled
+              name="user_search"
+              backgroundColor={Colors.background.noneTintHover}
+              hoverColor={Colors.background.white}
+              borderRadius={23}
+              padding="8px 12px"
+              borderColor={Colors.border.faint}
+              placeholder="Click to Search User"
+              Icon={
+                <FiSearch
+                  size={20}
+                  color={Colors.text.lowEmphasis}
+                  style={{ marginRight: 8 }}
+                />
+              }
+            />
+          </SearchClicker>
+        </SearchContainer>
+      )}
+
       <MenuContainer>
         <MenuButton
           type="button"

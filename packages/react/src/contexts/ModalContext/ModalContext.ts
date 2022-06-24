@@ -9,6 +9,12 @@ export interface IModalContext {
   render: boolean;
   close: () => void;
   open: () => void;
+  openRoute: (route: ModalPages | string) => void;
+  isSearchModalOpen: boolean;
+  renderSearchModal: boolean;
+  openSearchModal: () => void;
+  closeSearchModal: () => void;
+  toggleSearchModal: () => void;
 }
 
 export type ModalPages = 'default' | 'edit';

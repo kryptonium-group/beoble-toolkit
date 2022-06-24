@@ -28,7 +28,7 @@ const ChatContainer = styled.div`
 
 export const Chat: FC<ChatProps> = () => {
   const { openedChats } = useChat();
-  const { open, close, isOpen, render } = useDelayOpen(300);
+  const [isOpen, render, open, close] = useDelayOpen(300);
 
   return (
     <ChatContainer>

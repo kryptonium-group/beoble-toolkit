@@ -1,6 +1,13 @@
 import { useState } from 'react';
 
-export const useDelayOpen = (timeout: number) => {
+/**
+ *
+ * @param timeout: time to delay
+ * @returns [isOpen, render, open, close, toggle] in order
+ */
+export const useDelayOpen = (
+  timeout: number
+): [boolean, boolean, () => void, () => void, () => void] => {
   const [isOpen, setIsOpen] = useState(false);
   const [render, setRender] = useState(false);
 
@@ -20,5 +27,5 @@ export const useDelayOpen = (timeout: number) => {
     else open();
   };
 
-  return { open, close, toggle, isOpen, render };
+  return [isOpen, render, open, close, toggle];
 };

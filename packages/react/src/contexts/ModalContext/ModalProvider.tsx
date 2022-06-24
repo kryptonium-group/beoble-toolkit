@@ -8,7 +8,14 @@ export interface ModalProvider {
 
 export const ModalProvider: FC<ModalProvider> = ({ children }) => {
   const [route, setRoute] = useState<(ModalPages | string)[]>(['default']);
-  const { isOpen, toggle, render, close, open } = useDelayOpen(300);
+  const [isOpen, render, open, close, toggle] = useDelayOpen(300);
+  const [
+    isSearchModalOpen,
+    renderSearchModal,
+    openSearchModal,
+    closeSearchModal,
+    toggleSearchModal,
+  ] = useDelayOpen(300);
 
   const addRoute = (page: ModalPages | string) => {
     setRoute([...route, page]);
@@ -22,6 +29,11 @@ export const ModalProvider: FC<ModalProvider> = ({ children }) => {
     setRoute(route.slice(0, -1));
   };
 
+  const openRoute = (page: ModalPages | string) => {
+    open();
+    addRoute(page);
+  };
+
   return (
     <ModalContext.Provider
       value={{
@@ -33,6 +45,13 @@ export const ModalProvider: FC<ModalProvider> = ({ children }) => {
         toggle,
         open,
         close,
+        openRoute,
+
+        isSearchModalOpen,
+        renderSearchModal,
+        openSearchModal,
+        closeSearchModal,
+        toggleSearchModal,
       }}
     >
       {children}

@@ -10,6 +10,7 @@ import StatusButton from '../../components/StatusButton';
 import { ProfileType } from './type';
 import { useDelayOpen } from '../../hooks/useDelayOpen';
 import { useBeobleModal } from '../../hooks';
+import Modal from '../../components/Modal';
 
 /* eslint-disable-next-line */
 export interface ProfileProps {
@@ -23,7 +24,15 @@ export const Profile: FC<ProfileProps> = ({
   detailElement,
   hasButton = true,
 }) => {
-  const { isOpen, toggle, render, close } = useBeobleModal();
+  const {
+    isOpen,
+    toggle,
+    render,
+    close,
+    isSearchModalOpen,
+    renderSearchModal,
+    closeSearchModal,
+  } = useBeobleModal();
 
   /*
   const renderModal = () => {
@@ -57,6 +66,9 @@ export const Profile: FC<ProfileProps> = ({
     <StyledProfile>
       {hasButton && <StatusButton onClick={toggle} />}
       {render && <ProfileModal isOpen={isOpen} close={close} />}
+      {renderSearchModal && (
+        <Modal isOpen={isSearchModalOpen} onClose={closeSearchModal} />
+      )}
     </StyledProfile>
   );
 };
