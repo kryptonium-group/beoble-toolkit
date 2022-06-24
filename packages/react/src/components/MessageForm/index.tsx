@@ -24,6 +24,7 @@ export interface MessageFormProps {
 }
 
 const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false });
+
 const FormContainer = styled.form`
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -162,7 +163,7 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
     <FormContainer onSubmit={handleSubmit}>
       <TextEditorContainer {...{ isFocused }}>
         <TextEditor
-          placeholder="Write a mesage..."
+          placeholder="Write a message..."
           onFocus={() => setIsFoucesd(true)}
           onBlur={() => setIsFoucesd(false)}
           onChange={handleMessageChange}

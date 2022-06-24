@@ -3,6 +3,9 @@ import {
   RiUserReceived2Line,
   RiUserShared2Line,
   RiUserHeartLine,
+  RiUserAddLine,
+  RiUserUnfollowLine,
+  RiUserFollowLine,
 } from 'react-icons/ri';
 import { BeobleSDK, IUser } from '@beoble/js-sdk';
 import Identication from '../Identication';
@@ -34,18 +37,44 @@ import {
   WalletConnectStatus,
   WalletInfoContainer,
 } from './style';
+import { useENS } from '../../hooks';
+import Button from '../Button';
+import styled from 'styled-components';
+import { useGraph } from '../../hooks/useGraph';
 
 export interface ContentProps {
-  profileUser?: IUser;
+  profileUserId?: string;
 }
 
-export const ProfileContent: FC<ContentProps> = ({ profileUser }) => {
+export const SocialGraphContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  padding: 10px 0px 0px 0px;
+`;
+
+export const FollowButton = styled(Button)`
+  background-color: ${Colors.background.messageTint};
+  width: 120px;
+  font-size: 1rem;
+`;
+
+export const FriendButton = styled(Button)`
+  background-color: ${Colors.background.white};
+  color: ${Colors.background.messageTint};
+  border: 1px solid ${Colors.background.messageTint};
+  width: 120px;
+  font-size: 1rem;
+`;
+
+export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
   const [isFriendsMenuOpen, setIsFriendsMenuOpen] = useState(false);
   const [isFollowersMenuOpen, setIsFollowersMenuOpen] = useState(false);
   const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
 
-  const { initialized, account, user } = useBeoble();
-  const isUserProfile = !profileUser || user?.user_id === profileUser?.user_id;
+  const { initialized, account, user, Beoble, provider } = useBeoble();
+  const isUserProfile = !profileUserId || user?.user_id === profileUserId;
   const { addRoute } = useBeobleModal();
   const {
     friends,
@@ -57,7 +86,18 @@ export const ProfileContent: FC<ContentProps> = ({ profileUser }) => {
     getFollowers,
     getFollowings,
     getFriends,
-  } = useUser();
+    userInfo,
+  } = useUser(profileUserId);
+
+  const {
+    isFollowing,
+    isFriend,
+    hasFriendRequest,
+    onFollowButtonClick,
+    onFriendButtonClick,
+  } = useGraph(profileUserId);
+
+  const { ENSName, ENSAvatar } = useENS(provider, userInfo?.wallets[0]);
 
   const handleClickFriendsMenu = () => {
     const nextState = !isFriendsMenuOpen;
@@ -77,6 +117,13 @@ export const ProfileContent: FC<ContentProps> = ({ profileUser }) => {
     setIsFollowingMenuOpen(nextState);
   };
 
+  const handleClickUserListItem = (user_id: string) => () => {
+    addRoute(user_id);
+    setIsFollowingMenuOpen(false);
+    setIsFollowersMenuOpen(false);
+    setIsFriendsMenuOpen(false);
+  };
+
   const generateUserListItem = (user: IUser) => {
     return (
       <UserListItem
@@ -84,12 +131,12 @@ export const ProfileContent: FC<ContentProps> = ({ profileUser }) => {
         padding="8px 28px"
         size={'sm'}
         key={user.user_id}
+        onClick={handleClickUserListItem(user.user_id)}
       />
     );
   };
 
   const getDisplayName = () => {
-    console.log(isUserProfile, user, profileUser);
     if (isUserProfile) {
       return (
         user?.display_name ??
@@ -98,13 +145,20 @@ export const ProfileContent: FC<ContentProps> = ({ profileUser }) => {
         'undefined'
       );
     } else {
-      return '';
+      return (
+        userInfo?.display_name ?? ENSName ?? userInfo?.wallets[0] ?? 'undefined'
+      );
     }
   };
 
   const getTruncatedAddress = () => {
-    const address = isUserProfile ? account?.address : profileUser?.wallets[0];
+    const address = isUserProfile ? account?.address : userInfo?.wallets[0];
     return BeobleSDK.utils.truncateString(address ?? '', 16, 4, 4);
+  };
+
+  const getAddress = () => {
+    if (isUserProfile) return account?.address ?? '';
+    else return userInfo?.wallets[0] ?? '';
   };
 
   return (
@@ -113,23 +167,40 @@ export const ProfileContent: FC<ContentProps> = ({ profileUser }) => {
         <AddressContainer>
           <AddressProfileButton>
             <AddressProfileDiv>
-              <Identication diameter={36} account={account?.address ?? ''} />
+              <Identication diameter={36} account={getAddress()} />
               <AddressDiv>
                 <AddressSpan>{getDisplayName()}</AddressSpan>
                 <ProfileSpan>{getTruncatedAddress()}</ProfileSpan>
               </AddressDiv>
             </AddressProfileDiv>
           </AddressProfileButton>
-          <WalletInfoContainer>
-            <WalletConnectStatus>Connected</WalletConnectStatus>
-            <ManageWalletLink
-              onClick={() => {
-                addRoute('edit');
-              }}
-            >
-              Edit Profile
-            </ManageWalletLink>
-          </WalletInfoContainer>
+          {isUserProfile ? (
+            <WalletInfoContainer>
+              <WalletConnectStatus>Connected</WalletConnectStatus>
+              <ManageWalletLink
+                onClick={() => {
+                  addRoute('edit');
+                }}
+              >
+                Edit Profile
+              </ManageWalletLink>
+            </WalletInfoContainer>
+          ) : (
+            <SocialGraphContainer>
+              <FollowButton onClick={onFollowButtonClick}>
+                {isFollowing ? 'unfollow' : 'follow'}
+              </FollowButton>
+              <FriendButton onClick={onFriendButtonClick}>
+                {hasFriendRequest ? (
+                  <RiUserFollowLine />
+                ) : isFriend ? (
+                  <RiUserUnfollowLine />
+                ) : (
+                  <RiUserAddLine />
+                )}
+              </FriendButton>
+            </SocialGraphContainer>
+          )}
         </AddressContainer>
       </ProfileInfoContainer>
       <MenuContainer>

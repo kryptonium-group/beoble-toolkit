@@ -100,17 +100,17 @@ class UserFollow extends IAPIClass implements IRestEndPoint {
 }
 export interface IPutFriendshipBody {
   target_user_id: string;
-  friendship_action_type: FreindshipActionType;
+  friendship_action_type: FriendshipActionType;
 }
 
-export type FreindshipActionType = 'REQEUST' | 'ACCEPT' | 'UNFRIEND' | 'REJECT';
+export type FriendshipActionType = 'REQUEST' | 'ACCEPT' | 'UNFRIEND' | 'REJECT';
 
 class UserFriend extends IAPIClass implements IRestEndPoint {
   public async get(params: IUserIdParam): Promise<IUsersResponse> {
     return await this._client.get(Paths.user.friend.base, params);
   }
 
-  public async getRequest(params: IUserIdParam) {
+  public async getRequest(params: IUserIdParam): Promise<IUsersResponse> {
     return await this._client.get(Paths.user.friend.request, params);
   }
 

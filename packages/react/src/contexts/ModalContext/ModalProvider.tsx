@@ -7,10 +7,10 @@ export interface ModalProvider {
 }
 
 export const ModalProvider: FC<ModalProvider> = ({ children }) => {
-  const [route, setRoute] = useState<ModalPages[]>(['default']);
+  const [route, setRoute] = useState<(ModalPages | string)[]>(['default']);
   const { isOpen, toggle, render, close, open } = useDelayOpen(300);
 
-  const addRoute = (page: ModalPages) => {
+  const addRoute = (page: ModalPages | string) => {
     setRoute([...route, page]);
   };
 

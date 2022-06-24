@@ -8,6 +8,7 @@ import useBeobleModal from '../../hooks/useBeoble/useBeobleModal';
 import { zIndex } from '../../styles';
 import { flexStretch, noBorder } from '../../styles/commons';
 import { EditProfile } from './Edit';
+import { ModalPages } from '../../contexts';
 
 /* eslint-disable-next-line */
 export interface ProfileModalProps {
@@ -108,6 +109,17 @@ const ControlButton = styled(Button)`
   overflow: visible;
 `;
 
+const getModalContent = (page?: ModalPages | string) => {
+  switch (page) {
+    case 'edit':
+      return <EditProfile />;
+    case 'default':
+      return <ProfileContent key={'default'} />;
+    default:
+      return <ProfileContent profileUserId={page} key={page} />;
+  }
+};
+
 export const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
   const { route, popRoute } = useBeobleModal();
 
@@ -135,7 +147,7 @@ export const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
               <RiCloseFill size={16} />
             </ControlButton>
           </ModalControlContainer>
-          {route.at(-1) === 'edit' ? <EditProfile /> : <ProfileContent />}
+          {getModalContent(route.at(-1))}
         </ProfileModalCard>
       </ProfileModalContainer>
     </Container>

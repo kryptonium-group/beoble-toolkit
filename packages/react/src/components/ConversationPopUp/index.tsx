@@ -101,7 +101,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
 
   const { sendMessage, messages, isLoading } = useChannel(chatroomId);
   const { closeChat } = useChat();
-  const { open } = useBeobleModal();
+  const { addRoute, open } = useBeobleModal();
   const { chatroomAccount, chatroomName, otherMembers } =
     useChatRoom(chatroomId);
 
@@ -119,6 +119,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
 
   const handleProfileClick = () => {
     if (otherMembers.length > 0) {
+      addRoute(otherMembers[0].user_id);
       open();
     }
   };
