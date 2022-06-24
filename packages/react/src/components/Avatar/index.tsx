@@ -8,6 +8,7 @@ export interface AvatarProps extends SizeProps {
   status?: Status;
   profileImg?: string;
   account: string;
+  onClick?: () => void;
 }
 
 const AvatarContainer = styled.div`
@@ -15,6 +16,7 @@ const AvatarContainer = styled.div`
   background-color: #7c7c7c;
   ${SizeCss}
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 const ImageContainer = styled.img<SizeProps>`
@@ -40,9 +42,10 @@ export function Avatar({
   status,
   profileImg,
   account = '',
+  onClick,
 }: AvatarProps) {
   return (
-    <AvatarContainer size={size}>
+    <AvatarContainer size={size} {...{ onClick }}>
       {profileImg ? (
         <ImageContainer size={size} src={TestDefaultImage} />
       ) : (

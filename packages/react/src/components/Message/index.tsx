@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import styled, { css, keyframes } from 'styled-components';
+import { IUser } from '@beoble/js-sdk';
 import { Colors, FontWeights, Truncate } from '../../styles';
 import { convertTime } from '../../utils';
 import Avatar from '../Avatar';
@@ -15,6 +16,8 @@ export interface MessageProps {
   userName: string;
   chatId: string;
   creator_user_id: string;
+  user?: IUser;
+  onUserClick?: () => void;
 }
 
 const mountAnimation = keyframes`
@@ -91,6 +94,7 @@ const UserName = styled.p`
   margin-right: 8px;
   flex: 1;
   ${Truncate}
+  cursor: pointer;
 `;
 
 const TimePhrase = styled.time`
@@ -110,6 +114,8 @@ export const Message: FC<MessageProps> = ({
   account,
   userName,
   timestamp,
+  onUserClick,
+  user,
   chatId,
 }) => {
   return (
@@ -122,6 +128,7 @@ export const Message: FC<MessageProps> = ({
               profileImg={profileImage}
               status={'none'}
               account={account}
+              onClick={onUserClick}
             />
           )}
         </ProfileContainer>
@@ -129,7 +136,9 @@ export const Message: FC<MessageProps> = ({
       <MessageContentContainer {...{ isMine }}>
         {!isFollowing && (
           <MessageInfoContainer>
-            <UserName>{isMine ? 'You' : userName}</UserName>
+            <UserName onClick={onUserClick}>
+              {isMine ? 'You' : userName}
+            </UserName>
             <TimePhrase>{convertTime(timestamp)}</TimePhrase>
           </MessageInfoContainer>
         )}

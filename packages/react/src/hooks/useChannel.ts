@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Channel, IChat } from '@beoble/js-sdk';
-import { useBeoble } from './useBeoble';
+import { useBeoble, useBeobleModal } from './useBeoble';
 import { MessageProps } from '../components/Message';
 import { isMinEqual } from '../utils';
 import useChat from './useChat';
@@ -15,6 +15,7 @@ export const useChannel = (chatroomId: string) => {
   const [channel, setChannel] = useState<Channel>();
   const [isLoading, setIsLoading] = useState(true);
   const { updateChatrooms } = useChat();
+  const { openRoute } = useBeobleModal();
 
   useEffect(() => {
     if (Beoble && user) openChannel();
@@ -76,6 +77,9 @@ export const useChannel = (chatroomId: string) => {
       userName: creator_user.display_name,
       chatId: chat_id,
       creator_user_id: creator_user.user_id,
+      onUserClick: () => {
+        openRoute(creator_user.user_id);
+      },
     };
   };
 
