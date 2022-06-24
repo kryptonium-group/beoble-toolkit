@@ -73,8 +73,12 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
   const convertChatroomToConversation = (
     chatroom: IChatRoom
   ): MessageConversationProps => {
-    const { representative_media_url, chatroom_id, latest_chat_time } =
-      chatroom;
+    const {
+      representative_media_url,
+      chatroom_id,
+      latest_chat_time,
+      create_time,
+    } = chatroom;
 
     if (!user) throw new Error('user is not initialized yet');
     const conversation_name = getChatroomName(chatroom, user?.user_id);
@@ -83,9 +87,10 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
       user?.user_id
     );
     const lastMessage = getChatroomLatestMessage(chatroom);
+    const timestamp = (latest_chat_time ?? create_time) * 1000;
 
     return {
-      timestamp: latest_chat_time * 1000,
+      timestamp,
       status: 'online',
       lastMessage,
       userName: conversation_name,
