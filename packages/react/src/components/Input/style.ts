@@ -16,7 +16,7 @@ export const TitleContainer = styled.div`
 `;
 
 export const Title = styled.label`
-  color: rgb(229, 232, 235);
+  color: inherit;
   font-weight: 600;
   font-size: 16px;
   box-sizing: border-box;

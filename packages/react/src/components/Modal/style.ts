@@ -87,6 +87,16 @@ export const ScrollableSection = styled.section`
   }
 `;
 
+export const ContentSection = styled.section`
+  display: block;
+  position: relative;
+  overflow: hidden;
+  flex-grow: 1;
+  height: inherit;
+
+  padding: 20px 0px;
+`;
+
 export const TitleContainer = styled.div`
   padding: 12px 20px;
 `;

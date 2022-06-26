@@ -16,6 +16,7 @@ import {
   ChatRoomModalCard,
   ChatRoomModalContainer,
   Container,
+  ContentSection,
   FooterContainer,
   InputContainer,
   ScrollableSection,
@@ -24,6 +25,8 @@ import {
   UserLabelContainer,
   UserTypeTitle,
 } from '../Modal/style';
+import Avatar from '../Avatar';
+import NftPicker from '../NftPicker';
 
 export interface ChatRoomModalProps {
   isOpen: boolean;
@@ -38,10 +41,14 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
     isLoading,
     members,
     searchValue,
+    page,
+    config,
     setSearchValue,
     reset,
     toggleMember,
     createChatRoom,
+    goToChatroomSetting,
+    handleConfigChage,
   } = useChatRoomCreator();
 
   const handleBlockParentClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -81,8 +88,13 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
   };
 
   const handleConfirm = () => {
-    createChatRoom();
-    handleCancel();
+    if (members.length === 1 || page === 'chatroom_config') {
+      createChatRoom();
+      reset();
+      handleCancel();
+    } else if (members.length > 1) {
+      goToChatroomSetting();
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -93,62 +105,97 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
     <Container {...{ isOpen }} onClick={handleCancel}>
       <ChatRoomModalContainer {...{ isOpen }} onClick={handleBlockParentClick}>
         <ChatRoomModalCard>
-          <ModalHeader onClose={handleCancel} title="invite" />
-          {members.length > 0 && (
-            <UserLabelContainer>
-              {members.map(generateUserLabel)}
-            </UserLabelContainer>
-          )}
-          <InputContainer>
-            <Input
-              name="user_search"
-              backgroundColor={Colors.background.noneTintHover}
-              hoverColor={Colors.background.white}
-              borderRadius={23}
-              padding="8px 12px"
-              borderColor={Colors.border.faint}
-              placeholder="Address/ENS/beoble search"
-              Icon={
-                <FiSearch
-                  size={20}
-                  color={Colors.text.lowEmphasis}
-                  style={{ marginRight: 8 }}
-                />
-              }
-              onChange={handleChange}
-            />
-          </InputContainer>
-          {isLoading ? (
-            <SpinnerContainer>
-              <Spinner color={Colors.background.messageTint} />
-            </SpinnerContainer>
-          ) : (
-            <ScrollableSection>
-              {searchValue ? (
-                <>
-                  <TitleContainer>
-                    <UserTypeTitle>{`Result (${searchResult.length})`}</UserTypeTitle>
-                  </TitleContainer>
-                  {searchResult.map(generateUserItem)}
-                </>
-              ) : (
-                <>
-                  <TitleContainer>
-                    <UserTypeTitle>{`Friends (${friends.length})`}</UserTypeTitle>
-                  </TitleContainer>
-                  {friends && friends.map(generateUserItem)}
-                  <TitleContainer>
-                    <Divider />
-                  </TitleContainer>
-                  <TitleContainer>
-                    <UserTypeTitle>
-                      {`Followings (${followings.length})`}
-                    </UserTypeTitle>
-                  </TitleContainer>
-                  {followings && followings.map(generateUserItem)}
-                </>
+          <ModalHeader
+            onClose={handleCancel}
+            title={page === 'select_members' ? 'invite' : 'chatroom setting'}
+          />
+          {page === 'select_members' ? (
+            <>
+              {members.length > 0 && (
+                <UserLabelContainer>
+                  {members.map(generateUserLabel)}
+                </UserLabelContainer>
               )}
-            </ScrollableSection>
+              <InputContainer>
+                <Input
+                  name="user_search"
+                  backgroundColor={Colors.background.noneTintHover}
+                  hoverColor={Colors.background.white}
+                  borderRadius={23}
+                  padding="8px 12px"
+                  borderColor={Colors.border.faint}
+                  placeholder="Address/ENS/beoble search"
+                  Icon={
+                    <FiSearch
+                      size={20}
+                      color={Colors.text.lowEmphasis}
+                      style={{ marginRight: 8 }}
+                    />
+                  }
+                  onChange={handleChange}
+                />
+              </InputContainer>
+              {isLoading ? (
+                <SpinnerContainer>
+                  <Spinner color={Colors.background.messageTint} />
+                </SpinnerContainer>
+              ) : (
+                <ScrollableSection>
+                  {searchValue ? (
+                    <>
+                      <TitleContainer>
+                        <UserTypeTitle>{`Result (${searchResult.length})`}</UserTypeTitle>
+                      </TitleContainer>
+                      {searchResult.map(generateUserItem)}
+                    </>
+                  ) : (
+                    <>
+                      <TitleContainer>
+                        <UserTypeTitle>{`Friends (${friends.length})`}</UserTypeTitle>
+                      </TitleContainer>
+                      {friends && friends.map(generateUserItem)}
+                      <TitleContainer>
+                        <Divider />
+                      </TitleContainer>
+                      <TitleContainer>
+                        <UserTypeTitle>
+                          {`Followings (${followings.length})`}
+                        </UserTypeTitle>
+                      </TitleContainer>
+                      {followings && followings.map(generateUserItem)}
+                    </>
+                  )}
+                </ScrollableSection>
+              )}
+            </>
+          ) : (
+            <ContentSection>
+              <InputContainer>
+                <NftPicker size={100} />
+              </InputContainer>
+              <InputContainer style={{ color: Colors.text.normal }}>
+                <Input
+                  name="alias"
+                  label="Alias"
+                  placeholder="Enter Alias"
+                  value={config?.alias}
+                  onChange={handleConfigChage}
+                  backgroundColor={Colors.background.noneTintHover}
+                  hoverColor={Colors.background.white}
+                />
+              </InputContainer>
+              <InputContainer>
+                <Input
+                  name="display_name"
+                  label="Display Name"
+                  placeholder="Enter Display Name"
+                  value={config?.display_name}
+                  onChange={handleConfigChage}
+                  backgroundColor={Colors.background.noneTintHover}
+                  hoverColor={Colors.background.white}
+                />
+              </InputContainer>
+            </ContentSection>
           )}
           <FooterContainer>
             <Button

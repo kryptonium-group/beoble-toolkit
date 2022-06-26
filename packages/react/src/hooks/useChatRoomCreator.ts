@@ -1,23 +1,26 @@
 import { IUser } from '@beoble/js-sdk';
-import { ethers } from 'ethers';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useBeoble } from './useBeoble';
 import useChat from './useChat';
-import useDebounce from './useDebounce';
 import { useSearch } from './useSearch';
 import { useUser } from './useUser';
 
+type Page = 'select_members' | 'chatroom_config';
+interface IChatroomConfig {
+  alias: string;
+  display_name: string;
+}
+
 export const useChatRoomCreator = () => {
   const [members, setMembers] = useState<IUser[]>([]);
+  const [page, setPage] = useState<Page>('select_members');
+  const [config, setConfig] = useState<IChatroomConfig>({
+    alias: '',
+    display_name: '',
+  });
 
-  const {
-    friends,
-    followings,
-    getFriends,
-    getFollowings,
-    isFriendFetching,
-    isFollowingFetching,
-  } = useUser();
+  const { friends, followings, isFriendFetching, isFollowingFetching } =
+    useUser();
 
   const { openChat, updateChatrooms } = useChat();
   const {
@@ -36,6 +39,7 @@ export const useChatRoomCreator = () => {
 
   const reset = () => {
     setMembers([]);
+    setPage('select_members');
     restSearchValue();
   };
 
@@ -59,8 +63,8 @@ export const useChatRoomCreator = () => {
       );
     if (Beoble && user) {
       const res = await Beoble.chatroom.add({
-        alias: '',
-        display_name: '',
+        alias: config.alias,
+        display_name: config.display_name,
         creator_id: user.user_id,
         chatroom_type: members.length > 1 ? 'GROUP_CHAT' : 'DIRECT_CHAT',
         members: members.map((member) => member.user_id),
@@ -72,6 +76,19 @@ export const useChatRoomCreator = () => {
     }
   };
 
+  const goToChatroomSetting = () => {
+    setPage('chatroom_config');
+  };
+
+  const handleConfigChage = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setConfig({
+      ...config,
+      [e.target.id]: e.target.value,
+    });
+  };
+
   return {
     friends,
     followings,
@@ -79,9 +96,13 @@ export const useChatRoomCreator = () => {
     isLoading,
     searchResult,
     searchValue,
+    page,
+    config,
     setSearchValue,
     reset,
     createChatRoom,
     toggleMember,
+    goToChatroomSetting,
+    handleConfigChage,
   };
 };

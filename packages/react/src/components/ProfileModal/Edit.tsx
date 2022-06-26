@@ -74,7 +74,7 @@ export const EditProfile = () => {
         <Input
           name="alias"
           label="Alias"
-          placeholder="Enter username"
+          placeholder="Enter Alias"
           value={inputs?.alias}
           onChange={handleInputChage}
           disabled={disableInput}
@@ -83,8 +83,8 @@ export const EditProfile = () => {
       <InputContainer>
         <Input
           name="display_name"
-          label="Username"
-          placeholder="Enter username"
+          label="Display Name"
+          placeholder="Enter Display Name"
           value={inputs?.display_name}
           onChange={handleInputChage}
           disabled={isFetching || !user}
