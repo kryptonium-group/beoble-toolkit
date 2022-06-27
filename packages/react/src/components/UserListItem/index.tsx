@@ -85,7 +85,11 @@ export const UserListItem: FC<UserListItemProps> = ({
       <ProfileContainer>
         <Avatar
           account={user.wallets[0]}
-          profileImg={user.representative_media_url[0] ?? ENSAvatar}
+          profileImg={
+            user.representative_media_url
+              ? user.representative_media_url[0]
+              : ENSAvatar
+          }
           size={handleSize(size, [48, 36, 20])}
         />
         <DisplayName style={{ fontSize: handleSize(size, [20, 16, 14]) }}>
