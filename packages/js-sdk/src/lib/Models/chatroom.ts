@@ -73,6 +73,7 @@ export interface IChannel {
   representative_media_url: null | string[];
   alias: string;
   description: null | string;
+  last_message_at: string;
 }
 
 export interface IChannelCommand {
@@ -131,32 +132,6 @@ export interface IMember {
   shadow_banned: boolean;
   role: MemberRole;
   channel_role: ChannelRole;
-}
-
-export interface IMessage {
-  id: string;
-  text: string;
-  html: string;
-  type: MessageType;
-  user: IUser;
-  attachments: [];
-  latest_reactions: IReaction[];
-  own_reactions: IReaction[];
-  reaction_counts: any;
-  reaction_scores: any;
-  reply_count: number;
-  cid: string;
-  created_at: string;
-  updated_at: string;
-  shadowed: boolean;
-  mentioned_users: [];
-  silent: boolean;
-  pinned: boolean;
-  pinned_at: null | string;
-  pinned_by: null | string;
-  pin_expires: null | string;
-  chatroom_id: string;
-  creator_user_id: string;
 }
 
 export interface IReaction {

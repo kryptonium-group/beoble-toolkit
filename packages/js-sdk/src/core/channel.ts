@@ -1,7 +1,8 @@
 import { Paths } from '../constants';
-import { IPostChatBody } from '../lib';
+import { IPostChatBody, ISendMessage } from '../lib';
 import {
   ActionType,
+  IAction,
   IChannelConfig,
   IMessage,
   MessageType,
@@ -24,7 +25,7 @@ export class Channel {
     };
 
     this._socket.onmessage = (ev: MessageEvent<any>) => {
-      return;
+      //console.log(ev.data);
     };
 
     this._socket.onclose = () => {
@@ -40,8 +41,20 @@ export class Channel {
     await until(() => this._isOpen == true);
   }
 
-  public async sendMessage(chat: IPostChatBody) {
-    this._socket.send(JSON.stringify(chat));
+  public async sendMessage(message: ISendMessage) {
+    const data: IAction = {
+      action_type: 'SEND_MESSAGE',
+      data: message,
+    };
+    this._socket.send(JSON.stringify(data));
+  }
+
+  public retrieveMessage(config: any) {
+    const data: IAction = {
+      action_type: 'RETREIVE_MESSAGE',
+      data: config,
+    };
+    this._socket.send(JSON.stringify(data));
   }
 
   public async sendReaction() {
@@ -59,10 +72,14 @@ export class Channel {
     this._socket.addEventListener(event, callback);
   }
 
-  public onMessage(event: MessageType, callback: (data: any) => void) {
+  public onMessage(
+    event: MessageType,
+    callback: (data: IMessage<any>) => void
+  ) {
     this._socket.addEventListener('message', (e: MessageEvent) => {
-      const data: IMessage = JSON.parse(e.data);
-      if (data.type === event) callback(data.data);
+      console.log(e);
+      const data: IMessage<any> = JSON.parse(e.data);
+      if (data.message_type === event) callback(data.data);
     });
   }
 }

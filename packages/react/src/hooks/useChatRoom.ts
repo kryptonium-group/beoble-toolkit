@@ -13,13 +13,15 @@ export const useChatRoom = (chatroom_id: string) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const chatroomAccount =
-    chatroom && user ? getChatroomMemberAccount(chatroom, user.user_id) : '';
+    chatroom && user ? getChatroomMemberAccount(chatroom, user.id) : '';
 
   const chatroomName =
-    chatroom && user ? getChatroomName(chatroom, user.user_id) : '';
+    chatroom && user ? getChatroomName(chatroom, user.id) : '';
 
   const otherMembers =
-    chatroom && user ? filterOutUser(chatroom?.members, user?.user_id) : [];
+    chatroom && user
+      ? chatroom?.members.filter((member) => member.user_id === user?.id)
+      : [];
 
   useEffect(() => {
     if (Beoble) updateChatroom(chatroom_id);

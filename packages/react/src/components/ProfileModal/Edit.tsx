@@ -26,7 +26,7 @@ export const EditProfile = () => {
 
   const handleSave = async () => {
     if (!user) throw new Error('user is not initialized!');
-    updateUser(user.user_id, inputs);
+    updateUser(user.id, inputs);
   };
 
   const handleInputChage = (
@@ -49,12 +49,11 @@ export const EditProfile = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       setInputs({
         alias: user.alias,
         display_name: user.display_name,
-        description: user.description,
+        description: user.description ?? undefined,
       });
     }
   }, [user]);

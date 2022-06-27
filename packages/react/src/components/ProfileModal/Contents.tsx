@@ -92,7 +92,7 @@ export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
   const [isFollowingMenuOpen, setIsFollowingMenuOpen] = useState(false);
 
   const { initialized, account, user, Beoble, provider } = useBeoble();
-  const isUserProfile = !profileUserId || user?.user_id === profileUserId;
+  const isUserProfile = !profileUserId || user?.id === profileUserId;
   const { addRoute, openSearchModal } = useBeobleModal();
   const {
     friends,
@@ -148,8 +148,8 @@ export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
         {...{ user }}
         padding="8px 28px"
         size={'sm'}
-        key={user.user_id}
-        onClick={handleClickUserListItem(user.user_id)}
+        key={user.id}
+        onClick={handleClickUserListItem(user.id)}
       />
     );
   };

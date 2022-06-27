@@ -59,7 +59,7 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
     return (
       <UserLabel
         display_context={user.display_name}
-        key={user.user_id}
+        key={user.id}
         onClose={() => {
           toggleMember(user);
         }}
@@ -72,12 +72,12 @@ export const ChatRoomModal: FC<ChatRoomModalProps> = ({ onClose, isOpen }) => {
       <UserListItem
         {...{ user }}
         padding="8px 20px "
-        key={user.user_id}
+        key={user.id}
         hasCheckBox
         onClick={() => {
           toggleMember(user);
         }}
-        checked={members.some((member) => member.user_id === user.user_id)}
+        checked={members.some((member) => member.id === user.id)}
       />
     );
   };

@@ -62,9 +62,9 @@ export const Modal: FC<ModalProps> = ({ onClose, isOpen }) => {
       <UserListItem
         {...{ user }}
         padding="8px 20px "
-        key={user.user_id}
+        key={user.id}
         onClick={() => {
-          openRoute(user.user_id);
+          openRoute(user.id);
           closeSearchModal();
         }}
       />

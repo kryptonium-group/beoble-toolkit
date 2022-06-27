@@ -32,40 +32,40 @@ export const useGraph = (user_id?: string) => {
     if (!Beoble || !user) throw new BeobleNotInitizliedError();
     const res = await Beoble.user.follow.get({
       type: 'following',
-      user_id: user.user_id,
+      user_id: user.id,
     });
     return res.data;
   };
 
   const checkIsFollowing = async () => {
     const followings = await getFollowings();
-    return followings.some((following) => following.user_id === user_id);
+    return followings.some((following) => following.id === user_id);
   };
 
   const getFriends = async () => {
     if (!Beoble || !user) throw new BeobleNotInitizliedError();
     const res = await Beoble.user.friend.get({
-      user_id: user.user_id,
+      user_id: user.id,
     });
     return res.data;
   };
 
   const checkIsFriend = async () => {
     const friends = await getFriends();
-    return friends.some((friend) => friend.user_id === user_id);
+    return friends.some((friend) => friend.id === user_id);
   };
 
   const getFriendRequests = async () => {
     if (!Beoble || !user) throw new BeobleNotInitizliedError();
     const res = await Beoble.user.friend.getRequest({
-      user_id: user.user_id,
+      user_id: user.id,
     });
     return res.data;
   };
 
   const checkHasFriendRequest = async () => {
     const requests = await getFriendRequests();
-    return requests.some((request) => request.user_id === user_id);
+    return requests.some((request) => request.id === user_id);
   };
 
   const checkUserRelationship = async () => {
@@ -77,7 +77,7 @@ export const useGraph = (user_id?: string) => {
   const follow = async () => {
     if (!Beoble || !user) throw new BeobleNotInitizliedError();
     if (!user_id) return;
-    const res = await Beoble.user.follow.follow(user.user_id, {
+    const res = await Beoble.user.follow.follow(user.id, {
       target_user_id: user_id,
     });
     setIsFollowing(await checkIsFollowing());
@@ -86,7 +86,7 @@ export const useGraph = (user_id?: string) => {
   const unfollow = async () => {
     if (!Beoble || !user) throw new BeobleNotInitizliedError();
     if (!user_id) return;
-    const res = await Beoble.user.follow.unfollow(user.user_id, {
+    const res = await Beoble.user.follow.unfollow(user.id, {
       target_user_id: user_id,
     });
     setIsFollowing(await checkIsFollowing());
@@ -96,7 +96,7 @@ export const useGraph = (user_id?: string) => {
   const updateFriendship = async (actionType: FriendshipActionType) => {
     if (!Beoble || !user) throw new BeobleNotInitizliedError();
     if (!user_id) return;
-    const res = await Beoble.user.friend.updateFriendship(user.user_id, {
+    const res = await Beoble.user.friend.updateFriendship(user.id, {
       target_user_id: user_id,
       friendship_action_type: actionType,
     });

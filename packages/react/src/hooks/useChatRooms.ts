@@ -35,7 +35,7 @@ export const getChatroomLatestMessage = (chatroom: IChatRoom) => {
 };
 
 export const filterOutUser = (members: IUser[], user_id: string): IUser[] => {
-  return members.filter((member) => member.user_id !== user_id);
+  return members.filter((member) => member.id !== user_id);
 };
 
 export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
@@ -64,7 +64,7 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
   const updateChatrooms = async () => {
     if (Beoble && user) {
       const res = await Beoble.user.chatroom.get({
-        user_id: user.user_id,
+        user_id: user.id,
       });
 
       setChatrooms(res?.data ?? []);
@@ -75,13 +75,11 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
     chatroom: IChatRoom
   ): MessageConversationProps => {
     const { channel } = chatroom;
+    console.log(chatroom);
 
     if (!user) throw new Error('user is not initialized yet');
-    const conversation_name = getChatroomName(chatroom, user?.user_id);
-    const conversation_account = getChatroomMemberAccount(
-      chatroom,
-      user?.user_id
-    );
+    const conversation_name = getChatroomName(chatroom, user?.id);
+    const conversation_account = getChatroomMemberAccount(chatroom, user?.id);
     const lastMessage = getChatroomLatestMessage(chatroom);
     const timestamp = getUTCTimeStamp(channel.updated_at);
 

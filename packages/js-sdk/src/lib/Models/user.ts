@@ -38,14 +38,18 @@ export interface IPutUserBody {
 export interface IUserWithCount extends IUser, Partial<UserCounts> {}
 
 export interface IUser {
-  user_id: string;
-  create_time: number;
-  update_time: number;
+  id: string;
+  role: string; // need to be typed
+  created_at: string;
+  updated_at: string;
   wallets: string[];
   alias: string;
+  banned: boolean;
+  online: boolean;
+  public_key: null | string;
   display_name: string;
-  description?: string;
-  representative_media_url: string[];
+  description: null | string;
+  representative_media_url: null | string[];
 }
 
 interface UserCounts {

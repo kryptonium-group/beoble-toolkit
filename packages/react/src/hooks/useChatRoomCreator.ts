@@ -45,10 +45,8 @@ export const useChatRoomCreator = () => {
 
   const toggleMember = (user: IUser) => {
     // remove member
-    if (members.find((member) => member.user_id === user.user_id)) {
-      setMembers((prev) =>
-        prev.filter((member) => member.user_id !== user.user_id)
-      );
+    if (members.find((member) => member.id === user.id)) {
+      setMembers((prev) => prev.filter((member) => member.id !== user.id));
     }
     // add member
     else {
@@ -65,12 +63,12 @@ export const useChatRoomCreator = () => {
       const res = await Beoble.chatroom.add({
         alias: config.alias,
         display_name: config.display_name,
-        creator_id: user.user_id,
+        creator_id: user.id,
         chatroom_type: members.length > 1 ? 'GROUP_CHAT' : 'DIRECT_CHAT',
-        members: members.map((member) => member.user_id),
+        members: members.map((member) => member.id),
       });
       console.log(res);
-      openChat(res.data.chatroom_id);
+      openChat(res.data.channel.id);
       updateChatrooms();
       callback && callback();
     }

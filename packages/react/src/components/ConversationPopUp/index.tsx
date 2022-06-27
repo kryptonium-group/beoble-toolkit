@@ -119,7 +119,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
 
   const handleProfileClick = () => {
     if (otherMembers.length > 0) {
-      addRoute(otherMembers[0].user_id);
+      addRoute(otherMembers[0].id);
       open();
     }
   };

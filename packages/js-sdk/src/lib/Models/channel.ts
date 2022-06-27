@@ -7,13 +7,19 @@ export interface IChannelConfig {
   authToken?: string;
 }
 
-export type MessageType = 'SEND_MESSAGE' | 'RETRIEVE_MESSAGE';
-export interface IMessage {
-  type: MessageType;
-  data: any;
+export interface IMessage<T> {
+  message_type: MessageType;
+  data: T;
 }
 
-export type ActionType =
+export type MessageType =
   | 'RETRIEVED_MESSAGE'
   | 'UPDATED_MESSAGE'
   | 'NEW_MESSAGE';
+
+export type ActionType = 'RETREIVE_MESSAGE' | 'SEND_MESSAGE';
+
+export interface IAction {
+  action_type: ActionType;
+  data: any;
+}

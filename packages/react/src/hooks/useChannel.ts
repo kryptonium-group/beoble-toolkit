@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Channel, IChat } from '@beoble/js-sdk';
 import { useBeoble, useBeobleModal } from './useBeoble';
 import { MessageProps } from '../components/Message';
-import { isMinEqual } from '../utils';
+import { getUTCTimeStamp, isMinEqual } from '../utils';
 import useChat from './useChat';
 import {
   BeobleNotInitizliedError,
@@ -53,17 +53,16 @@ export const useChannel = (chatroomId: string) => {
   ): MessageProps => {
     if (!user) throw new BeobleNotInitizliedError();
 
-    const { creator_user, create_time, content_text, chat_id } = chat;
+    const { creator_user_id, created_at, text, id, user: creator } = chat;
     const previousChat = array[index - 1];
-
-    const isMine = user.user_id === creator_user.user_id;
+    const isMine = user.id === creator_user_id;
 
     const isSameUserWithPrevious = lastChat
-      ? creator_user.user_id === lastChat.creator_user_id
-      : creator_user.user_id === previousChat?.creator_user.user_id;
+      ? creator_user_id === lastChat.creator_user_id
+      : creator_user_id === previousChat?.creator_user_id;
 
-    const timestamp = create_time * 1000;
-    const previousTimestamp = previousChat?.create_time * 1000 ?? 0;
+    const timestamp = getUTCTimeStamp(created_at);
+    const previousTimestamp = getUTCTimeStamp(previousChat?.created_at) ?? 0;
 
     const isFollowing =
       isSameUserWithPrevious && isMinEqual(timestamp, previousTimestamp);
@@ -71,14 +70,14 @@ export const useChannel = (chatroomId: string) => {
     return {
       isMine,
       isFollowing,
-      content: content_text,
+      content: text,
       timestamp,
-      account: creator_user.wallets[0],
-      userName: creator_user.display_name,
-      chatId: chat_id,
-      creator_user_id: creator_user.user_id,
+      account: creator.wallets[0],
+      userName: creator.display_name,
+      chatId: id,
+      creator_user_id,
       onUserClick: () => {
-        openRoute(creator_user.user_id);
+        openRoute(creator_user_id);
       },
     };
   };
@@ -120,10 +119,11 @@ export const useChannel = (chatroomId: string) => {
       throw new Error('user should be initialized before sending message!');
     if (!content) return;
     if (channel) {
+      console.log(user);
       channel.sendMessage({
-        creator_user_id: user.user_id,
+        creator_user_id: user.id,
         chatroom_id: chatroomId,
-        content_text: content,
+        text: content,
       });
     }
   };

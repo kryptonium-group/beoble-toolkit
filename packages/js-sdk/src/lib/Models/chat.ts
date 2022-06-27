@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { IResponse } from '../Responses/response';
+import { MessageType } from '../types';
+import { IChannel, IReaction } from './chatroom';
 import { IUser } from './user';
 
 export interface IChatResponse extends IResponse<IChat> {}
@@ -33,13 +35,28 @@ export interface IPutChatReportBody {
 }
 
 export interface IChat {
-  chat_id: string;
+  id: string;
+  text: string;
+  html: string;
+  type: MessageType;
+  user: IUser;
+  attachments: [];
+  latest_reactions: IReaction[];
+  own_reactions: IReaction[];
+  reaction_counts: any;
+  reaction_scores: any;
+  reply_count: number;
+  cid: string;
+  created_at: string;
+  updated_at: string;
+  shadowed: boolean;
+  mentioned_users: [];
+  silent: boolean;
+  pinned: boolean;
+  pinned_at: null | string;
+  pinned_by: null | string;
+  pin_expires: null | string;
   chatroom_id: string;
-  content_media_url: string[];
-  content_text: string;
-  create_time: number;
-  creator_user: IUser;
-  parent_chat_id?: string;
-  reactions: any;
-  update_time: number;
+  creator_user_id: string;
+  channel: IChannel;
 }

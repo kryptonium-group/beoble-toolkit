@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { IChat, IUser, IChannel, IMessage, IRead, IMember } from '../Models';
+import { IChat, IUser, IChannel, IRead, IMember } from '../Models';
 import { IResponse } from './response';
 
 interface IMembership {
@@ -17,8 +17,8 @@ export interface IRecentChatResponse extends IResponse<IChat[]> {}
 
 export interface IChatRoom {
   channel: IChannel;
-  messages: IMessage[];
-  pinned_messages: IMessage[];
+  messages: IChat[];
+  pinned_messages: IChat[];
   read: IRead[];
   members: IMember[];
   membership: null | any;

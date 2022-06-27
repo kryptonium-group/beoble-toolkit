@@ -36,7 +36,7 @@ export const useUser = (user_id?: string) => {
     setIsFollowingFetching(true);
     const followers = await Beoble.user.follow.get({
       type: 'following',
-      user_id: user_id ?? user.user_id,
+      user_id: user_id ?? user.id,
     });
     setFollowings(followers.data);
     setIsFollowingFetching(false);
@@ -46,7 +46,7 @@ export const useUser = (user_id?: string) => {
     if (!Beoble || !user) throw new BeobleNotInitizliedError();
     setIsFriendFetching(true);
     const freinds = await Beoble.user.friend.get({
-      user_id: user_id ?? user.user_id,
+      user_id: user_id ?? user.id,
     });
     setFriends(freinds.data);
     setIsFriendFetching(false);
@@ -57,7 +57,7 @@ export const useUser = (user_id?: string) => {
     if (!Beoble || !user) throw new BeobleNotInitizliedError();
     const followers = await Beoble.user.follow.get({
       type: 'follower',
-      user_id: user_id ?? user.user_id,
+      user_id: user_id ?? user.id,
     });
     setFollowers(followers.data);
     setIsFollowerFetching(false);
