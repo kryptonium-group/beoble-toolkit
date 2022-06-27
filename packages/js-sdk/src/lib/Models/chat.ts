@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { IResponse } from './response';
+import { IResponse } from '../Responses/response';
 import { IUser } from './user';
 
 export interface IChatResponse extends IResponse<IChat> {}

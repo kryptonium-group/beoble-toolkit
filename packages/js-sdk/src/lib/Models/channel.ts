@@ -1,3 +1,5 @@
+import { IUser } from './user';
+
 export type WebScocketEvents = 'open' | 'message' | 'error' | 'close';
 
 export interface IChannelConfig {
@@ -5,8 +7,9 @@ export interface IChannelConfig {
   authToken?: string;
 }
 
+export type MessageType = 'SEND_MESSAGE' | 'RETRIEVE_MESSAGE';
 export interface IMessage {
-  action_type: ActionType;
+  type: MessageType;
   data: any;
 }
 

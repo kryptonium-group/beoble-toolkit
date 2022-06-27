@@ -1,9 +1,8 @@
-import { convertTimestampTo } from './timeUtil';
+import { isMinEqual } from './timeUtil';
 
 describe('timestamp utility test', () => {
-  it('', () => {
-    const current = Date.now();
-    const formattedTime = convertTimestampTo(current);
-    console.log(formattedTime);
+  it('test room', () => {
+    console.log('hi');
+    console.log(Date.parse('2022-06-20T08:34:52.238902179Z'));
   });
 });

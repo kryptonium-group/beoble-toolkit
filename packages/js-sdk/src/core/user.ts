@@ -10,7 +10,7 @@ import {
   IUserResponse,
 } from '../lib';
 import ApiClient from '../lib/api';
-import { IUserIdParam } from '../lib/Models/request';
+import { IUserIdParam } from '../lib/Requests/request';
 import { IAPIClass, IRestEndPoint } from './types';
 
 export class User extends IAPIClass implements IRestEndPoint {

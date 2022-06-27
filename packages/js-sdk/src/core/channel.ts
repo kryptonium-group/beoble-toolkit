@@ -4,6 +4,7 @@ import {
   ActionType,
   IChannelConfig,
   IMessage,
+  MessageType,
   WebScocketEvents,
 } from '../lib/Models/channel';
 import { until } from '../util';
@@ -43,6 +44,10 @@ export class Channel {
     this._socket.send(JSON.stringify(chat));
   }
 
+  public async sendReaction() {
+    return;
+  }
+
   public async close() {
     this._socket.close();
   }
@@ -54,10 +59,10 @@ export class Channel {
     this._socket.addEventListener(event, callback);
   }
 
-  public onMessage(event: ActionType, callback: (data: any) => void) {
+  public onMessage(event: MessageType, callback: (data: any) => void) {
     this._socket.addEventListener('message', (e: MessageEvent) => {
       const data: IMessage = JSON.parse(e.data);
-      if (data.action_type === event) callback(data.data);
+      if (data.type === event) callback(data.data);
     });
   }
 }

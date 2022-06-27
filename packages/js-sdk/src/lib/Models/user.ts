@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { SortngOrder } from '../../core/user';
-import { MembershipAction } from './chatroom';
-import { IResponse } from './response';
+import { IResponse } from '../Responses/response';
+import { MembershipAction } from '../types';
 
 export interface IUsersResponse extends IResponse<IUser[]> {}
 
