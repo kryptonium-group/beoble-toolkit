@@ -72,10 +72,7 @@ export class Channel {
     this._socket.addEventListener(event, callback);
   }
 
-  public onMessage(
-    event: MessageType,
-    callback: (data: IMessage<any>) => void
-  ) {
+  public onMessage(event: MessageType, callback: (data: any) => void) {
     this._socket.addEventListener('message', (e: MessageEvent) => {
       console.log(e);
       const data: IMessage<any> = JSON.parse(e.data);
