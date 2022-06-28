@@ -75,7 +75,6 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
     chatroom: IChatRoom
   ): MessageConversationProps => {
     const { channel } = chatroom;
-    console.log(chatroom);
 
     if (!user) throw new Error('user is not initialized yet');
     const conversation_name = getChatroomName(chatroom, user?.id);

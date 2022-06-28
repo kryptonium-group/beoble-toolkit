@@ -40,7 +40,6 @@ export const useWeb3 = (): IUseWeb3 => {
 
   const registerProviderEvent = () => {
     window.ethereum.on('accountsChanged', () => {
-      console.log('i');
       initAccount();
     });
   };

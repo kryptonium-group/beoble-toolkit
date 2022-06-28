@@ -2,6 +2,8 @@ export const Paths = {
   wss: {
     chat: (chatroom_id: string) =>
       `wss://dev.api.beoble.app/chatroom/${chatroom_id}/chat`,
+    notification: (app_id: string, user_id: string) =>
+      `wss://dev.api.beoble.app/user/${app_id}/${user_id}`,
   },
   prod: 'https://api.beoble.app',
   dev: 'https://dev.api.beoble.app',

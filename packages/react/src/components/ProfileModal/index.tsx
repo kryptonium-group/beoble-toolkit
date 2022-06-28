@@ -127,10 +127,6 @@ export const ProfileModal = ({ isOpen, close }: ProfileModalProps) => {
     e.stopPropagation();
   };
 
-  useEffect(() => {
-    console.log(route);
-  }, [route]);
-
   return (
     <Container onClick={close} isOpen={isOpen}>
       <ProfileModalContainer isOpen={isOpen} onClick={handleBlockParentClick}>

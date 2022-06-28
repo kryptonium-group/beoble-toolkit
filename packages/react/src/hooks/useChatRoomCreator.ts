@@ -67,7 +67,6 @@ export const useChatRoomCreator = () => {
         chatroom_type: members.length > 1 ? 'GROUP_CHAT' : 'DIRECT_CHAT',
         members: members.map((member) => member.id),
       });
-      console.log(res);
       openChat(res.data.channel.id);
       updateChatrooms();
       callback && callback();

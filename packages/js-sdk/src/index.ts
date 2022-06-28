@@ -1,4 +1,4 @@
-import { Core, Channel, FriendshipActionType } from './core';
+import { Core, Channel, FriendshipActionType, Notification } from './core';
 import * as utils from './util';
 export * from './lib';
 
@@ -7,4 +7,4 @@ const BeobleSDK = {
   utils,
 };
 
-export { BeobleSDK, Core, Channel, FriendshipActionType };
+export { BeobleSDK, Core, Channel, FriendshipActionType, Notification };

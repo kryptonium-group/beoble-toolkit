@@ -41,14 +41,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
     const user = await beoble.user.get({
       wallet_address,
     });
-    if (user.meta.count < 1) {
-      const newUser = await beoble.user.add({
-        wallet_address,
-        alias: wallet_address,
-        display_name: wallet_address,
-      });
-      setUser(newUser);
-    } else setUser(user.data[0]);
+    setUser(user.data[0]);
   };
 
   return (

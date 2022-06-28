@@ -17,7 +17,6 @@ export const useBeobleSDK = () => {
     try {
       setIsFetching(true);
       const res = await Beoble.user.update(userId, body);
-      console.log(res);
       setIsFetching(false);
       setIsFetched(true);
       setData(res);

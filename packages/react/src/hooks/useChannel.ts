@@ -119,7 +119,6 @@ export const useChannel = (chatroomId: string) => {
       throw new Error('user should be initialized before sending message!');
     if (!content) return;
     if (channel) {
-      console.log(user);
       channel.sendMessage({
         creator_user_id: user.id,
         chatroom_id: chatroomId,

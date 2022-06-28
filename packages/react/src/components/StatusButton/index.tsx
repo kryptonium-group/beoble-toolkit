@@ -23,7 +23,6 @@ export const StatusButton = ({ onClick }: StatusButtonProps) => {
 
   const handleClickTest = useCallback(async () => {
     onClick && onClick();
-    console.log(account);
   }, [onClick, account]);
 
   return (

@@ -1,31 +1,24 @@
 import { Paths } from '../constants';
-import { IPostChatBody, ISendMessage } from '../lib';
-import {
-  ActionType,
-  IAction,
-  IChannelConfig,
-  IMessage,
-  MessageType,
-  WebScocketEvents,
-} from '../lib/Models/channel';
+import { IMessage, MessageType, WebScocketEvents } from '../lib/Models/channel';
+import { INotificationConfig } from '../lib/Models/notification';
 import { until } from '../util';
 
-export class Channel {
+export class Notification {
   private _socket: WebSocket;
   private _isOpen = false;
 
-  constructor(config: IChannelConfig) {
-    const chatUrl =
-      `${Paths.wss.chat(config.chatroom_id)}` +
+  constructor(config: INotificationConfig) {
+    const notiUrl =
+      `${Paths.wss.notification(config.app_id, config.user_id)}` +
       (config.authToken ? `?auth_token=${config.authToken}` : '');
-    this._socket = new WebSocket(chatUrl);
+    this._socket = new WebSocket(notiUrl);
 
     this._socket.onopen = () => {
       this._isOpen = true;
     };
 
     this._socket.onmessage = (ev: MessageEvent<any>) => {
-      //console.log(ev.data);
+      console.log(ev.data);
     };
 
     this._socket.onclose = () => {
@@ -39,26 +32,6 @@ export class Channel {
 
   public async open() {
     await until(() => this._isOpen == true);
-  }
-
-  public async sendMessage(message: ISendMessage) {
-    const data: IAction = {
-      action_type: 'SEND_MESSAGE',
-      data: message,
-    };
-    this._socket.send(JSON.stringify(data));
-  }
-
-  public retrieveMessage(config: any) {
-    const data: IAction = {
-      action_type: 'RETREIVE_MESSAGE',
-      data: config,
-    };
-    this._socket.send(JSON.stringify(data));
-  }
-
-  public async sendReaction() {
-    return;
   }
 
   public async close() {

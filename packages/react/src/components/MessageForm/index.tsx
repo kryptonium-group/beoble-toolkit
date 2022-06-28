@@ -143,7 +143,6 @@ export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
 
   const handleEmojiClick = (e: MouseEvent, emoji: IEmojiData) => {
     setIsEmojiPickerOpen(false);
-    console.log(emoji);
     setMessageContent((prev) => prev + emoji.emoji);
   };
 
