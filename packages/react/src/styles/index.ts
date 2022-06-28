@@ -43,6 +43,7 @@ export const Colors = {
     shadow: '#0000004d', // 0, 0, 0, 0.3
     containerTint: '#f9fafb',
     messageTint: '#742ddd',
+    notification: '#FA3E3E',
   },
   signal: {
     positive: '#057642',

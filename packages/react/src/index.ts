@@ -1,3 +1,4 @@
+export * from './components/AlarmNumber/index';
 export * from './components/Modal/index';
 export * from './components/UserLabel/index';
 export * from './components/CheckBox/index';

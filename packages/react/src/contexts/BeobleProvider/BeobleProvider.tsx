@@ -4,6 +4,7 @@ import useWeb3 from '../../hooks/useWeb3';
 import { BeobleContext } from '../BeobleContext';
 import { ModalProvider } from '../ModalContext/ModalProvider';
 import { ChatProvider } from '../ChatContext/ChatProvider';
+import { useNotification } from '../../hooks/useNotification';
 
 export interface IBeobleProvider {
   children?: ReactNode;
@@ -16,6 +17,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
   const { provider, account, initProvider } = useWeb3();
+  useNotification(user?.id);
 
   // create beoble sdk obj on mount
   // and store
@@ -34,9 +36,6 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
     }
   }, [Beoble, account]);
 
-  // fetch user with account address
-  // create new and store if no user exist
-  // else store it
   const initUser = async (beoble: Core, wallet_address: string) => {
     const user = await beoble.user.get({
       wallet_address,

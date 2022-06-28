@@ -21,13 +21,3 @@ export class Core extends IAPIClass {
     this.auth = new Auth(this._client);
   }
 }
-
-function initialized(client?: ApiClient) {
-  return function (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
-    // if (target.client) throw new NotInitializedException();
-  };
-}

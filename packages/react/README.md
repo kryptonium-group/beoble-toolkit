@@ -17,16 +17,16 @@ Run `nx build react` to build project. [Doc](https://nx.dev/react/overview)
 ## Creating Component
 
 Components
-`nx g component my-component --project=react --directory=components --R --fileName=index`
+`nx g component ${my-component} --project=react --directory=components --R --fileName=index`
 
 Widgets
-`nx g component my-component --project=react --directory=widgets --R --fileName=index`
+`nx g component ${my-component} --project=react --directory=widgets --R --fileName=index`
 
 [Doc](https://nx.dev/packages/react/generators/component)
 
 ## Creating Component Story
 
-`nx g component-story --project=react --componentPath=component_tsx_root`
+`nx g component-story --project=react --componentPath=components/${my-component}/index.tsx`
 
 [Doc](https://nx.dev/packages/react/generators/component-story)
 
