@@ -7,6 +7,8 @@ import {
   NewMessageHeaderProps,
   ChatHeader,
   ChatHeaderProps,
+  ModalHeaderProps,
+  ModalHeader,
 } from './index';
 
 export default {
@@ -40,4 +42,13 @@ ChatHeaderPrimary.args = {
   account: 'bamnenim',
   status: 'online',
   isMinimized: false,
+};
+
+const ModalHeaderTemplate: Story<ModalHeaderProps> = (args) => (
+  <ModalHeader {...args} />
+);
+
+export const ModalHeaderPrimary = ModalHeaderTemplate.bind({});
+ModalHeaderPrimary.args = {
+  title: 'invite',
 };

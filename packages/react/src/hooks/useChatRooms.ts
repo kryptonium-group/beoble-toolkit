@@ -2,41 +2,12 @@ import { IChatRoom, Core, IUser } from '@beoble/js-sdk';
 import { useEffect, useState } from 'react';
 import { MessageConversationProps } from '../components/MessageConversation';
 import { getUTCTimeStamp } from '../utils';
-import { useBeoble } from './useBeoble';
-
-// TODO: need to handle group chat without display name
-export const getChatroomName = (chatroom: IChatRoom, user_id: string) => {
-  const { channel, members } = chatroom;
-  const { chatroom_type, display_name } = channel;
-  if (chatroom_type === 'GROUP_CHAT') return display_name;
-  else {
-    const otherMembers = members.filter((member) => member.user_id !== user_id);
-    return otherMembers[0].user.display_name;
-  }
-};
-
-export const getChatroomMemberAccount = (
-  chatroom: IChatRoom,
-  user_id: string,
-  index = 0
-) => {
-  const { members, channel } = chatroom;
-  const otherMembers = members.filter((member) => member.user_id !== user_id);
-  if (!otherMembers[index])
-    throw new Error(`member at index ${index} does not exist!`);
-  return channel.chatroom_type === 'DIRECT_CHAT'
-    ? otherMembers[index].user.wallets[0]
-    : '';
-};
-
-export const getChatroomLatestMessage = (chatroom: IChatRoom) => {
-  const { messages } = chatroom;
-  return messages.length > 0 ? messages[0].text : 'Type anything to start!';
-};
-
-export const filterOutUser = (members: IUser[], user_id: string): IUser[] => {
-  return members.filter((member) => member.id !== user_id);
-};
+import {
+  getChatroomLatestMessage,
+  getChatroomMemberAccount,
+  getChatroomName,
+  getChatroomUndreadCount,
+} from '../utils/chatroomUtil';
 
 export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
   const [chatrooms, setChatrooms] = useState<IChatRoom[]>([]);
@@ -44,6 +15,7 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
     MessageConversationProps[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   useEffect(() => {
     if (Beoble && user) initChatrooms();
@@ -53,8 +25,15 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
     const converted = chatrooms.map((chatroom) =>
       convertChatroomToConversation(chatroom)
     );
+    if (user) {
+      const totalUnreadMessages = chatrooms.reduce(
+        (prev, cur) => prev + getChatroomUndreadCount(cur, user?.id),
+        0
+      );
+      setUnreadMessages(totalUnreadMessages);
+    }
     setConversations(converted);
-  }, [chatrooms]);
+  }, [chatrooms, user]);
 
   const initChatrooms = async () => {
     await updateChatrooms();
@@ -66,6 +45,7 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
       const res = await Beoble.user.chatroom.get({
         user_id: user.id,
       });
+      console.log(res);
 
       setChatrooms(res?.data ?? []);
     }
@@ -80,7 +60,10 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
     const conversation_name = getChatroomName(chatroom, user?.id);
     const conversation_account = getChatroomMemberAccount(chatroom, user?.id);
     const lastMessage = getChatroomLatestMessage(chatroom);
-    const timestamp = getUTCTimeStamp(channel.updated_at);
+    const timestamp = getUTCTimeStamp(
+      channel.last_message_at ?? channel.created_at
+    );
+    const unreadMessages = getChatroomUndreadCount(chatroom, user?.id);
 
     return {
       timestamp,
@@ -92,8 +75,15 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
         : '',
       account: conversation_account,
       chatroomId: channel.id,
+      unreadMessages,
     };
   };
 
-  return { chatrooms, conversations, isLoading, updateChatrooms };
+  return {
+    chatrooms,
+    conversations,
+    isLoading,
+    updateChatrooms,
+    unreadMessages,
+  };
 };

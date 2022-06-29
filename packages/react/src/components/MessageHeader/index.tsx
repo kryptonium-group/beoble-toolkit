@@ -9,6 +9,7 @@ import { Status } from '../OnlineStatus';
 import { FC, MouseEventHandler, MouseEvent } from 'react';
 import { Colors, FontWeights, Truncate } from '../../styles';
 import { FiMinimize2 } from 'react-icons/fi';
+import AlarmNumber from '../AlarmNumber';
 
 export interface MessageHeaderProps {
   profileImage?: string;
@@ -18,6 +19,7 @@ export interface MessageHeaderProps {
   onNewChatRoomClick?: () => void;
   isMinimized: boolean;
   account: string;
+  unreadMessages?: number;
 }
 
 const StyledMessageHeader = styled.header`
@@ -27,7 +29,9 @@ const StyledMessageHeader = styled.header`
   align-items: center;
   padding: 0px 8px;
   position: relative;
-  background-color: #fff;
+  background-color: ${Colors.background.white};
+  color: ${Colors.text.normal};
+
   border-bottom: 1px solid #00000014;
 
   min-height: 48px;
@@ -39,6 +43,7 @@ const StyledMessageHeader = styled.header`
 
   &:hover {
     background-color: #f9fafb;
+    color: ${Colors.text.normal};
   }
 `;
 
@@ -61,7 +66,6 @@ const ProfileContainer = styled.div`
 `;
 
 const HeaderTitle = styled.span`
-  color: #000000e6;
   font-size: 15px;
   font-weight: 600;
   margin-left: 8px;
@@ -72,6 +76,11 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
+const MessageHeaderContainer = styled(StyledMessageHeader)`
+  background-color: ${Colors.background.messageTint};
+  color: ${Colors.text.white};
+`;
+
 export const MessageHeader: FC<MessageHeaderProps> = ({
   profileImage,
   status,
@@ -80,6 +89,7 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
   onNewChatRoomClick,
   isMinimized,
   account,
+  unreadMessages,
 }) => {
   const handleMoreButtonClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -91,7 +101,7 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
   };
 
   return (
-    <StyledMessageHeader onClick={onHeaderClick}>
+    <MessageHeaderContainer onClick={onHeaderClick}>
       <ProfileContainer>
         <Avatar
           size={32}
@@ -100,19 +110,30 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
           account={account}
         />
         <HeaderTitle>Messaging</HeaderTitle>
+        {unreadMessages !== undefined && unreadMessages > 0 && (
+          <AlarmNumber count={unreadMessages} style={{ marginLeft: 8 }} />
+        )}
       </ProfileContainer>
       <ControlsContainer>
-        <IconButton size={32} onClick={handleMoreButtonClick}>
-          <MdMoreHoriz />
+        <IconButton size={32} onClick={handleMoreButtonClick} color="inherit">
+          <MdMoreHoriz color="inherit" />
         </IconButton>
-        <IconButton size={32} onClick={handleNewMessageButtonClick}>
-          <BiEdit />
+        <IconButton
+          size={32}
+          onClick={handleNewMessageButtonClick}
+          color="inherit"
+        >
+          <BiEdit color="inherit" />
         </IconButton>
-        <IconButton size={32} onClick={onMinimizeButtonClick}>
-          {isMinimized ? <BsChevronCompactUp /> : <BsChevronCompactDown />}
+        <IconButton size={32} onClick={onMinimizeButtonClick} color="inherit">
+          {isMinimized ? (
+            <BsChevronCompactUp color="inherit" />
+          ) : (
+            <BsChevronCompactDown color="inherit" />
+          )}
         </IconButton>
       </ControlsContainer>
-    </StyledMessageHeader>
+    </MessageHeaderContainer>
   );
 };
 
@@ -151,6 +172,7 @@ export interface ChatHeaderProps {
   onExpand?: MouseEventHandler<any>;
   onMore?: MouseEventHandler<any>;
   onProfileClick?: MouseEventHandler<any>;
+  unreadMessages?: number;
 }
 
 const TitleContainer = styled.div`
@@ -195,6 +217,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   onExpand,
   onMore,
   onProfileClick,
+  unreadMessages,
 }) => {
   const handleExpandButtonClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -233,7 +256,13 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
           </UserName>
           {!isMinimized && <StatusDiv>{status}</StatusDiv>}
         </TitleContainer>
+        {unreadMessages !== undefined && unreadMessages > 0 && (
+          <div style={{ marginLeft: 8 }}>
+            <AlarmNumber count={unreadMessages} />
+          </div>
+        )}
       </ProfileContainer>
+
       <ControlsContainer>
         {!isMinimized && (
           <>
@@ -253,15 +282,12 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   );
 };
 
-export interface CreateChatRoomHeaderProps {
+export interface ModalHeaderProps {
   onClose: () => void;
   title: string;
 }
 
-export const ModalHeader: FC<CreateChatRoomHeaderProps> = ({
-  onClose,
-  title,
-}) => {
+export const ModalHeader: FC<ModalHeaderProps> = ({ onClose, title }) => {
   return (
     <StyledMessageHeader>
       <ProfileContainer>

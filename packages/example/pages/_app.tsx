@@ -5,13 +5,15 @@ import { BeobleProvider, Chat } from '@beoble/react';
 import './styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  const demoAppId = 'beoble_demo';
+
   return (
     <>
       <Head>
         <title>Welcome to example!</title>
       </Head>
       <Web3ContextProvider>
-        <BeobleProvider>
+        <BeobleProvider appId={demoAppId}>
           <main className="app">
             <Component {...pageProps} />
           </main>

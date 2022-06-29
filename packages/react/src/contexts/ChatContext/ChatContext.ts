@@ -9,6 +9,7 @@ export interface IChatContext {
   updateChatrooms: () => Promise<void>;
   conversations: MessageConversationProps[];
   isChatroomsLoading: boolean;
+  unreadMessages: number;
 }
 
 export const ChatContext = createContext<IChatContext | null>(null);

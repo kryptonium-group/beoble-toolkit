@@ -102,7 +102,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   const { sendMessage, messages, isLoading } = useChannel(chatroomId);
   const { closeChat } = useChat();
   const { addRoute, open } = useBeobleModal();
-  const { chatroomAccount, chatroomName, otherMembers } =
+  const { unreadMessages, chatroomAccount, chatroomName, otherMembers } =
     useChatRoom(chatroomId);
 
   const handleCloseChat = useCallback(() => {
@@ -134,7 +134,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
         onHeaderClick={handleHeaderClick}
         onExpand={handleExpandChat}
         onProfileClick={handleProfileClick}
-        {...{ isMinimized, isExpanded }}
+        {...{ isMinimized, isExpanded, unreadMessages }}
       />
       <ContentContainer>
         <MessageDisplayContainer>

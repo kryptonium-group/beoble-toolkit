@@ -5,19 +5,23 @@ import { BeobleContext } from '../BeobleContext';
 import { ModalProvider } from '../ModalContext/ModalProvider';
 import { ChatProvider } from '../ChatContext/ChatProvider';
 import { useNotification } from '../../hooks/useNotification';
+import { GlobalStyle } from '../../styles';
+import { ThemeProvider } from 'styled-components';
+import { lightTheme } from '../../theme';
 
 export interface IBeobleProvider {
+  appId: string;
   children?: ReactNode;
 }
 
-export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
+export const BeobleProvider: FC<IBeobleProvider> = ({ appId, children }) => {
   const [initialized, setInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [Beoble, setBeoble] = useState<Core | null>(null);
   const [user, setUser] = useState<IUser | null>(null);
 
   const { provider, account, initProvider } = useWeb3();
-  useNotification(user?.id);
+  const { notification } = useNotification(appId, user?.id);
 
   // create beoble sdk obj on mount
   // and store
@@ -44,22 +48,25 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children }) => {
   };
 
   return (
-    <BeobleContext.Provider
-      value={{
-        initialized,
-        isAuthenticated,
-        provider,
-        account,
-        Beoble,
-        user,
-        setUser,
-        initProvider,
-      }}
-    >
-      <ChatProvider core={Beoble} user={user}>
-        <ModalProvider>{children}</ModalProvider>
-      </ChatProvider>
-    </BeobleContext.Provider>
+    <ThemeProvider theme={lightTheme}>
+      <BeobleContext.Provider
+        value={{
+          initialized,
+          isAuthenticated,
+          provider,
+          account,
+          notification,
+          Beoble,
+          user,
+          setUser,
+          initProvider,
+        }}
+      >
+        <ChatProvider core={Beoble} {...{ user, notification }}>
+          <ModalProvider>{children}</ModalProvider>
+        </ChatProvider>
+      </BeobleContext.Provider>
+    </ThemeProvider>
   );
 };
 

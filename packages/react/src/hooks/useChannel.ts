@@ -14,7 +14,6 @@ export const useChannel = (chatroomId: string) => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [channel, setChannel] = useState<Channel>();
   const [isLoading, setIsLoading] = useState(true);
-  const { updateChatrooms } = useChat();
   const { openRoute } = useBeobleModal();
 
   useEffect(() => {
@@ -36,7 +35,6 @@ export const useChannel = (chatroomId: string) => {
 
       chat.onMessage('NEW_MESSAGE', (data: IChat) => {
         updateMessage(data);
-        updateChatrooms();
       });
 
       await chat.open();

@@ -5,7 +5,7 @@ import ConversationPopUp from '../../components/ConversationPopUp';
 import MessageOverlay from '../../components/MessageOverlay';
 import useChat from '../../hooks/useChat';
 import { useDelayOpen } from '../../hooks/useDelayOpen';
-import { zIndex } from '../../styles';
+import { GlobalStyle, zIndex } from '../../styles';
 
 /* eslint-disable-next-line */
 export interface ChatProps {}
@@ -32,6 +32,7 @@ export const Chat: FC<ChatProps> = () => {
 
   return (
     <ChatContainer>
+      <GlobalStyle />
       {render && <ChatRoomModal onClose={close} {...{ isOpen }} />}
       <MessageOverlay onNewChatRoomClick={open} />
       {openedChats.length > 0 &&

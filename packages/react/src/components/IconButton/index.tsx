@@ -19,7 +19,7 @@ export interface IconButtonProps
 }
 
 const StyledIconButton = styled(Button)<SizeProps>`
-  color: #00000099;
+  color: ${({ color }) => color ?? '#00000099'};
   height: ${({ size }) => size}px;
   width: ${({ size }) => size}px;
   border-radius: 50%;

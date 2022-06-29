@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { createContext } from 'react';
-import { Core, IUser } from '@beoble/js-sdk';
+import { Core, IUser, Notification } from '@beoble/js-sdk';
 import { Account } from '../../hooks/useWeb3';
 
 export interface IBeobleContext {
@@ -9,6 +9,7 @@ export interface IBeobleContext {
 
   provider: ethers.providers.Web3Provider | null;
   account?: Account;
+  notification?: Notification;
 
   Beoble: Core | null;
   user: IUser | null;

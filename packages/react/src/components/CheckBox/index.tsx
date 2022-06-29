@@ -13,7 +13,7 @@ export interface CheckBoxProps extends SizeProps {
 
 interface ContainerProps extends SizeProps {
   clicked?: boolean;
-  backgroundColor: string;
+  backgroundColor?: string;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -21,8 +21,8 @@ const Container = styled.div<ContainerProps>`
   height: ${({ size }) => size}px;
   border-radius: 50%;
   border: 1px solid ${Colors.border.faint};
-  background-color: ${({ clicked, backgroundColor }) =>
-    clicked ? backgroundColor : Colors.background.white};
+  background-color: ${({ clicked, backgroundColor, theme }) =>
+    clicked ? backgroundColor ?? theme.primary : Colors.background.white};
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -36,7 +36,7 @@ const Container = styled.div<ContainerProps>`
 export const CheckBox: FC<CheckBoxProps> = ({
   size,
   onClick,
-  backgroundColor = Colors.background.messageTint,
+  backgroundColor,
   value,
   onChange,
 }) => {

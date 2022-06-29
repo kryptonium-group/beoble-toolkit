@@ -1,11 +1,11 @@
 import { IChatRoom, IUser } from '@beoble/js-sdk';
 import { useEffect, useState } from 'react';
-import { useBeoble } from './useBeoble';
 import {
-  filterOutUser,
   getChatroomMemberAccount,
   getChatroomName,
-} from './useChatRooms';
+  getChatroomUndreadCount,
+} from '../utils/chatroomUtil';
+import { useBeoble } from './useBeoble';
 
 export const useChatRoom = (chatroom_id: string) => {
   const { Beoble, user } = useBeoble();
@@ -23,6 +23,9 @@ export const useChatRoom = (chatroom_id: string) => {
       ? chatroom?.members.filter((member) => member.user_id === user?.id)
       : [];
 
+  const unreadMessages =
+    chatroom && user ? getChatroomUndreadCount(chatroom, user.id) : 0;
+
   useEffect(() => {
     if (Beoble) updateChatroom(chatroom_id);
   }, [Beoble]);
@@ -33,6 +36,7 @@ export const useChatRoom = (chatroom_id: string) => {
     const res = await Beoble.chatroom.get({
       chatroom_id,
     });
+    console.log(res);
     setChatroom(res.data.length > 0 ? res.data[0] : undefined);
     setIsLoading(false);
   };
@@ -44,5 +48,6 @@ export const useChatRoom = (chatroom_id: string) => {
     chatroomAccount,
     chatroomName,
     otherMembers,
+    unreadMessages,
   };
 };

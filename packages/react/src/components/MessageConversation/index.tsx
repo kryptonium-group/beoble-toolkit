@@ -6,6 +6,7 @@ import { convertTime } from '../../utils/timeUtil';
 import Avatar from '../Avatar';
 import { Status } from '../OnlineStatus';
 import { mountAnimation } from '../../styles/commons';
+import AlarmNumber from '../AlarmNumber';
 
 export interface MessageConversationProps {
   timestamp: number;
@@ -16,6 +17,7 @@ export interface MessageConversationProps {
   account: string;
   onClick?: React.MouseEventHandler<any>;
   chatroomId: string;
+  unreadMessages?: number;
 }
 
 const StyledMessageConversation = styled.div`
@@ -110,6 +112,7 @@ export const MessageConversation: React.FC<MessageConversationProps> = ({
   account,
   onClick,
   chatroomId,
+  unreadMessages,
 }) => {
   const { openChat } = useChat();
 
@@ -140,6 +143,9 @@ export const MessageConversation: React.FC<MessageConversationProps> = ({
             <MessageContainer>
               <MessagePhrase>{lastMessage}</MessagePhrase>
             </MessageContainer>
+            {unreadMessages !== undefined && unreadMessages > 0 && (
+              <AlarmNumber count={unreadMessages} />
+            )}
           </ConversationRow>
         </ConversationContentWrapper>
       </ConversationContentCard>

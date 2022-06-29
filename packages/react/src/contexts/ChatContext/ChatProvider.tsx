@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { FC, ReactNode, useState } from 'react';
-import { Core, IUser } from '@beoble/js-sdk';
+import { Core, IUser, Notification } from '@beoble/js-sdk';
 import { useChatRooms } from '../../hooks/useChatRooms';
 import useScreen from '../../hooks/useScreen';
 import { ChatContext } from './ChatContext';
@@ -9,15 +9,24 @@ export interface IChatProvider {
   children?: ReactNode;
   core: Core | null;
   user: IUser | null;
+  notification?: Notification;
 }
 
-export const ChatProvider: FC<IChatProvider> = ({ children, core, user }) => {
+export const ChatProvider: FC<IChatProvider> = ({
+  children,
+  core,
+  user,
+  notification,
+}) => {
   const [openedChats, setOpenedChats] = useState<string[]>([]);
   const screen = useScreen();
-  const { updateChatrooms, conversations, chatrooms, isLoading } = useChatRooms(
-    core,
-    user
-  );
+  const {
+    updateChatrooms,
+    conversations,
+    chatrooms,
+    isLoading,
+    unreadMessages,
+  } = useChatRooms(core, user);
 
   const openChat = (chatroom_id: string) => {
     // console.log(screen?.width);
@@ -38,6 +47,7 @@ export const ChatProvider: FC<IChatProvider> = ({ children, core, user }) => {
         updateChatrooms,
         conversations,
         isChatroomsLoading: isLoading,
+        unreadMessages,
       }}
     >
       {children}

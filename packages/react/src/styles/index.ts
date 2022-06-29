@@ -1,4 +1,4 @@
-import { css } from 'styled-components';
+import { createGlobalStyle, css } from 'styled-components';
 
 export interface SizeProps {
   size?: number;
@@ -65,3 +65,9 @@ export const zIndex = {
   blur: 998,
   messages: 997,
 };
+
+export const GlobalStyle = createGlobalStyle`
+  div {
+    font-family: system-ui;
+  }
+`;
