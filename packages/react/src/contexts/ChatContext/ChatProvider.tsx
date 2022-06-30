@@ -23,6 +23,7 @@ export const ChatProvider: FC<IChatProvider> = ({
   const {
     updateChatrooms,
     addChatroom,
+    updateChatroomRead,
     conversations,
     chatrooms,
     isLoading,
@@ -53,7 +54,9 @@ export const ChatProvider: FC<IChatProvider> = ({
         openChat,
         openedChats,
         closeChat,
+        addChatroom,
         updateChatrooms,
+        updateChatroomRead,
         conversations,
         isChatroomsLoading: isLoading,
         unreadMessages,

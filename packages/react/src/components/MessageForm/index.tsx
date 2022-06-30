@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { forwardRef, InputHTMLAttributes } from 'react';
 import { AiOutlinePaperClip, AiOutlinePicture } from 'react-icons/ai';
 import dynamic from 'next/dynamic';
 import { MdGif, MdMoreHoriz } from 'react-icons/md';
@@ -15,10 +16,12 @@ import React, {
   KeyboardEvent,
   MouseEvent,
   useRef,
+  HTMLInputTypeAttribute,
 } from 'react';
 
 /* eslint-disable-next-line */
-export interface MessageFormProps {
+export interface MessageFormProps
+  extends InputHTMLAttributes<HTMLTextAreaElement> {
   onSend: (value: string) => void;
   disabled?: boolean;
 }
@@ -112,129 +115,133 @@ const UploadInput = styled.input`
   display: none;
 `;
 
-export const MessageForm: FC<MessageFormProps> = ({ onSend, disabled }) => {
-  const [isFocused, setIsFoucesd] = useState(false);
-  const [messageContent, setMessageContent] = useState('');
-  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
+  ({ onSend, disabled, ...props }, ref) => {
+    const [isFocused, setIsFoucesd] = useState(false);
+    const [messageContent, setMessageContent] = useState('');
+    const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const pictureInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const pictureInputRef = useRef<HTMLInputElement>(null);
 
-  const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessageContent(e.target.value);
-  };
+    const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+      setMessageContent(e.target.value);
+    };
 
-  const handleSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    handleSendMessage();
-  };
-
-  const handleSendMessage = () => {
-    onSend(messageContent);
-    setMessageContent('');
-  };
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' && e.shiftKey === false) {
+    const handleSubmit = (e: SyntheticEvent) => {
       e.preventDefault();
       handleSendMessage();
-    }
-  };
+    };
 
-  const handleEmojiClick = (e: MouseEvent, emoji: IEmojiData) => {
-    setIsEmojiPickerOpen(false);
-    setMessageContent((prev) => prev + emoji.emoji);
-  };
+    const handleSendMessage = () => {
+      onSend(messageContent);
+      setMessageContent('');
+    };
 
-  const toggleEmojiPicker = () => {
-    setIsEmojiPickerOpen((prev) => !prev);
-  };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && e.shiftKey === false) {
+        e.preventDefault();
+        handleSendMessage();
+      }
+    };
 
-  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target?.files);
-  };
+    const handleEmojiClick = (e: MouseEvent, emoji: IEmojiData) => {
+      setIsEmojiPickerOpen(false);
+      setMessageContent((prev) => prev + emoji.emoji);
+    };
 
-  const handlePictureUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target?.files);
-  };
+    const toggleEmojiPicker = () => {
+      setIsEmojiPickerOpen((prev) => !prev);
+    };
 
-  return (
-    <FormContainer onSubmit={handleSubmit}>
-      <TextEditorContainer {...{ isFocused }}>
-        <TextEditor
-          placeholder="Write a message..."
-          onFocus={() => setIsFoucesd(true)}
-          onBlur={() => setIsFoucesd(false)}
-          onChange={handleMessageChange}
-          value={messageContent}
-          onKeyDown={handleKeyDown}
-          {...{ disabled }}
-        />
-      </TextEditorContainer>
-      <FormFooter>
-        <FooterActionButtonContainer>
-          <UploadInput
-            ref={pictureInputRef}
-            type="file"
-            accept="image/png, image/jpeg, image/gif"
-            name="image_upload"
-            onChange={handlePictureUpload}
-          />
-          <IconButton
-            size={32}
+    const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+      console.log(e.target?.files);
+    };
+
+    const handlePictureUpload = (e: ChangeEvent<HTMLInputElement>) => {
+      console.log(e.target?.files);
+    };
+
+    return (
+      <FormContainer onSubmit={handleSubmit}>
+        <TextEditorContainer {...{ isFocused }}>
+          <TextEditor
+            ref={ref}
+            placeholder="Write a message..."
+            onFocus={() => setIsFoucesd(true)}
+            onBlur={() => setIsFoucesd(false)}
+            onChange={handleMessageChange}
+            value={messageContent}
+            onKeyDown={handleKeyDown}
             {...{ disabled }}
-            type="button"
-            onClick={() => pictureInputRef.current?.click()}
-          >
-            <AiOutlinePicture />
-          </IconButton>
-          <UploadInput
-            ref={fileInputRef}
-            type="file"
-            name="file_upload"
-            onChange={handleFileUpload}
+            {...props}
           />
-          <IconButton
-            size={32}
-            {...{ disabled }}
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <AiOutlinePaperClip />
-          </IconButton>
-          {/**
+        </TextEditorContainer>
+        <FormFooter>
+          <FooterActionButtonContainer>
+            <UploadInput
+              ref={pictureInputRef}
+              type="file"
+              accept="image/png, image/jpeg, image/gif"
+              name="image_upload"
+              onChange={handlePictureUpload}
+            />
+            <IconButton
+              size={32}
+              {...{ disabled }}
+              type="button"
+              onClick={() => pictureInputRef.current?.click()}
+            >
+              <AiOutlinePicture />
+            </IconButton>
+            <UploadInput
+              ref={fileInputRef}
+              type="file"
+              name="file_upload"
+              onChange={handleFileUpload}
+            />
+            <IconButton
+              size={32}
+              {...{ disabled }}
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <AiOutlinePaperClip />
+            </IconButton>
+            {/**
              * 
           <IconButton size={32} {...{ disabled }} type="button">
             <MdGif />
           </IconButton>
              */}
-          <IconContainer>
-            {isEmojiPickerOpen && (
-              <PickerContainer>
-                <Picker onEmojiClick={handleEmojiClick} />
-              </PickerContainer>
-            )}
-            <IconButton
-              size={32}
-              {...{ disabled }}
-              type="button"
-              onClick={toggleEmojiPicker}
-            >
-              <BsEmojiSmile />
+            <IconContainer>
+              {isEmojiPickerOpen && (
+                <PickerContainer>
+                  <Picker onEmojiClick={handleEmojiClick} />
+                </PickerContainer>
+              )}
+              <IconButton
+                size={32}
+                {...{ disabled }}
+                type="button"
+                onClick={toggleEmojiPicker}
+              >
+                <BsEmojiSmile />
+              </IconButton>
+            </IconContainer>
+          </FooterActionButtonContainer>
+          <FooterActionButtonContainer>
+            <SendButton disabled={!messageContent || disabled} type="submit">
+              Send
+            </SendButton>
+            <IconButton size={32} {...{ disabled }} type="button">
+              <MdMoreHoriz />
             </IconButton>
-          </IconContainer>
-        </FooterActionButtonContainer>
-        <FooterActionButtonContainer>
-          <SendButton disabled={!messageContent || disabled} type="submit">
-            Send
-          </SendButton>
-          <IconButton size={32} {...{ disabled }} type="button">
-            <MdMoreHoriz />
-          </IconButton>
-        </FooterActionButtonContainer>
-      </FormFooter>
-    </FormContainer>
-  );
-};
+          </FooterActionButtonContainer>
+        </FormFooter>
+      </FormContainer>
+    );
+  }
+);
 
 export default MessageForm;

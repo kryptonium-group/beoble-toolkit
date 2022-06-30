@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import Picker from 'emoji-picker-react';
 import { Colors } from '../../styles';
@@ -7,7 +7,13 @@ import MessageForm from '../MessageForm';
 import { ChatHeader } from '../MessageHeader';
 import { useChannel } from '../../hooks/useChannel';
 import Spinner from '../Spinner';
-import { useChatRoom, useChat, useBeobleModal } from '../../hooks';
+import {
+  useChatRoom,
+  useChat,
+  useBeobleModal,
+  useFocus,
+  useBeoble,
+} from '../../hooks';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
@@ -96,14 +102,38 @@ const SpinnerContainer = styled.div`
 export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   chatroomId,
 }) => {
+  const [messageFormRef, focusMessageForm] = useFocus<HTMLTextAreaElement>();
   const [isMinimized, setIsMinimized] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { sendMessage, messages, isLoading } = useChannel(chatroomId);
-  const { closeChat } = useChat();
+  const { sendMessage, messages, isLoading, markAsRead } =
+    useChannel(chatroomId);
+  const { closeChat, updateChatroomRead } = useChat();
   const { addRoute, open } = useBeobleModal();
-  const { unreadMessages, chatroomAccount, chatroomName, otherMembers } =
-    useChatRoom(chatroomId);
+  const {
+    unreadMessages,
+    chatroomAccount,
+    chatroomName,
+    otherMembers,
+    chatroom,
+  } = useChatRoom(chatroomId);
+
+  // when user open conversaation
+  // mark as read
+  useEffect(() => {
+    if (!isLoading && unreadMessages > 0) markAsRead();
+  }, [isLoading, chatroom]);
+
+  // whenever user focuses conversation
+  // mark as read
+  const handleFocus = async () => {
+    console.log('focused');
+    if (!isLoading && unreadMessages > 0) {
+      const res = await markAsRead();
+      updateChatroomRead(res.data);
+      console.log(res);
+    }
+  };
 
   const handleCloseChat = useCallback(() => {
     closeChat(chatroomId);
@@ -124,8 +154,18 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     }
   };
 
+  useEffect(() => {
+    messageFormRef && focusMessageForm();
+  }, [focusMessageForm, messageFormRef]);
+
   return (
-    <Container {...{ isMinimized, isExpanded }}>
+    <Container
+      {...{ isMinimized, isExpanded }}
+      tabIndex={0}
+      onClick={() => {
+        focusMessageForm();
+      }}
+    >
       <ChatHeader
         status={'none'}
         account={chatroomAccount}
@@ -148,7 +188,13 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
               messages.map((args) => <Message key={args.chatId} {...args} />)}
           </MessageListScrollable>
         </MessageDisplayContainer>
-        <MessageForm onSend={sendMessage} disabled={isLoading} />
+        <MessageForm
+          onSend={sendMessage}
+          disabled={isLoading}
+          onFocus={handleFocus}
+          ref={messageFormRef}
+          autoFocus
+        />
       </ContentContainer>
     </Container>
   );

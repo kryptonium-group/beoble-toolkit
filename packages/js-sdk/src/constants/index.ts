@@ -46,6 +46,7 @@ export const Paths = {
       withId: (chatroom_id: string) => `/chatroom/${chatroom_id}/member`,
     },
     recent: '/chatroom/chat/recent',
+    markAsRead: '/chatroom/chat/read',
   },
   auth: {
     login: {

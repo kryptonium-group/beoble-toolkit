@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Channel, IChat } from '@beoble/js-sdk';
+import { BeobleSDK, Channel, IChat } from '@beoble/js-sdk';
 import { useBeoble, useBeobleModal } from './useBeoble';
 import { MessageProps } from '../components/Message';
 import { getUTCTimeStamp, isMinEqual } from '../utils';
-import useChat from './useChat';
-import {
-  BeobleNotInitizliedError,
-  ProviderNotInitializedError,
-} from '../lib/Errors';
+import { BeobleNotInitizliedError } from '../lib/Errors';
 
 export const useChannel = (chatroomId: string) => {
   const { Beoble, user } = useBeoble();
@@ -125,5 +121,18 @@ export const useChannel = (chatroomId: string) => {
     }
   };
 
-  return { sendMessage, openChannel, messages, isLoading };
+  const markAsRead = async () => {
+    if (!Beoble || !user) throw new BeobleNotInitizliedError();
+    await BeobleSDK.utils.until(() => isLoading === false);
+    const last_message = messages.at(0);
+    if (!last_message) return;
+    const res = await Beoble.chatroom.chat.markAsRead({
+      chat_id: last_message.chatId,
+      chatroom_id: chatroomId,
+      user_id: user.id,
+    });
+    return res;
+  };
+
+  return { sendMessage, openChannel, messages, isLoading, markAsRead };
 };

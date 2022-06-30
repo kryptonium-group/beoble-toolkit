@@ -1,13 +1,13 @@
-import { useRef } from 'react';
+import { RefObject, useRef } from 'react';
 
 export const useFocus = <
-  T extends HTMLInputElement | HTMLTextAreaElement
->() => {
+  T extends HTMLInputElement | HTMLTextAreaElement | HTMLDivElement
+>(): [RefObject<T>, () => void] => {
   const htmlElRef = useRef<T>(null);
 
   const setElFocus = () => {
-    htmlElRef.current && htmlElRef.current.focus();
+    htmlElRef.current?.focus();
   };
 
-  return { htmlElRef, setElFocus };
+  return [htmlElRef, setElFocus];
 };

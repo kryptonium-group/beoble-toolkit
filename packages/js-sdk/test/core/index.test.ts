@@ -15,7 +15,7 @@ export const getUser = async (core: Core, wallet_address: string) => {
   });
   try {
     const user = res.data[0];
-    const user_id = user.user_id;
+    const user_id = user.id;
     return { user, user_id };
   } catch {
     throw new Error(
@@ -35,7 +35,7 @@ export const getUserChatRoom = async (
   });
   try {
     const chatroom = res.data[chatroom_index];
-    const chatroom_id = chatroom.chatroom_id;
+    const chatroom_id = chatroom.channel.id;
     return { user, user_id, chatroom, chatroom_id };
   } catch {
     throw new Error(`TestError: there is no chatroom under ${wallet_address}`);
@@ -56,7 +56,7 @@ export const getUserRecentChat = async (
   const res = await core.chatroom.chat.getRecent(chatroom_id, chat_number);
   try {
     const chat = res.data[0];
-    const chat_id = chat.chat_id;
+    const chat_id = chat.id;
     return { user, user_id, chatroom, chatroom_id, chat, chat_id };
   } catch {
     throw new Error(

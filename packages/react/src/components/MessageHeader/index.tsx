@@ -89,7 +89,12 @@ const MessageHeaderContainer = styled(
     hasNewMessage ? theme.primary : Colors.background.white};
   color: ${({ hasNewMessage, theme }) =>
     hasNewMessage ? Colors.text.white : Colors.text.normal};
-  animation: ${BrightnessAnimation} 2s infinite;
+
+  ${({ hasNewMessage }) =>
+    hasNewMessage &&
+    css`
+      animation: ${BrightnessAnimation} 2s infinite;
+    `}
 `;
 
 export const MessageHeader: FC<MessageHeaderProps> = ({
@@ -208,8 +213,8 @@ const linkDecoration = css`
 `;
 
 const StatusDiv = styled.div`
+  color: inherit;
   ${Truncate}
-  color: ${Colors.text.normal};
   font-size: 12px;
 `;
 

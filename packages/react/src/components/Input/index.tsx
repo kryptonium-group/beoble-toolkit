@@ -31,7 +31,7 @@ export function Input({
   ...htmlInputProps
 }: InputProps) {
   const [isFocus, setIsFocus] = useState(false);
-  const { htmlElRef, setElFocus } = useFocus<HTMLInputElement>();
+  const [htmlElRef, setElFocus] = useFocus<HTMLInputElement>();
 
   const handleFocus = () => {
     setElFocus();

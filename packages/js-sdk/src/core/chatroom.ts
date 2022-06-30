@@ -10,6 +10,7 @@ import {
   IRecentChatResponse,
 } from '../lib';
 import ApiClient from '../lib/api';
+import { IPostMarkAsReadParam } from '../lib/Requests/chatroom';
 import { IAPIClass, IRestEndPoint } from './types';
 
 export class ChatRoom extends IAPIClass implements IRestEndPoint {
@@ -67,5 +68,9 @@ class Chat extends IAPIClass {
       chatroom_id,
       limit,
     });
+  }
+
+  public async markAsRead(params: IPostMarkAsReadParam) {
+    return await this._client.post(Paths.chatroom.markAsRead, params);
   }
 }
