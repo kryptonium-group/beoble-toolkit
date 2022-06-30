@@ -36,7 +36,6 @@ export const useChatRoom = (chatroom_id: string) => {
     const res = await Beoble.chatroom.get({
       chatroom_id,
     });
-    console.log(res);
     setChatroom(res.data.length > 0 ? res.data[0] : undefined);
     setIsLoading(false);
   };

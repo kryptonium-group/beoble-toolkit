@@ -10,6 +10,7 @@ import { FC, MouseEventHandler, MouseEvent } from 'react';
 import { Colors, FontWeights, Truncate } from '../../styles';
 import { FiMinimize2 } from 'react-icons/fi';
 import AlarmNumber from '../AlarmNumber';
+import { BrightnessAnimation } from '../../styles/commons';
 
 export interface MessageHeaderProps {
   profileImage?: string;
@@ -20,6 +21,7 @@ export interface MessageHeaderProps {
   isMinimized: boolean;
   account: string;
   unreadMessages?: number;
+  hasNewMessage: boolean;
 }
 
 const StyledMessageHeader = styled.header`
@@ -76,9 +78,18 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
-const MessageHeaderContainer = styled(StyledMessageHeader)`
-  background-color: ${Colors.background.messageTint};
-  color: ${Colors.text.white};
+interface MessageHeaderContainerProps {
+  hasNewMessage: boolean;
+}
+
+const MessageHeaderContainer = styled(
+  StyledMessageHeader
+)<MessageHeaderContainerProps>`
+  background-color: ${({ hasNewMessage, theme }) =>
+    hasNewMessage ? theme.primary : Colors.background.white};
+  color: ${({ hasNewMessage, theme }) =>
+    hasNewMessage ? Colors.text.white : Colors.text.normal};
+  animation: ${BrightnessAnimation} 2s infinite;
 `;
 
 export const MessageHeader: FC<MessageHeaderProps> = ({
@@ -90,6 +101,7 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
   isMinimized,
   account,
   unreadMessages,
+  hasNewMessage,
 }) => {
   const handleMoreButtonClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -101,7 +113,7 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
   };
 
   return (
-    <MessageHeaderContainer onClick={onHeaderClick}>
+    <MessageHeaderContainer onClick={onHeaderClick} {...{ hasNewMessage }}>
       <ProfileContainer>
         <Avatar
           size={32}
@@ -116,21 +128,17 @@ export const MessageHeader: FC<MessageHeaderProps> = ({
       </ProfileContainer>
       <ControlsContainer>
         <IconButton size={32} onClick={handleMoreButtonClick} color="inherit">
-          <MdMoreHoriz color="inherit" />
+          <MdMoreHoriz />
         </IconButton>
         <IconButton
           size={32}
           onClick={handleNewMessageButtonClick}
           color="inherit"
         >
-          <BiEdit color="inherit" />
+          <BiEdit />
         </IconButton>
         <IconButton size={32} onClick={onMinimizeButtonClick} color="inherit">
-          {isMinimized ? (
-            <BsChevronCompactUp color="inherit" />
-          ) : (
-            <BsChevronCompactDown color="inherit" />
-          )}
+          {isMinimized ? <BsChevronCompactUp /> : <BsChevronCompactDown />}
         </IconButton>
       </ControlsContainer>
     </MessageHeaderContainer>
@@ -180,12 +188,12 @@ const TitleContainer = styled.div`
   flex-grow: 1;
   margin-left: 8px;
   padding-left: 4px;
-
-  ${Truncate}
+  color: inherit;
+  ${Truncate};
 `;
 
 const UserName = styled.a<{ isMinimized: boolean }>`
-  color: ${Colors.text.normal};
+  color: inherit;
   font-weight: ${FontWeights.bold};
   text-decoration: none;
 
@@ -203,6 +211,22 @@ const StatusDiv = styled.div`
   ${Truncate}
   color: ${Colors.text.normal};
   font-size: 12px;
+`;
+
+const ChatHeaderContainer = styled(
+  StyledMessageHeader
+)<MessageHeaderContainerProps>`
+  background-color: ${({ hasNewMessage, theme }) =>
+    hasNewMessage ? theme.primary : Colors.background.white};
+
+  color: ${({ hasNewMessage, theme }) =>
+    hasNewMessage ? Colors.text.white : Colors.text.normal};
+
+  ${({ hasNewMessage }) =>
+    hasNewMessage &&
+    css`
+      animation: ${BrightnessAnimation} 2s infinite;
+    `}
 `;
 
 export const ChatHeader: FC<ChatHeaderProps> = ({
@@ -242,7 +266,10 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   };
 
   return (
-    <StyledMessageHeader onClick={onHeaderClick}>
+    <ChatHeaderContainer
+      onClick={onHeaderClick}
+      hasNewMessage={unreadMessages ? unreadMessages > 0 : false}
+    >
       <ProfileContainer>
         <Avatar
           size={32}
@@ -256,29 +283,32 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
           </UserName>
           {!isMinimized && <StatusDiv>{status}</StatusDiv>}
         </TitleContainer>
-        {unreadMessages !== undefined && unreadMessages > 0 && (
-          <div style={{ marginLeft: 8 }}>
-            <AlarmNumber count={unreadMessages} />
-          </div>
-        )}
       </ProfileContainer>
 
       <ControlsContainer>
         {!isMinimized && (
           <>
-            <IconButton size={32} onClick={handleMoreButtonClick}>
+            <IconButton
+              size={32}
+              onClick={handleMoreButtonClick}
+              color="inherit"
+            >
               <MdMoreHoriz />
             </IconButton>
-            <IconButton size={32} onClick={handleExpandButtonClick}>
+            <IconButton
+              size={32}
+              onClick={handleExpandButtonClick}
+              color="inherit"
+            >
               {isExpanded ? <FiMinimize2 /> : <CgArrowsExpandRight />}
             </IconButton>
           </>
         )}
-        <IconButton size={32} onClick={handleCloseClick}>
+        <IconButton size={32} onClick={handleCloseClick} color="inherit">
           <CgClose />
         </IconButton>
       </ControlsContainer>
-    </StyledMessageHeader>
+    </ChatHeaderContainer>
   );
 };
 

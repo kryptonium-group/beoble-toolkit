@@ -3,6 +3,7 @@ import { Notification } from '@beoble/js-sdk';
 
 export const useNotification = (appId: string, userId?: string) => {
   const [notification, setNotification] = useState<Notification>();
+  const [hasNewMessage, setHasNewMessage] = useState(false);
 
   useEffect(() => {
     openNotification();
@@ -19,9 +20,12 @@ export const useNotification = (appId: string, userId?: string) => {
         authToken: 'sungmingodsungmingod',
       });
       await noti.open();
+      noti.onMessage('NEW_MESSAGE', (data) => {
+        setHasNewMessage(true);
+      });
       setNotification(noti);
     }
   };
 
-  return { notification };
+  return { notification, hasNewMessage, setHasNewMessage };
 };

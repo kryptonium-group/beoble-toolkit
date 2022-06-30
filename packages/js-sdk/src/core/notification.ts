@@ -18,7 +18,7 @@ export class Notification {
     };
 
     this._socket.onmessage = (ev: MessageEvent<any>) => {
-      console.log(ev.data);
+      // console.log(ev.data);
     };
 
     this._socket.onclose = () => {

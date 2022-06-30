@@ -10,6 +10,8 @@ export interface IBeobleContext {
   provider: ethers.providers.Web3Provider | null;
   account?: Account;
   notification?: Notification;
+  hasNewMessage: boolean;
+  setHasNewMessage: (data: boolean) => void;
 
   Beoble: Core | null;
   user: IUser | null;

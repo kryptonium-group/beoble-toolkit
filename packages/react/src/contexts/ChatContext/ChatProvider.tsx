@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { FC, ReactNode, useState } from 'react';
-import { Core, IUser, Notification } from '@beoble/js-sdk';
+import { Core, IChatRoom, IUser, Notification } from '@beoble/js-sdk';
 import { useChatRooms } from '../../hooks/useChatRooms';
 import useScreen from '../../hooks/useScreen';
 import { ChatContext } from './ChatContext';
@@ -22,6 +22,7 @@ export const ChatProvider: FC<IChatProvider> = ({
   const screen = useScreen();
   const {
     updateChatrooms,
+    addChatroom,
     conversations,
     chatrooms,
     isLoading,
@@ -37,6 +38,14 @@ export const ChatProvider: FC<IChatProvider> = ({
   const closeChat = (chatroom_id: string) => {
     setOpenedChats((prev) => prev.filter((chat) => chat !== chatroom_id));
   };
+
+  useEffect(() => {
+    if (notification) {
+      notification.onMessage('NEW_MESSAGE', (data: IChatRoom) => {
+        addChatroom(data);
+      });
+    }
+  }, [notification]);
 
   return (
     <ChatContext.Provider

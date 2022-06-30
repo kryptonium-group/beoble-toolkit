@@ -20,6 +20,18 @@ export const Appear = keyframes`
   }
 `;
 
+export const BrightnessAnimation = keyframes`
+  0% {
+    filter: brightness(1) 
+  }
+  50% {
+    filter: brightness(1.2)
+  }
+  100% {
+    filter: brightness(1) 
+  }
+`;
+
 export const flexStretch = css`
   vertical-align: inherit;
   max-width: 100%;

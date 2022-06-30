@@ -5,7 +5,7 @@ import { BeobleProvider, Chat } from '@beoble/react';
 import './styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
-  const demoAppId = 'beoble_demo';
+  const demoAppId = '2eef3eb4-db9a-46d2-b919-0a684cb87a50';
 
   return (
     <>

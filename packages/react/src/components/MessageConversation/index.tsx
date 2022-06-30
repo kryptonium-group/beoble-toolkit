@@ -35,7 +35,7 @@ const StyledMessageConversation = styled.div`
     background-color: ${Colors.background.noneTintHover};
   }
 
-  animation: ${mountAnimation} 500ms;
+  // animation: ${mountAnimation} 500ms;
 `;
 
 const ProfileContainer = styled.div`

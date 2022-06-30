@@ -1,11 +1,10 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Core, IUser } from '@beoble/js-sdk';
 import useWeb3 from '../../hooks/useWeb3';
-import { BeobleContext } from '../BeobleContext';
+import { BeobleContext } from '.';
 import { ModalProvider } from '../ModalContext/ModalProvider';
 import { ChatProvider } from '../ChatContext/ChatProvider';
 import { useNotification } from '../../hooks/useNotification';
-import { GlobalStyle } from '../../styles';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../../theme';
 
@@ -21,7 +20,10 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ appId, children }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
   const { provider, account, initProvider } = useWeb3();
-  const { notification } = useNotification(appId, user?.id);
+  const { notification, hasNewMessage, setHasNewMessage } = useNotification(
+    appId,
+    user?.id
+  );
 
   // create beoble sdk obj on mount
   // and store
@@ -56,6 +58,8 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ appId, children }) => {
           provider,
           account,
           notification,
+          hasNewMessage,
+          setHasNewMessage,
           Beoble,
           user,
           setUser,

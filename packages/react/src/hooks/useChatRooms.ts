@@ -46,9 +46,16 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
         user_id: user.id,
       });
       console.log(res);
-
       setChatrooms(res?.data ?? []);
     }
+  };
+
+  const addChatroom = (chatroom: IChatRoom) => {
+    const filteredChatrooms = chatrooms.filter(
+      (obj) => obj.channel.id !== chatroom.channel.id
+    );
+    filteredChatrooms.unshift(chatroom);
+    setChatrooms(filteredChatrooms);
   };
 
   const convertChatroomToConversation = (
@@ -84,6 +91,7 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
     conversations,
     isLoading,
     updateChatrooms,
+    addChatroom,
     unreadMessages,
   };
 };
