@@ -7,7 +7,7 @@ import { ChatContext } from './ChatContext';
 
 export interface IChatProvider {
   children?: ReactNode;
-  core: Core | null;
+  core: Core;
   user: IUser | null;
   notification?: Notification;
 }

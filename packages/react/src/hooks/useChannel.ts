@@ -13,15 +13,15 @@ export const useChannel = (chatroomId: string) => {
   const { openRoute } = useBeobleModal();
 
   useEffect(() => {
-    if (Beoble && user) openChannel();
+    if (user) openChannel();
     return () => {
       channel?.close();
     };
-  }, [Beoble, user, channel]);
+  }, [user, channel]);
 
   const openChannel = async () => {
     if (!channel) {
-      const chat = Beoble!.chat.channel({
+      const chat = Beoble.chat.channel({
         chatroom_id: chatroomId,
       });
 
@@ -122,7 +122,7 @@ export const useChannel = (chatroomId: string) => {
   };
 
   const markAsRead = async () => {
-    if (!Beoble || !user) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     await BeobleSDK.utils.until(() => isLoading === false);
     const last_message = messages.at(0);
     if (!last_message) return;

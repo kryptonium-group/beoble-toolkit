@@ -29,7 +29,7 @@ export const useGraph = (user_id?: string) => {
   };
 
   const getFollowings = async () => {
-    if (!Beoble || !user) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     const res = await Beoble.user.follow.get({
       type: 'following',
       user_id: user.id,
@@ -43,7 +43,7 @@ export const useGraph = (user_id?: string) => {
   };
 
   const getFriends = async () => {
-    if (!Beoble || !user) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     const res = await Beoble.user.friend.get({
       user_id: user.id,
     });
@@ -56,7 +56,7 @@ export const useGraph = (user_id?: string) => {
   };
 
   const getFriendRequests = async () => {
-    if (!Beoble || !user) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     const res = await Beoble.user.friend.getRequest({
       user_id: user.id,
     });
@@ -75,7 +75,7 @@ export const useGraph = (user_id?: string) => {
   };
 
   const follow = async () => {
-    if (!Beoble || !user) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     if (!user_id) return;
     const res = await Beoble.user.follow.follow(user.id, {
       target_user_id: user_id,
@@ -84,7 +84,7 @@ export const useGraph = (user_id?: string) => {
   };
 
   const unfollow = async () => {
-    if (!Beoble || !user) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     if (!user_id) return;
     const res = await Beoble.user.follow.unfollow(user.id, {
       target_user_id: user_id,
@@ -94,7 +94,7 @@ export const useGraph = (user_id?: string) => {
   };
 
   const updateFriendship = async (actionType: FriendshipActionType) => {
-    if (!Beoble || !user) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     if (!user_id) return;
     const res = await Beoble.user.friend.updateFriendship(user.id, {
       target_user_id: user_id,

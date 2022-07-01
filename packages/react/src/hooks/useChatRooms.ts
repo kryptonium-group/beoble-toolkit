@@ -9,7 +9,7 @@ import {
   getChatroomUndreadCount,
 } from '../utils/chatroomUtil';
 
-export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
+export const useChatRooms = (Beoble: Core, user: IUser | null) => {
   const [chatrooms, setChatrooms] = useState<IChatRoom[]>([]);
   const [conversations, setConversations] = useState<
     MessageConversationProps[]
@@ -18,7 +18,7 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
   const [unreadMessages, setUnreadMessages] = useState(0);
 
   useEffect(() => {
-    if (Beoble && user) initChatrooms();
+    if (user) initChatrooms();
   }, [Beoble, user]);
 
   useEffect(() => {
@@ -27,13 +27,13 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
     );
     if (user) {
       const totalUnreadMessages = chatrooms.reduce(
-        (prev, cur) => prev + getChatroomUndreadCount(cur, user?.id),
+        (prev, cur) => prev + getChatroomUndreadCount(cur, user.id),
         0
       );
       setUnreadMessages(totalUnreadMessages);
     }
     setConversations(converted);
-  }, [chatrooms, user]);
+  }, [chatrooms]);
 
   const initChatrooms = async () => {
     await updateChatrooms();
@@ -41,7 +41,7 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
   };
 
   const updateChatrooms = async () => {
-    if (Beoble && user) {
+    if (user) {
       const res = await Beoble.user.chatroom.get({
         user_id: user.id,
       });
@@ -54,7 +54,6 @@ export const useChatRooms = (Beoble: Core | null, user: IUser | null) => {
       (obj) => obj.channel.id !== chatroom.channel.id
     );
     filteredChatrooms.unshift(chatroom);
-    console.log(chatrooms, filteredChatrooms);
     setChatrooms(filteredChatrooms);
   };
 

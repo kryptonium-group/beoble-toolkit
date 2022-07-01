@@ -27,12 +27,10 @@ export const useChatRoom = (chatroom_id: string) => {
     chatroom && user ? getChatroomUndreadCount(chatroom, user.id) : 0;
 
   useEffect(() => {
-    if (Beoble) updateChatroom(chatroom_id);
+    updateChatroom(chatroom_id);
   }, [Beoble]);
 
   const updateChatroom = async (chatroom_id: string) => {
-    if (!Beoble)
-      throw new Error('Beoble core should be initialzed before calling API');
     const res = await Beoble.chatroom.get({
       chatroom_id,
     });

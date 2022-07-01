@@ -11,42 +11,53 @@ import { lightTheme } from '../../theme';
 export interface IBeobleProvider {
   appId: string;
   children?: ReactNode;
+  Beoble: Core;
 }
 
-export const BeobleProvider: FC<IBeobleProvider> = ({ appId, children }) => {
+export const BeobleProvider: FC<IBeobleProvider> = ({
+  appId,
+  children,
+  Beoble,
+}) => {
   const [initialized, setInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [Beoble, setBeoble] = useState<Core | null>(null);
   const [user, setUser] = useState<IUser | null>(null);
 
-  const { provider, account, initProvider } = useWeb3();
+  const { provider, address, ensName, ensAvatar, initProvider, getSign } =
+    useWeb3();
   const { notification, hasNewMessage, setHasNewMessage } = useNotification(
     appId,
     user?.id
   );
 
-  // create beoble sdk obj on mount
-  // and store
-  useEffect(() => {
-    const beoble = new Core();
-    setBeoble(beoble);
-  }, []);
-
   // when beoble sdk is created
   // and web account information is fetched successfully
   // mark initialized and fetch user from beoble sdk
   useEffect(() => {
-    if (Beoble && account) {
+    if (address) {
       setInitialized(true);
-      initUser(Beoble, account.address);
+      initUser(address);
+      getAuth(address);
     }
-  }, [Beoble, account]);
+  }, [address]);
 
-  const initUser = async (beoble: Core, wallet_address: string) => {
-    const user = await beoble.user.get({
+  const initUser = async (wallet_address: string) => {
+    const res = await Beoble.user.get({
       wallet_address,
     });
-    setUser(user.data[0]);
+    const user = res.data[0];
+    if (!user.public_key) {
+      console.log(user);
+    }
+    const updated = await Beoble.user.update(user.id, {});
+
+    setUser(user);
+  };
+
+  const getAuth = async (wallet_address: string) => {
+    const res = await Beoble.auth.getMessage(wallet_address);
+    const test = await getSign(res.data.message_to_sign);
+    console.log(test);
   };
 
   return (
@@ -56,7 +67,11 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ appId, children }) => {
           initialized,
           isAuthenticated,
           provider,
-          account,
+          account: {
+            address,
+            ensName,
+            ensAvatar,
+          },
           notification,
           hasNewMessage,
           setHasNewMessage,

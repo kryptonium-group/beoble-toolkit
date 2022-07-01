@@ -2,23 +2,12 @@ import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { WalletNotConnectedError } from '../lib/Errors';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IUseWeb3 {
-  provider: ethers.providers.Web3Provider | null;
-  account?: Account;
-  initProvider: () => void;
-}
-
-export interface Account {
-  address: string;
-  ensName: string | null;
-  ensAvatar: string | null;
-}
-
-export const useWeb3 = (): IUseWeb3 => {
+export const useWeb3 = () => {
   const [provider, setProvider] =
     useState<null | ethers.providers.Web3Provider>(null);
-  const [account, setAccount] = useState<Account | undefined>();
+  const [address, setAddress] = useState<string | undefined>();
+  const [ensName, setEnsName] = useState<string | null>(null);
+  const [ensAvatar, setEnsAvatar] = useState<string | null>(null);
 
   // when provider is properly injected into window.ethereum,
   // create ethers provider and save it.
@@ -50,21 +39,33 @@ export const useWeb3 = (): IUseWeb3 => {
       const chainId = (await provider.getNetwork()).chainId;
       try {
         const address = await signer.getAddress();
+        setAddress(address);
         const ensName =
           chainId === 1 ? await provider.lookupAddress(address) : null;
+        setEnsName(ensName);
         const ensAvatar = ensName ? await provider.getAvatar(ensName) : null;
-        setAccount({
-          address,
-          ensName,
-          ensAvatar,
-        });
+        setEnsAvatar(ensAvatar);
       } catch {
-        setAccount(undefined);
+        setAddress(undefined);
       }
     }
   };
 
-  return { provider, account, initProvider };
+  const getSign = async (msg: string) => {
+    if (provider) {
+      const signer = provider.getSigner();
+      const testHash = ethers.utils.id(msg);
+      const sig = await signer.signMessage(msg);
+      const pk = ethers.utils.recoverPublicKey(
+        ethers.utils.arrayify(testHash),
+        sig
+      );
+      console.log(pk);
+      return pk;
+    }
+  };
+
+  return { provider, initProvider, address, ensAvatar, ensName, getSign };
 };
 
 export default useWeb3;

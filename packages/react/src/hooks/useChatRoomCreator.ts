@@ -59,7 +59,7 @@ export const useChatRoomCreator = () => {
       throw new Error(
         'You should have at least one user with to create chat room'
       );
-    if (Beoble && user) {
+    if (user) {
       const res = await Beoble.chatroom.add({
         alias: config.alias,
         display_name: config.display_name,

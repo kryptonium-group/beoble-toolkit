@@ -19,21 +19,19 @@ export const useSearch = () => {
   }, [debouncedSearchValue]);
 
   const searchUser = async (input: string) => {
-    if (Beoble) {
-      setIsSearching(true);
-      if (ethers.utils.isAddress(input)) {
-        const user = await Beoble.user.get({
-          wallet_address: input,
-        });
-        setIsSearching(false);
-        setSearchResult(user.data);
-      } else {
-        const user = await Beoble.user.get({
-          alias_search: input,
-        });
-        setIsSearching(false);
-        setSearchResult(user.data);
-      }
+    setIsSearching(true);
+    if (ethers.utils.isAddress(input)) {
+      const user = await Beoble.user.get({
+        wallet_address: input,
+      });
+      setIsSearching(false);
+      setSearchResult(user.data);
+    } else {
+      const user = await Beoble.user.get({
+        alias_search: input,
+      });
+      setIsSearching(false);
+      setSearchResult(user.data);
     }
   };
 

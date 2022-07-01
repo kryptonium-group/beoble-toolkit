@@ -13,7 +13,6 @@ export const useBeobleSDK = () => {
   };
 
   const updateUser = async (userId: string, body: IPutUserBody) => {
-    if (!Beoble) throw new Error('Beoble is not initialized!');
     try {
       setIsFetching(true);
       const res = await Beoble.user.update(userId, body);
