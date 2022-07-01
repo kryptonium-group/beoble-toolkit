@@ -51,7 +51,12 @@ export const useWeb3 = () => {
     }
   };
 
-  const getSign = async (msg: string) => {
+  /**
+   *
+   * @param msg message to sign
+   * @returns [signature, public key]
+   */
+  const getSign = async (msg: string): Promise<[string, string]> => {
     if (provider) {
       const signer = provider.getSigner();
       const testHash = ethers.utils.id(msg);
@@ -61,8 +66,9 @@ export const useWeb3 = () => {
         sig
       );
       console.log(pk);
-      return pk;
+      return [sig, pk];
     }
+    return ['', ''];
   };
 
   return { provider, initProvider, address, ensAvatar, ensName, getSign };

@@ -56,7 +56,11 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
 
   const getAuth = async (wallet_address: string) => {
     const res = await Beoble.auth.getMessage(wallet_address);
-    const test = await getSign(res.data.message_to_sign);
+    const [signature, public_key] = await getSign(res.data.message_to_sign);
+    const res2 = await Beoble.auth.login({
+      wallet_address,
+      signature: '',
+    });
     console.log(test);
   };
 

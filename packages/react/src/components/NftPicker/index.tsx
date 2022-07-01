@@ -23,7 +23,7 @@ export function NftPicker({ size = 150 }: NftPickerProps) {
       </HoverContainer>
       <ImageContainer size={size}>
         {account ? (
-          <Identication diameter={size} account={account.address} />
+          <Identication diameter={size} account={account?.address ?? ''} />
         ) : (
           <PickerImage src="https://storage.googleapis.com/opensea-static/opensea-profile/11.png" />
         )}
