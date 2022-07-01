@@ -12,7 +12,7 @@ export interface TextareaProps
 
 export function Textarea({ label, name, ...htmlTextAreaProps }: TextareaProps) {
   const [isFocus, setIsFocus] = useState(false);
-  const { htmlElRef, setElFocus } = useFocus<HTMLTextAreaElement>();
+  const [htmlElRef, setElFocus] = useFocus<HTMLTextAreaElement>();
 
   const handleFocus = () => {
     setElFocus();

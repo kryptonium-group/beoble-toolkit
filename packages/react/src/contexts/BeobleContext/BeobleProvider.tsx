@@ -61,7 +61,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
       wallet_address,
       signature: '',
     });
-    console.log(test);
+    console.log(res2);
   };
 
   return (
