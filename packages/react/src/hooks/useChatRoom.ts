@@ -20,7 +20,7 @@ export const useChatRoom = (chatroom_id: string) => {
 
   const otherMembers =
     chatroom && user
-      ? chatroom?.members.filter((member) => member.user_id === user?.id)
+      ? chatroom?.members.filter((member) => member.user_id !== user?.id)
       : [];
 
   const unreadMessages =

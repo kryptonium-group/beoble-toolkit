@@ -49,7 +49,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
     if (!user.public_key) {
       console.log(user);
     }
-    const updated = await Beoble.user.update(user.id, {});
+    // const updated = await Beoble.user.update(user.id, {});
 
     setUser(user);
   };
@@ -59,9 +59,9 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
     const [signature, public_key] = await getSign(res.data.message_to_sign);
     const res2 = await Beoble.auth.login({
       wallet_address,
-      signature: '',
+      signature,
     });
-    console.log(res2);
+    console.log(res2, public_key);
   };
 
   return (

@@ -148,6 +148,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   };
 
   const handleProfileClick = () => {
+    console.log(otherMembers);
     if (otherMembers.length > 0) {
       addRoute(otherMembers[0].user.id);
       open();
