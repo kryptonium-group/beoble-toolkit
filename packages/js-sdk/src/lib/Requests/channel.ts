@@ -1,8 +1,7 @@
-import { IAttachment, IUser } from '../Models';
+import { IAttachment } from '../Models';
+import { ActionType } from '../types/channel';
 
-/**
- * hi
- */
+// think this is not proper
 export interface ISendMessage {
   creator_user_id: string;
   chatroom_id: string;
@@ -15,4 +14,9 @@ export interface ISendMessage {
 
 export interface IRetrieveMessage {
   chatroom_id: string;
+}
+
+export interface IAction {
+  action_type: ActionType;
+  data: any;
 }

@@ -71,6 +71,9 @@ export const Paths = {
     reaction: (post_id: string) => `/post/${post_id}/reaction`,
     report: (post_id: string) => `/post/${post_id}/report`,
   },
+  file: {
+    upload: '/file/upload',
+  },
 };
 
 export const AuthToken = 'beobletoken';

@@ -1,13 +1,13 @@
 import { Paths } from '../constants';
+import { IChannelConfig } from '../lib/Models/channel';
 import {
-  IChatResponse,
   IGetChatParams,
   IPostChatBody,
   IPutChatBody,
   IPutChatReactionBody,
   IPutChatReportBody,
-} from '../lib';
-import { IChannelConfig } from '../lib/Models/channel';
+} from '../lib/Requests/chat';
+import { IChatResponse } from '../lib/Responses/chat';
 import { Channel } from './channel';
 import { IAPIClass, IRestEndPoint } from './types';
 

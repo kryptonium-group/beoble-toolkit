@@ -1,10 +1,7 @@
 import { AuthToken, Paths } from '../constants';
 import ApiClient from '../lib/api';
-import {
-  IAuthResponse,
-  ILoginResponse,
-  IPostLogInBody,
-} from '../lib/Models/auth';
+import { IPostLogInBody } from '../lib/Requests/auth';
+import { IAuthResponse, ILoginResponse } from '../lib/Responses/auth';
 import { isBrowser } from '../util/environment';
 import { IAPIClass } from './types';
 

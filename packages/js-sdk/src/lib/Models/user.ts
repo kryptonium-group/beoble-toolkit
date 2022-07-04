@@ -33,6 +33,7 @@ export interface IPutUserBody {
   display_name?: string;
   description?: string;
   representative_media_url?: string[];
+  public_key?: string;
 }
 
 export interface IUserWithCount extends IUser, Partial<UserCounts> {}

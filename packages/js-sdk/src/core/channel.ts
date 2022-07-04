@@ -1,13 +1,8 @@
 import { Paths } from '../constants';
-import { IPostChatBody, ISendMessage } from '../lib';
-import {
-  ActionType,
-  IAction,
-  IChannelConfig,
-  IMessage,
-  MessageType,
-  WebScocketEvents,
-} from '../lib/Models/channel';
+import { IAction, ISendMessage, MessageType } from '../lib';
+import { IChannelConfig } from '../lib/Models/channel';
+import { IMessage } from '../lib/Responses/channel';
+import { WebScocketEvents } from '../lib/types/channel';
 import { until } from '../util';
 
 export class Channel {
@@ -57,6 +52,7 @@ export class Channel {
     this._socket.send(JSON.stringify(data));
   }
 
+  //TODO
   public async sendReaction() {
     return;
   }

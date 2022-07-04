@@ -1,6 +1,7 @@
 import { Paths } from '../constants';
-import { IMessage, MessageType, WebScocketEvents } from '../lib/Models/channel';
 import { INotificationConfig } from '../lib/Models/notification';
+import { IMessage } from '../lib/Responses/channel';
+import { MessageType, WebScocketEvents } from '../lib/types/channel';
 import { until } from '../util';
 
 export class Notification {

@@ -38,7 +38,6 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
     if (address) {
       setInitialized(true);
       initUser(address);
-      getAuth(address);
     }
   }, [address]);
 
@@ -47,24 +46,28 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
       wallet_address,
     });
     const user = res.data[0];
-    if (!user.public_key) {
-      console.log(user);
-    }
-    // const updated = await Beoble.user.update(user.id, {});
-
+    console.log(user);
     setUser(user);
+
+    if (!user.public_key) {
+      const public_key = await login(wallet_address);
+      const updated = await Beoble.user.update(user.id, {
+        public_key,
+      });
+      console.log('updated user', updated);
+      setUser(updated.data);
+    }
   };
 
-  const getAuth = async (wallet_address: string) => {
-    if (!Beoble.auth.authToken) {
-      const res = await Beoble.auth.getMessage(wallet_address);
-      const [signature, public_key] = await getSign(res.data.message_to_sign);
-      const res2 = await Beoble.auth.login({
-        wallet_address,
-        signature,
-      });
-      console.log(res2, public_key);
-    }
+  const login = async (wallet_address: string) => {
+    const res = await Beoble.auth.getMessage(wallet_address);
+    const [signature, public_key] = await getSign(res.data.message_to_sign);
+    const res2 = await Beoble.auth.login({
+      wallet_address,
+      signature,
+    });
+    console.log(res2, public_key);
+    return public_key;
   };
 
   return (

@@ -1,58 +1,15 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { IChat } from '.';
-import {
-  AttachmentType,
-  Capablity,
-  ChannelRole,
-  ChatRoomType,
-  MemberRole,
-  MembershipAction,
-  MembershipType,
-  MessageType,
-} from '../types';
+import { IChat } from './chat';
+import { Capablity, ChannelRole, ChatRoomType, MemberRole } from '../types';
 import { IUser } from './user';
 
-/*
 export interface IChatRoom {
-  chatroom_id: string;
-  create_time: string | number;
-  update_time: string | number;
-  latest_chat_time: number;
-  alias: string;
-  display_name: string;
-  description: string;
-  representative_media_url: string[];
-  creator_id: string;
-  chatroom_type: ChatRoomType;
-  latest_chat: IChat[];
-  members: IUser[];
-}
-*/
-export interface IGetChatRoomParams {
-  chatroom_id: string;
-}
-
-export interface IPostChatRoomBody {
-  alias: string;
-  display_name: string;
-  description?: string;
-  representative_media_url?: string;
-  creator_id: string;
-  chatroom_type: ChatRoomType;
-  members: string[];
-}
-
-export interface IPutChatRoomBody {
-  alias?: string;
-  display_name?: string;
-  description?: string;
-  representative_media_url?: string;
-}
-
-export interface IPutChatRoomMembershipBody {
-  user_ids: string[];
-  membership_type: MembershipType;
-  membership_action: MembershipAction;
+  channel: IChannel;
+  messages: IChat[];
+  pinned_messages: IChat[];
+  read: IRead[];
+  members: IMember[];
+  membership: null | any;
 }
 
 export interface IChannel {
@@ -76,12 +33,6 @@ export interface IChannel {
   last_message_at: string;
 }
 
-export interface IChannelCommand {
-  name: string;
-  description: string;
-  args: string;
-  set: string;
-}
 export interface ChannelConfig {
   created_at: string;
   updated_at: string;
@@ -106,6 +57,13 @@ export interface ChannelConfig {
   commands: IChannelCommand[];
 }
 
+export interface IChannelCommand {
+  name: string;
+  description: string;
+  args: string;
+  set: string;
+}
+
 export interface IRead {
   user: IUser;
   last_read: string;
@@ -121,32 +79,4 @@ export interface IMember {
   shadow_banned: boolean;
   role: MemberRole;
   channel_role: ChannelRole;
-}
-
-export interface IMember {
-  user_id: string;
-  user: IUser;
-  created_at: string;
-  updated_at: string;
-  banned: boolean;
-  shadow_banned: boolean;
-  role: MemberRole;
-  channel_role: ChannelRole;
-}
-
-export interface IReaction {
-  type: string;
-  score: number;
-}
-
-export interface IAttachment {
-  type?: AttachmentType;
-  author_name?: string;
-  title?: string;
-  title_link?: string;
-  text?: string;
-  image_url?: string;
-  asset_url?: string;
-  thumb_url?: string;
-  og_scrape_url?: string;
 }

@@ -1,3 +1,4 @@
 export interface CoreOptions {
-  authToken: string;
+  authToken?: string;
+  appId: string;
 }

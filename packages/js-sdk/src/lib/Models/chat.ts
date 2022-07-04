@@ -1,38 +1,6 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-import { IResponse } from '../Responses/response';
-import { MessageType } from '../types';
-import { IChannel, IReaction } from './chatroom';
+import { AttachmentType, MessageType } from '../types';
+import { IChannel } from './chatroom';
 import { IUser } from './user';
-
-export interface IChatResponse extends IResponse<IChat> {}
-
-export interface IGetChatParams {
-  chat_id: string | string[];
-}
-
-export interface IPostChatBody {
-  parent_chat_id?: string;
-  creator_user_id: string;
-  chatroom_id: string;
-  content_text: string;
-  content_media_url?: string[];
-}
-
-export interface IPutChatBody {
-  content_text?: string;
-  content_media_url?: string[];
-}
-
-export interface IPutChatReactionBody {
-  user_id: string;
-  reaction: string;
-}
-
-export interface IPutChatReportBody {
-  user_id: string;
-  report_action_type: string;
-  report_message: string;
-}
 
 export interface IChat {
   id: string;
@@ -40,7 +8,7 @@ export interface IChat {
   html: string;
   type: MessageType;
   user: IUser;
-  attachments: [];
+  attachments: IAttachment[];
   latest_reactions: IReaction[];
   own_reactions: IReaction[];
   reaction_counts: any;
@@ -59,4 +27,21 @@ export interface IChat {
   chatroom_id: string;
   creator_user_id: string;
   channel: IChannel;
+}
+
+export interface IReaction {
+  type: string;
+  score: number;
+}
+
+export interface IAttachment {
+  type?: AttachmentType;
+  author_name?: string;
+  title?: string;
+  title_link?: string;
+  text?: string;
+  image_url?: string;
+  asset_url?: string;
+  thumb_url?: string;
+  og_scrape_url?: string;
 }
