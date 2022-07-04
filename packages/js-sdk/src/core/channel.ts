@@ -1,8 +1,8 @@
 import { Paths } from '../constants';
-import { IAction, ISendMessage, MessageType } from '../lib';
+import { IAction, ISendMessage } from '../lib';
 import { IChannelConfig } from '../lib/Models/channel';
 import { IMessage } from '../lib/Responses/channel';
-import { WebScocketEvents } from '../lib/types/channel';
+import { MessageType, WebScocketEvents } from '../lib/types/channel';
 import { until } from '../util';
 
 export class Channel {

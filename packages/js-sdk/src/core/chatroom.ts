@@ -3,14 +3,16 @@ import {
   IChatRoomMembershipResponse,
   IChatRoomResponse,
   IChatRoomsResponse,
-  IGetChatRoomParams,
-  IPostChatRoomBody,
-  IPutChatRoomBody,
-  IPutChatRoomMembershipBody,
   IRecentChatResponse,
 } from '../lib';
 import ApiClient from '../lib/api';
-import { IPostMarkAsReadParam } from '../lib/Requests/chatroom';
+import {
+  IGetChatRoomParams,
+  IPostChatRoomBody,
+  IPostMarkAsReadParam,
+  IPutChatRoomBody,
+  IPutChatRoomMembershipBody,
+} from '../lib/Requests/chatroom';
 import { IAPIClass, IRestEndPoint } from './types';
 
 export class ChatRoom extends IAPIClass implements IRestEndPoint {
