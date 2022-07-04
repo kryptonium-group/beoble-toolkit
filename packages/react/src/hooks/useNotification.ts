@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Notification } from '@beoble/js-sdk';
+import { Notification, Core } from '@beoble/js-sdk';
 
-export const useNotification = (appId: string, userId?: string) => {
+export const useNotification = (core: Core, appId: string, userId?: string) => {
   const [notification, setNotification] = useState<Notification>();
   const [hasNewMessage, setHasNewMessage] = useState(false);
 
@@ -14,11 +14,7 @@ export const useNotification = (appId: string, userId?: string) => {
 
   const openNotification = async () => {
     if (userId) {
-      const noti = new Notification({
-        app_id: appId,
-        user_id: userId,
-        authToken: 'sungmingodsungmingod',
-      });
+      const noti = core.notification(appId, userId);
       await noti.open();
       noti.onMessage('NEW_MESSAGE', (data) => {
         setHasNewMessage(true);

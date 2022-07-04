@@ -72,3 +72,5 @@ export const Paths = {
     report: (post_id: string) => `/post/${post_id}/report`,
   },
 };
+
+export const AuthToken = 'beobletoken';

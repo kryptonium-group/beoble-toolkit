@@ -26,6 +26,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
   const { provider, address, ensName, ensAvatar, initProvider, getSign } =
     useWeb3();
   const { notification, hasNewMessage, setHasNewMessage } = useNotification(
+    Beoble,
     appId,
     user?.id
   );
@@ -55,13 +56,15 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
   };
 
   const getAuth = async (wallet_address: string) => {
-    const res = await Beoble.auth.getMessage(wallet_address);
-    const [signature, public_key] = await getSign(res.data.message_to_sign);
-    const res2 = await Beoble.auth.login({
-      wallet_address,
-      signature,
-    });
-    console.log(res2, public_key);
+    if (!Beoble.auth.authToken) {
+      const res = await Beoble.auth.getMessage(wallet_address);
+      const [signature, public_key] = await getSign(res.data.message_to_sign);
+      const res2 = await Beoble.auth.login({
+        wallet_address,
+        signature,
+      });
+      console.log(res2, public_key);
+    }
   };
 
   return (
