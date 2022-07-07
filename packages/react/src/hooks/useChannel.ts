@@ -27,6 +27,7 @@ export const useChannel = (chatroomId: string) => {
       });
 
       chat.onMessage('RETRIEVED_MESSAGE', (data: IChat[]) => {
+        console.log(data.length);
         updateMessage(data);
       });
 
@@ -72,7 +73,7 @@ export const useChannel = (chatroomId: string) => {
       isMine,
       isFollowing,
       content: text,
-      timestamp,
+      created_at,
       account: creator.wallets[0],
       userName: creator.display_name,
       chatId: id,
@@ -96,7 +97,13 @@ export const useChannel = (chatroomId: string) => {
 
   const checkIsFollowing = (prev: MessageProps, incoming: MessageProps) => {
     const isSameUser = prev.creator_user_id === incoming.creator_user_id;
-    return isSameUser && isMinEqual(prev.timestamp, incoming.timestamp);
+    return (
+      isSameUser &&
+      isMinEqual(
+        getUTCTimeStamp(prev.created_at),
+        getUTCTimeStamp(incoming.created_at)
+      )
+    );
   };
 
   const updateMessage = (data: IChat[] | IChat) => {
@@ -111,9 +118,10 @@ export const useChannel = (chatroomId: string) => {
     );
   };
 
-  const retrieveMessages = () => {
-    const res: MessageProps[] = [];
-    setMessages((prev) => concatMessages(res, prev));
+  const retrieveMessages = (lastChatTime: string) => {
+    if (channel) {
+      channel.retrieveMessage(lastChatTime);
+    }
   };
 
   const sendMessage = (content: string) => {
@@ -142,5 +150,12 @@ export const useChannel = (chatroomId: string) => {
     return res;
   };
 
-  return { sendMessage, openChannel, messages, isLoading, markAsRead };
+  return {
+    sendMessage,
+    retrieveMessages,
+    openChannel,
+    messages,
+    isLoading,
+    markAsRead,
+  };
 };

@@ -36,3 +36,7 @@ export const isMinEqual = (timestamp: number, timestampToCompare: number) => {
 export const getUTCTimeStamp = (utcTime: string) => {
   return Date.parse(utcTime);
 };
+
+export const getLocalTimeFromUTC = (utcTime: string) => {
+  return new Date(utcTime).toString();
+};

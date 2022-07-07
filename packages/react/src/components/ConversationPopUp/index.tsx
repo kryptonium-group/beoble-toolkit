@@ -107,7 +107,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   const [isMinimized, setIsMinimized] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { sendMessage, messages, isLoading, markAsRead } =
+  const { sendMessage, retrieveMessages, messages, isLoading, markAsRead } =
     useChannel(chatroomId);
   const { closeChat, updateChatroomRead } = useChat();
   const { addRoute, open } = useBeobleModal();
@@ -118,6 +118,11 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     otherMembers,
     chatroom,
   } = useChatRoom(chatroomId);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = useCallback((e: any) => {
+    console.log(e);
+  }, []);
 
   // when user open conversaation
   // mark as read
@@ -140,6 +145,9 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
 
   const handleHeaderClick = () => {
     setIsMinimized(!isMinimized);
+    if (messages.length > 0) {
+      retrieveMessages(messages.at(-1)!.created_at);
+    }
   };
 
   const handleExpandChat = () => {
@@ -188,7 +196,17 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
       />
       <ContentContainer>
         <MessageDisplayContainer>
-          <MessageListScrollable>
+          <MessageListScrollable
+            ref={scrollRef}
+            onScroll={(e) => {
+              //console.log(e);
+            }}
+            onScrollCapture={(e) => {
+              console.log(e);
+              console.log(scrollRef.current?.scrollTop);
+              console.log(scrollRef.current?.scrollHeight);
+            }}
+          >
             {isLoading && (
               <SpinnerContainer>
                 <Spinner color={Colors.background.messageTint} />

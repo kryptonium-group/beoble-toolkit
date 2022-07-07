@@ -37,6 +37,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
     if (address) {
       setInitialized(true);
       initUser(address);
+      login(address);
     }
   }, [address]);
 

@@ -5,4 +5,4 @@ export type MessageType =
   | 'UPDATED_MESSAGE'
   | 'NEW_MESSAGE';
 
-export type ActionType = 'RETREIVE_MESSAGE' | 'SEND_MESSAGE';
+export type ActionType = 'RETRIEVE_MESSAGE' | 'SEND_MESSAGE';

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { IUser } from '@beoble/js-sdk';
 import { Colors, FontWeights, Truncate } from '../../styles';
-import { convertTime } from '../../utils';
+import { convertTime, getUTCTimeStamp } from '../../utils';
 import Avatar from '../Avatar';
 import { Status } from '../OnlineStatus';
 
@@ -11,7 +11,7 @@ export interface MessageProps {
   isMine: boolean;
   isFollowing: boolean;
   content: string;
-  timestamp: number;
+  created_at: string;
   profileImage?: string;
   account: string;
   userName: string;
@@ -115,7 +115,7 @@ export const Message: FC<MessageProps> = ({
   profileImage,
   account,
   userName,
-  timestamp,
+  created_at,
   onUserClick,
   user,
   chatId,
@@ -142,7 +142,7 @@ export const Message: FC<MessageProps> = ({
             <UserName onClick={onUserClick}>
               {isMine ? 'You' : userName}
             </UserName>
-            <TimePhrase>{convertTime(timestamp)}</TimePhrase>
+            <TimePhrase>{convertTime(getUTCTimeStamp(created_at))}</TimePhrase>
           </MessageInfoContainer>
         )}
         <MessageBox {...{ isMine }}>{content}</MessageBox>

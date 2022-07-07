@@ -34,6 +34,7 @@ export class Channel {
 
   public async open() {
     await until(() => this._isOpen == true);
+    return this._isOpen;
   }
 
   public async sendMessage(message: ISendMessage) {
@@ -44,10 +45,23 @@ export class Channel {
     this._socket.send(JSON.stringify(data));
   }
 
-  public retrieveMessage(config: any) {
+  // {
+  // 	"type" "RETRIEVE_MESSAGE",
+  // 	"data": {
+  // 		"created_at": {
+  // 			"$gt": "2022-06-22T09:43:07.76673Z"
+  // 		}
+  // 	}
+  // }
+  /** */
+  public retrieveMessage(last_message_created_at: string) {
     const data: IAction = {
-      action_type: 'RETREIVE_MESSAGE',
-      data: config,
+      action_type: 'RETRIEVE_MESSAGE',
+      data: {
+        created_at: {
+          $lt: last_message_created_at,
+        },
+      },
     };
     this._socket.send(JSON.stringify(data));
   }

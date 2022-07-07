@@ -20,3 +20,21 @@ function useDebounce<T>(value: T, delay?: number): [boolean, T] {
 }
 
 export default useDebounce;
+
+const useFuncDebounce = (callback: (...args: any[]) => any, delay?: number) => {
+  const [isDebouncing, setIsDebouncing] = useState(false);
+
+  useEffect(() => {
+    setIsDebouncing(true);
+    const timer = setTimeout(() => {
+      setIsDebouncing(false);
+      callback();
+    }, delay || 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [callback, delay]);
+
+  return {};
+};
