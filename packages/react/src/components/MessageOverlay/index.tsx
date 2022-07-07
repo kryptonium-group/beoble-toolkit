@@ -7,6 +7,7 @@ import MessageConversation from '../MessageConversation';
 import MessageHeader from '../MessageHeader';
 import Spinner from '../Spinner';
 import useChat from '../../hooks/useChat';
+import { Status } from '../OnlineStatus';
 
 /* eslint-disable-next-line */
 export interface MessageOverlayProps {
@@ -65,7 +66,7 @@ export const MessageOverlay: FC<MessageOverlayProps> = ({
 }) => {
   const [isMinimized, setIsMinimized] = useState(true);
 
-  const { account, hasNewMessage, setHasNewMessage } = useBeoble();
+  const { account, hasNewMessage, setHasNewMessage, user } = useBeoble();
   const { conversations, isChatroomsLoading, unreadMessages } = useChat();
 
   const toggleMinimize = () => {
@@ -73,10 +74,15 @@ export const MessageOverlay: FC<MessageOverlayProps> = ({
     setHasNewMessage(false);
   };
 
+  const getUserStatus = (): Status => {
+    if (!user) return 'none';
+    return user.public_key ? (user.online ? 'online' : 'offline') : 'none';
+  };
+
   return (
     <MessageOverlayBubble isMinimized={isMinimized}>
       <MessageHeader
-        status={'online'}
+        status={getUserStatus()}
         {...{ isMinimized }}
         onMinimizeButtonClick={toggleMinimize}
         onHeaderClick={toggleMinimize}

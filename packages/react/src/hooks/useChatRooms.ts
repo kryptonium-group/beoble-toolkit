@@ -1,6 +1,7 @@
 import { IChatRoom, Core, IUser } from '@beoble/js-sdk';
 import { useEffect, useState } from 'react';
 import { MessageConversationProps } from '../components/MessageConversation';
+import { Status } from '../components/OnlineStatus';
 import { getUTCTimeStamp } from '../utils';
 import {
   getChatroomLatestMessage,
@@ -70,7 +71,7 @@ export const useChatRooms = (Beoble: Core, user: IUser | null) => {
   const convertChatroomToConversation = (
     chatroom: IChatRoom
   ): MessageConversationProps => {
-    const { channel } = chatroom;
+    const { channel, members } = chatroom;
 
     if (!user) throw new Error('user is not initialized yet');
     const conversation_name = getChatroomName(chatroom, user?.id);
@@ -80,10 +81,21 @@ export const useChatRooms = (Beoble: Core, user: IUser | null) => {
       channel.last_message_at ?? channel.created_at
     );
     const unreadMessages = getChatroomUndreadCount(chatroom, user?.id);
+    const otherMember = members.filter(
+      (member) => member.user_id !== user.id
+    )[0];
+    const status: Status =
+      channel.chatroom_type === 'DIRECT_CHAT'
+        ? otherMember.user.public_key
+          ? otherMember.user.online
+            ? 'online'
+            : 'offline'
+          : 'none'
+        : 'none';
 
     return {
       timestamp,
-      status: 'online',
+      status,
       lastMessage,
       userName: conversation_name,
       profilePhoto: channel.representative_media_url

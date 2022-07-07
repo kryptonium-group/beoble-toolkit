@@ -4,6 +4,7 @@ import { useBeoble, useBeobleModal } from './useBeoble';
 import { MessageProps } from '../components/Message';
 import { getUTCTimeStamp, isMinEqual } from '../utils';
 import { BeobleNotInitizliedError } from '../lib/Errors';
+import { Status } from '../components/OnlineStatus';
 
 export const useChannel = (chatroomId: string) => {
   const { Beoble, user } = useBeoble();
@@ -61,6 +62,12 @@ export const useChannel = (chatroomId: string) => {
     const isFollowing =
       isSameUserWithPrevious && isMinEqual(timestamp, previousTimestamp);
 
+    const status: Status = creator.public_key
+      ? creator.online
+        ? 'online'
+        : 'offline'
+      : 'none';
+
     return {
       isMine,
       isFollowing,
@@ -73,6 +80,7 @@ export const useChannel = (chatroomId: string) => {
       onUserClick: () => {
         openRoute(creator_user_id);
       },
+      status,
     };
   };
 

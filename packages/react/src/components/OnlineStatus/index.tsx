@@ -16,7 +16,7 @@ export const OnlineStatus = styled.div<OnlineStatusProps>`
   box-sizing: border-box;
   box-shadow: 0 0 0 2px #fff;
   border: 3px solid #057642;
-  ${({ status }) => status === 'offline' && 'display: none'}
+  ${({ status }) => status === 'none' && 'display: none'}
 `;
 
 export type Status = 'online' | 'mobile' | 'offline' | 'none';

@@ -4,6 +4,7 @@ import { IUser } from '@beoble/js-sdk';
 import { Colors, FontWeights, Truncate } from '../../styles';
 import { convertTime } from '../../utils';
 import Avatar from '../Avatar';
+import { Status } from '../OnlineStatus';
 
 /* eslint-disable-next-line */
 export interface MessageProps {
@@ -18,6 +19,7 @@ export interface MessageProps {
   creator_user_id: string;
   user?: IUser;
   onUserClick?: () => void;
+  status: Status;
 }
 
 const mountAnimation = keyframes`
@@ -117,6 +119,7 @@ export const Message: FC<MessageProps> = ({
   onUserClick,
   user,
   chatId,
+  status,
 }) => {
   return (
     <MessageContainer {...{ isMine }}>
@@ -126,7 +129,7 @@ export const Message: FC<MessageProps> = ({
             <Avatar
               size={32}
               profileImg={profileImage}
-              status={'none'}
+              status={status}
               account={account}
               onClick={onUserClick}
             />

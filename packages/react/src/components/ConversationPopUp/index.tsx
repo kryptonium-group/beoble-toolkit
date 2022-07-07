@@ -14,6 +14,7 @@ import {
   useFocus,
   useBeoble,
 } from '../../hooks';
+import { Status } from '../OnlineStatus';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
@@ -157,6 +158,16 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     messageFormRef && focusMessageForm();
   }, [focusMessageForm, messageFormRef]);
 
+  const getChatroomUserStatus = (): Status => {
+    if (chatroom?.channel.chatroom_type !== 'DIRECT_CHAT') return 'none';
+    const otherUser = otherMembers[0].user;
+    return otherUser.public_key
+      ? otherUser.online
+        ? 'online'
+        : 'offline'
+      : 'none';
+  };
+
   return (
     <Container
       {...{ isMinimized, isExpanded }}
@@ -166,7 +177,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
       }}
     >
       <ChatHeader
-        status={'none'}
+        status={getChatroomUserStatus()}
         account={chatroomAccount}
         userName={chatroomName}
         onClose={handleCloseChat}
