@@ -18,6 +18,7 @@ import React, {
   useRef,
   HTMLInputTypeAttribute,
 } from 'react';
+import { useBeoble } from '../../hooks';
 
 /* eslint-disable-next-line */
 export interface MessageFormProps
@@ -121,6 +122,8 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
     const [messageContent, setMessageContent] = useState('');
     const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
+    const { Beoble } = useBeoble();
+
     const fileInputRef = useRef<HTMLInputElement>(null);
     const pictureInputRef = useRef<HTMLInputElement>(null);
 
@@ -154,8 +157,16 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
       setIsEmojiPickerOpen((prev) => !prev);
     };
 
-    const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-      console.log(e.target?.files);
+    const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target?.files) {
+        const file = e.target.files[0];
+        console.log(file);
+        const res = await Beoble.file.upload({
+          upload_file: file,
+          upload_type: 'USER',
+        });
+        console.log(res);
+      }
     };
 
     const handlePictureUpload = (e: ChangeEvent<HTMLInputElement>) => {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { IUser } from '@beoble/js-sdk';
 import { useBeoble } from './useBeoble';
 import { BeobleNotInitizliedError } from '../lib/Errors';
+import { useRestAPI } from './useFetch';
 
 export const useUser = (user_id?: string) => {
   const [userInfo, setUserInfo] = useState<IUser>();
@@ -14,6 +15,14 @@ export const useUser = (user_id?: string) => {
   const [isFollowingFetching, setIsFollowingFetching] = useState(true);
 
   const { Beoble, user } = useBeoble();
+
+  const friendState = useRestAPI(['friend'], () =>
+    Beoble.user.get({ user_id })
+  );
+
+  useEffect(() => {
+    console.log(friendState);
+  }, [friendState]);
 
   useEffect(() => {
     if (user_id) getUserInfo(user_id);

@@ -27,7 +27,6 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
     useWeb3();
   const { notification, hasNewMessage, setHasNewMessage } = useNotification(
     Beoble,
-    appId,
     user?.id
   );
 

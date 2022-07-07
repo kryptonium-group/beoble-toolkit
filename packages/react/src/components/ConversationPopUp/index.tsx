@@ -127,11 +127,9 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   // whenever user focuses conversation
   // mark as read
   const handleFocus = async () => {
-    console.log('focused');
     if (!isLoading && unreadMessages > 0) {
       const res = await markAsRead();
       updateChatroomRead(res.data);
-      console.log(res);
     }
   };
 

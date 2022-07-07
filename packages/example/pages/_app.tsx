@@ -7,7 +7,9 @@ import './styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const demoAppId = '2eef3eb4-db9a-46d2-b919-0a684cb87a50';
-  const core = new Core();
+  const core = new Core({
+    appId: demoAppId,
+  });
 
   return (
     <>

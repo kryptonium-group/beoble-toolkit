@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { Paths } from '../constants';
 import { BeobleException } from './Exceptions/BeobleException';
 
@@ -62,12 +62,13 @@ export default class ApiClient {
     );
   }
 
-  public async post(path: string, data?: any, params?: any): Promise<any> {
+  public async post(
+    path: string,
+    data?: any,
+    config?: AxiosRequestConfig<any>
+  ): Promise<any> {
     return this.tryRestApi(
-      async () =>
-        await this.client.post(path, data, {
-          params,
-        })
+      async () => await this.client.post(path, data, config)
     );
   }
 
