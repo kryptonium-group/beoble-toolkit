@@ -1,16 +1,14 @@
 import { Paths } from '../constants';
+import { IChatRoomsResponse, IUser } from '../lib';
+import ApiClient from '../lib/api';
+import { IUserIdParam } from '../lib/Requests/request';
 import {
-  IChatRoomsResponse,
   IGetUserParams,
   IPostUserBody,
   IPutUserBody,
   IPutUserChatRoomMembershipBody,
-  IUser,
-  IUsersResponse,
-  IUserResponse,
-} from '../lib';
-import ApiClient from '../lib/api';
-import { IUserIdParam } from '../lib/Requests/request';
+} from '../lib/Requests/user';
+import { IUserResponse, IUsersResponse } from '../lib/Responses/user';
 import { IAPIClass, IRestEndPoint } from './types';
 
 export class User extends IAPIClass implements IRestEndPoint {
