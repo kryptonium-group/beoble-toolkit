@@ -27,8 +27,7 @@ export const useChannel = (chatroomId: string) => {
       });
 
       chat.onMessage('RETRIEVED_MESSAGE', (data: IChat[]) => {
-        console.log(data.length);
-        updateMessage(data);
+        unshiftMessage(data);
       });
 
       chat.onMessage('NEW_MESSAGE', (data: IChat) => {
@@ -114,6 +113,18 @@ export const useChannel = (chatroomId: string) => {
         messages.map((chat, index, array) =>
           convertChatToMessageProps(chat, index, array, prev.at(-1))
         )
+      )
+    );
+  };
+
+  const unshiftMessage = (data: IChat[] | IChat) => {
+    const messages = Array.isArray(data) ? data : [data];
+    setMessages((prev) =>
+      concatMessages(
+        messages.map((chat, index, array) =>
+          convertChatToMessageProps(chat, index, array)
+        ),
+        prev
       )
     );
   };

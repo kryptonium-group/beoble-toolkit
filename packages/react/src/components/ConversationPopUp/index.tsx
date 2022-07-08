@@ -15,6 +15,7 @@ import {
   useBeoble,
 } from '../../hooks';
 import { Status } from '../OnlineStatus';
+import { useDebounceCallback } from '../../hooks/useDebounce';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
@@ -120,10 +121,6 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   } = useChatRoom(chatroomId);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = useCallback((e: any) => {
-    console.log(e);
-  }, []);
-
   // when user open conversaation
   // mark as read
   useEffect(() => {
@@ -145,9 +142,6 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
 
   const handleHeaderClick = () => {
     setIsMinimized(!isMinimized);
-    if (messages.length > 0) {
-      retrieveMessages(messages.at(-1)!.created_at);
-    }
   };
 
   const handleExpandChat = () => {
@@ -161,6 +155,22 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
       open();
     }
   };
+
+  const handleScroll = useDebounceCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      if (scrollRef.current) {
+        const { clientHeight, scrollTop, scrollHeight } = scrollRef.current;
+        const scrollableHeight = scrollHeight - clientHeight;
+        if (Math.abs(scrollTop / scrollableHeight) === 1) {
+          if (messages.length > 0) {
+            retrieveMessages(messages.at(-1)!.created_at);
+          }
+        }
+      }
+    },
+    500,
+    [messages, scrollRef.current]
+  );
 
   useEffect(() => {
     messageFormRef && focusMessageForm();
@@ -196,17 +206,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
       />
       <ContentContainer>
         <MessageDisplayContainer>
-          <MessageListScrollable
-            ref={scrollRef}
-            onScroll={(e) => {
-              //console.log(e);
-            }}
-            onScrollCapture={(e) => {
-              console.log(e);
-              console.log(scrollRef.current?.scrollTop);
-              console.log(scrollRef.current?.scrollHeight);
-            }}
-          >
+          <MessageListScrollable ref={scrollRef} onScroll={handleScroll}>
             {isLoading && (
               <SpinnerContainer>
                 <Spinner color={Colors.background.messageTint} />

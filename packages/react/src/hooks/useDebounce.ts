@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 function useDebounce<T>(value: T, delay?: number): [boolean, T] {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -21,20 +21,24 @@ function useDebounce<T>(value: T, delay?: number): [boolean, T] {
 
 export default useDebounce;
 
-const useFuncDebounce = (callback: (...args: any[]) => any, delay?: number) => {
+export const useDebounceCallback = (
+  callback: (...args: any[]) => void,
+  delay?: number,
+  dependencies = <any>[]
+) => {
   const [isDebouncing, setIsDebouncing] = useState(false);
+  const timeout = useRef<number>();
 
-  useEffect(() => {
-    setIsDebouncing(true);
-    const timer = setTimeout(() => {
-      setIsDebouncing(false);
-      callback();
-    }, delay || 500);
+  return useCallback(
+    (...args: any[]) => {
+      const later = () => {
+        clearTimeout(timeout.current);
+        callback(...args);
+      };
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [callback, delay]);
-
-  return {};
+      clearTimeout(timeout.current);
+      timeout.current = window.setTimeout(later, delay);
+    },
+    [callback, delay, ...dependencies]
+  );
 };

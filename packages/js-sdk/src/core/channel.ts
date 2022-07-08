@@ -45,15 +45,6 @@ export class Channel {
     this._socket.send(JSON.stringify(data));
   }
 
-  // {
-  // 	"type" "RETRIEVE_MESSAGE",
-  // 	"data": {
-  // 		"created_at": {
-  // 			"$gt": "2022-06-22T09:43:07.76673Z"
-  // 		}
-  // 	}
-  // }
-  /** */
   public retrieveMessage(last_message_created_at: string) {
     const data: IAction = {
       action_type: 'RETRIEVE_MESSAGE',
