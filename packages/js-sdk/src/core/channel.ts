@@ -75,8 +75,13 @@ export class Channel {
 
   public onMessage(event: MessageType, callback: (data: any) => void) {
     this._socket.addEventListener('message', (e: MessageEvent) => {
-      const data: IMessage<any> = JSON.parse(e.data);
-      if (data.message_type === event) callback(data.data);
+      try {
+        const data: IMessage<any> = JSON.parse(e.data);
+        if (data.message_type === event) callback(data.data);
+      } catch (error) {
+        console.log('error occured:', error);
+        console.log('given data was: ', e.data);
+      }
     });
   }
 }

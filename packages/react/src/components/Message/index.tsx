@@ -93,6 +93,7 @@ const UserName = styled.p`
   padding: 0;
   font-size: 14px;
   font-weight: ${FontWeights.bold};
+  color: ${({ theme }) => theme.text.normal};
   margin-right: 8px;
   flex: 1;
   ${Truncate}

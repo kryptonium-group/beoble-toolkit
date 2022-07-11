@@ -52,6 +52,7 @@ const DisplayName = styled.span`
   margin-left: 8px;
   padding: 0;
   flex: 1;
+  color: ${({ theme }) => theme.text.normal};
   ${Truncate}
 `;
 

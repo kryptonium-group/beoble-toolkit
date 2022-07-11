@@ -25,6 +25,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
 
   const { provider, address, ensName, ensAvatar, initProvider, getSign } =
     useWeb3();
+
   const { notification, hasNewMessage, setHasNewMessage } = useNotification(
     Beoble,
     user?.id
@@ -46,7 +47,6 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
       wallet_address,
     });
     const user = res.data[0];
-    console.log(user);
     setUser(user);
 
     if (!user.public_key) {
@@ -54,7 +54,6 @@ export const BeobleProvider: FC<IBeobleProvider> = ({
       const updated = await Beoble.user.update(user.id, {
         public_key,
       });
-      console.log('updated user', updated);
       setUser(updated.data);
     }
   };
