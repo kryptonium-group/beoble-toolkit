@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Core, IUser } from '@beoble/js-sdk';
 import useWeb3 from '../../hooks/useWeb3';
-import { BeobleContext } from '.';
+import { BeobleContext } from './BeobleContext';
 import { ModalProvider } from '../ModalContext/ModalProvider';
 import { ChatProvider } from '../ChatContext/ChatProvider';
 import { useNotification } from '../../hooks/useNotification';
@@ -9,16 +9,11 @@ import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../../theme';
 
 export interface IBeobleProvider {
-  appId: string;
   children?: ReactNode;
   Beoble: Core;
 }
 
-export const BeobleProvider: FC<IBeobleProvider> = ({
-  appId,
-  children,
-  Beoble,
-}) => {
+export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
   const [initialized, setInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<IUser | null>(null);

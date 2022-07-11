@@ -51,11 +51,11 @@ export const useChatRooms = (Beoble: Core, user: IUser | null) => {
     }
   };
 
-  const addChatroom = (chatroom: IChatRoom) => {
+  const addChatroom = (chatroomToAdd: IChatRoom) => {
     const filteredChatrooms = chatrooms.filter(
-      (obj) => obj.channel.id !== chatroom.channel.id
+      (prevChatroom) => prevChatroom.channel.id === chatroomToAdd.channel.id
     );
-    filteredChatrooms.unshift(chatroom);
+    filteredChatrooms.unshift(chatroomToAdd);
     setChatrooms(filteredChatrooms);
   };
 
