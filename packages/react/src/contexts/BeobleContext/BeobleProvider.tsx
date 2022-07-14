@@ -33,24 +33,43 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
     if (address) {
       setInitialized(true);
       initUser(address);
-      login(address);
     }
   }, [address]);
 
-  const initUser = async (wallet_address: string) => {
+  useEffect(() => {
+    if (notification && address) {
+      updateUser(address);
+    }
+  }, [notification, address]);
+
+  const updateUser = async (wallet_address: string) => {
     const res = await Beoble.user.get({
       wallet_address,
     });
     const user = res.data[0];
     setUser(user);
+    return user;
+  };
 
-    if (!user.public_key) {
-      const public_key = await login(wallet_address);
-      const updated = await Beoble.user.update(user.id, {
-        public_key,
-      });
-      setUser(updated.data);
+  const initUser = async (wallet_address: string) => {
+    try {
+      const user = await updateUser(wallet_address);
+
+      if (!user.public_key) {
+        await upadatePublicKey(wallet_address, user.id);
+      }
+    } catch (error) {
+      await login(wallet_address);
+      initUser(wallet_address);
     }
+  };
+
+  const upadatePublicKey = async (wallet_address: string, user_id: string) => {
+    const public_key = await login(wallet_address);
+    const updated = await Beoble.user.update(user_id, {
+      public_key,
+    });
+    setUser(updated.data);
   };
 
   const login = async (wallet_address: string) => {

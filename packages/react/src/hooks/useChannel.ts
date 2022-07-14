@@ -5,6 +5,7 @@ import { MessageProps } from '../components/Message';
 import { getUTCTimeStamp, isMinEqual } from '../utils';
 import { BeobleNotInitizliedError } from '../lib/Errors';
 import { Status } from '../components/OnlineStatus';
+import { getUserOnlineStatus } from '../utils/userUtil';
 
 export const useChannel = (chatroomId: string) => {
   const { Beoble, user } = useBeoble();
@@ -63,7 +64,7 @@ export const useChannel = (chatroomId: string) => {
       isSameUserWithPrevious && isMinEqual(timestamp, previousTimestamp);
 
     const status: Status = creator.public_key
-      ? creator.online
+      ? getUserOnlineStatus(creator)
         ? 'online'
         : 'offline'
       : 'none';

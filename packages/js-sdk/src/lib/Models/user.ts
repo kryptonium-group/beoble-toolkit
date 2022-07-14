@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { UserRole } from '../types/user';
 
 export interface IUser {
@@ -13,17 +14,11 @@ export interface IUser {
   display_name: string;
   description: null | string;
   representative_media_url: null | string[];
-  registered_apps: IUserInApp[];
+  registered_dapps: RegisteredDapp[];
 }
 
-interface IUserInApp {
-  app: {
-    app_name: string;
-    app_website: string;
-    create_time: string;
-    id: string;
-    update_time: string;
-  };
+interface RegisteredDapp {
+  dapp: Dapp;
   is_online: boolean;
   last_online_at: string;
 }
@@ -41,3 +36,5 @@ export interface UserCounts {
   reporters_received_count: number;
   reporters_sent_count: number;
 }
+
+export interface Dapp extends IUser {}

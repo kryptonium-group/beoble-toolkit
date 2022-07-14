@@ -17,6 +17,7 @@ export const useNotification = (core: Core, userId?: string) => {
       const noti = core.notification(userId);
       await noti.open();
       noti.onMessage('NEW_MESSAGE', (data) => {
+        console.log(data);
         setHasNewMessage(true);
       });
       setNotification(noti);

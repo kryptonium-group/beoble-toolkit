@@ -18,8 +18,10 @@ export const getChatroomMemberAccount = (
 ) => {
   const { members, channel } = chatroom;
   const otherMembers = members.filter((member) => member.user_id !== user_id);
+  /*
   if (!otherMembers[index])
     throw new Error(`member at index ${index} does not exist!`);
+    */
   return channel.chatroom_type === 'DIRECT_CHAT'
     ? otherMembers[index].user.wallets[0]
     : '';

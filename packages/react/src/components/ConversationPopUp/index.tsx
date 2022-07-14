@@ -1,21 +1,16 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import Picker from 'emoji-picker-react';
+import { IUser } from '@beoble/js-sdk';
 import { Colors } from '../../styles';
 import Message from '../Message';
 import MessageForm from '../MessageForm';
 import { ChatHeader } from '../MessageHeader';
 import { useChannel } from '../../hooks/useChannel';
 import Spinner from '../Spinner';
-import {
-  useChatRoom,
-  useChat,
-  useBeobleModal,
-  useFocus,
-  useBeoble,
-} from '../../hooks';
+import { useChatRoom, useChat, useBeobleModal, useFocus } from '../../hooks';
 import { Status } from '../OnlineStatus';
 import { useDebounceCallback } from '../../hooks/useDebounce';
+import { getUserOnlineStatus } from '../../utils/userUtil';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
@@ -125,6 +120,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   // mark as read
   useEffect(() => {
     if (!isLoading && unreadMessages > 0) markAsRead();
+    console.log(chatroom);
   }, [isLoading, chatroom]);
 
   // whenever user focuses conversation
@@ -180,7 +176,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     if (chatroom?.channel.chatroom_type !== 'DIRECT_CHAT') return 'none';
     const otherUser = otherMembers[0].user;
     return otherUser.public_key
-      ? otherUser.online
+      ? getUserOnlineStatus(otherUser)
         ? 'online'
         : 'offline'
       : 'none';

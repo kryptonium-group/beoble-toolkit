@@ -9,6 +9,7 @@ import {
   getChatroomName,
   getChatroomUndreadCount,
 } from '../utils/chatroomUtil';
+import { getUserOnlineStatus } from '../utils/userUtil';
 
 export const useChatRooms = (Beoble: Core, user: IUser | null) => {
   const [chatrooms, setChatrooms] = useState<IChatRoom[]>([]);
@@ -87,7 +88,7 @@ export const useChatRooms = (Beoble: Core, user: IUser | null) => {
     const status: Status =
       channel.chatroom_type === 'DIRECT_CHAT'
         ? otherMember.user.public_key
-          ? otherMember.user.online
+          ? getUserOnlineStatus(otherMember.user)
             ? 'online'
             : 'offline'
           : 'none'

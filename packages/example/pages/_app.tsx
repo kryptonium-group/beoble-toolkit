@@ -6,7 +6,7 @@ import { Core } from '@beoble/js-sdk';
 import './styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
-  const demoAppId = '2eef3eb4-db9a-46d2-b919-0a684cb87a50';
+  const demoAppId = 'ddcd9c84-45c7-4d05-8008-18582d7f91be';
   const core = new Core({
     appId: demoAppId,
   });
@@ -17,7 +17,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>Welcome to example!</title>
       </Head>
       <Web3ContextProvider>
-        <BeobleProvider appId={demoAppId} Beoble={core}>
+        <BeobleProvider Beoble={core}>
           <main className="app">
             <Component {...pageProps} />
           </main>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useBeoble } from '../../hooks';
@@ -8,6 +8,7 @@ import MessageHeader from '../MessageHeader';
 import Spinner from '../Spinner';
 import useChat from '../../hooks/useChat';
 import { Status } from '../OnlineStatus';
+import { getUserOnlineStatus } from '../../utils/userUtil';
 
 /* eslint-disable-next-line */
 export interface MessageOverlayProps {
@@ -74,10 +75,14 @@ export const MessageOverlay: FC<MessageOverlayProps> = ({
     setHasNewMessage(false);
   };
 
-  const getUserStatus = (): Status => {
+  const getUserStatus = useCallback((): Status => {
     if (!user) return 'none';
-    return user.public_key ? (user.online ? 'online' : 'offline') : 'none';
-  };
+    return user.public_key
+      ? getUserOnlineStatus(user)
+        ? 'online'
+        : 'offline'
+      : 'none';
+  }, [user]);
 
   return (
     <MessageOverlayBubble isMinimized={isMinimized}>
