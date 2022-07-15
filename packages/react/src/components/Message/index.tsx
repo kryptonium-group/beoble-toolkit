@@ -1,16 +1,19 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import styled, { css, keyframes } from 'styled-components';
-import { IUser } from '@beoble/js-sdk';
+import { IAttachment, IUser } from '@beoble/js-sdk';
 import { Colors, FontWeights, Truncate } from '../../styles';
 import { convertTime, getUTCTimeStamp } from '../../utils';
 import Avatar from '../Avatar';
 import { Status } from '../OnlineStatus';
+import { lineHeight } from 'styled-system';
 
 /* eslint-disable-next-line */
+export type ContentType = 'TEXT' | 'IMAGE';
 export interface MessageProps {
   isMine: boolean;
   isFollowing: boolean;
-  content: string;
+  content: ReactNode;
+  contentType: ContentType;
   created_at: string;
   profileImage?: string;
   account: string;
@@ -66,14 +69,17 @@ const MessageInfoContainer = styled.div`
   width: 100%;
 `;
 
-const MessageBox = styled.div<{ isMine: boolean }>`
+const MessageBox = styled.div<{ isMine: boolean; contentType: ContentType }>`
   ${({ isMine }) => (isMine ? MyMessage : OthersMessage)}
   font-size: 14px;
-  padding: 8px 12px;
-  width: fit-content;
+  padding: ${({ contentType }) =>
+    contentType === 'IMAGE' ? '0px' : '8px 12px'};
+  ${({ contentType }) => contentType === 'IMAGE' && 'line-height: 0;'}
+  block-size: fit-content;
   min-width: 10px;
   max-width: 100%;
   overflow-wrap: break-word;
+  overflow: hidden;
 `;
 
 const MyMessage = css`
@@ -109,10 +115,20 @@ const TimePhrase = styled.time`
   color: ${Colors.text.lowEmphasis};
 `;
 
+const MessageImage = styled.img`
+  object-fit: cover;
+  width: 100%;
+`;
+
+export const getImageContent = (attachment: IAttachment, chatId: string) => {
+  return <MessageImage alt={chatId} src={attachment.asset_url} />;
+};
+
 export const Message: FC<MessageProps> = ({
   isMine,
   isFollowing,
   content,
+  contentType,
   profileImage,
   account,
   userName,
@@ -146,7 +162,7 @@ export const Message: FC<MessageProps> = ({
             <TimePhrase>{convertTime(getUTCTimeStamp(created_at))}</TimePhrase>
           </MessageInfoContainer>
         )}
-        <MessageBox {...{ isMine }}>{content}</MessageBox>
+        <MessageBox {...{ isMine, contentType }}>{content}</MessageBox>
       </MessageContentContainer>
     </MessageContainer>
   );

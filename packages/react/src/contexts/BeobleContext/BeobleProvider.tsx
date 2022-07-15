@@ -33,6 +33,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
     if (address) {
       setInitialized(true);
       initUser(address);
+      login(address);
     }
   }, [address]);
 
@@ -54,11 +55,11 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
   const initUser = async (wallet_address: string) => {
     try {
       const user = await updateUser(wallet_address);
-
       if (!user.public_key) {
         await upadatePublicKey(wallet_address, user.id);
       }
     } catch (error) {
+      console.log(error);
       await login(wallet_address);
       initUser(wallet_address);
     }
@@ -78,6 +79,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
     const res2 = await Beoble.auth.login({
       wallet_address,
       signature,
+      chain_type: 'ETHEREUM',
     });
     console.log(res2, public_key);
     return public_key;

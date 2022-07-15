@@ -1,10 +1,9 @@
-import { AxiosRequestHeaders } from 'axios';
 import { Paths } from '../constants';
-import { IPostUploadFileBody } from '../lib/Requests/file';
+import { IPostUploadBody } from '../lib/Requests/attachment';
 import { IAPIClass } from './types';
 
-export class File extends IAPIClass {
-  public async upload(body: IPostUploadFileBody) {
+export class Attachment extends IAPIClass {
+  public async upload(body: IPostUploadBody) {
     const formData = new FormData();
     formData.append('upload_file', body.upload_file, body.upload_file.name);
     formData.append('upload_type', body.upload_type);

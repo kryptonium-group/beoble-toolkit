@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { BeobleSDK, Channel, IChat } from '@beoble/js-sdk';
+import { BeobleSDK, Channel, IAttachment, IChat } from '@beoble/js-sdk';
 import { useBeoble, useBeobleModal } from './useBeoble';
-import { MessageProps } from '../components/Message';
+import { getImageContent, MessageProps } from '../components/Message';
 import { getUTCTimeStamp, isMinEqual } from '../utils';
 import { BeobleNotInitizliedError } from '../lib/Errors';
 import { Status } from '../components/OnlineStatus';
@@ -49,7 +49,14 @@ export const useChannel = (chatroomId: string) => {
   ): MessageProps => {
     if (!user) throw new BeobleNotInitizliedError();
 
-    const { creator_user_id, created_at, text, id, user: creator } = chat;
+    const {
+      creator_user_id,
+      created_at,
+      text,
+      id,
+      user: creator,
+      attachments,
+    } = chat;
     const previousChat = array[index - 1];
     const isMine = user.id === creator_user_id;
 
@@ -69,10 +76,15 @@ export const useChannel = (chatroomId: string) => {
         : 'offline'
       : 'none';
 
+    const content =
+      attachments.length > 0 ? getImageContent(attachments[0], id) : text;
+    const contentType = attachments.length > 0 ? 'IMAGE' : 'TEXT';
+
     return {
       isMine,
       isFollowing,
-      content: text,
+      content,
+      contentType,
       created_at,
       account: creator.wallets[0],
       userName: creator.display_name,
@@ -149,6 +161,18 @@ export const useChannel = (chatroomId: string) => {
     }
   };
 
+  const sendImage = (attachment: IAttachment) => {
+    if (!user)
+      throw new Error('user should be initialized before sending message!');
+    if (channel) {
+      channel.sendMessage({
+        creator_user_id: user.id,
+        chatroom_id: chatroomId,
+        attachments: [attachment],
+      });
+    }
+  };
+
   const markAsRead = async () => {
     if (!user) throw new BeobleNotInitizliedError();
     await BeobleSDK.utils.until(() => isLoading === false);
@@ -164,6 +188,7 @@ export const useChannel = (chatroomId: string) => {
 
   return {
     sendMessage,
+    sendImage,
     retrieveMessages,
     openChannel,
     messages,

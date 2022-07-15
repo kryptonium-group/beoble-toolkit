@@ -42,4 +42,4 @@ export type MessageType =
   | 'system'
   | 'deleted';
 
-export type AttachmentType = 'image' | 'audio' | 'video';
+export type AttachmentType = 'IMAGE' | 'AUDIO' | 'VIDEO' | 'TEXT';

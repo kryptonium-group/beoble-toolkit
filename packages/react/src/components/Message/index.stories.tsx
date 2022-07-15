@@ -14,7 +14,7 @@ MyMessage.args = {
   isMine: true,
   isFollowing: false,
   content: LoremIpsum,
-  timestamp: 1654852163180,
+  created_at: '2022-07-14T23:58:10Z',
 };
 
 export const MyMessageFollowing = Template.bind({});
@@ -22,7 +22,7 @@ MyMessageFollowing.args = {
   isMine: true,
   isFollowing: true,
   content: 'hi',
-  timestamp: 1654852163180,
+  created_at: '2022-07-14T23:58:10Z',
 };
 
 export const OthersMessage = Template.bind({});
@@ -31,7 +31,7 @@ OthersMessage.args = {
   isMine: false,
   isFollowing: false,
   content: LoremIpsum,
-  timestamp: 1654852163180,
+  created_at: '2022-07-14T23:58:10Z',
 };
 
 export const OthersMessageFollowing = Template.bind({});
@@ -39,5 +39,19 @@ OthersMessageFollowing.args = {
   isMine: false,
   isFollowing: true,
   content: 'hi',
-  timestamp: 1654852163180,
+  created_at: '2022-07-14T23:58:10Z',
+};
+
+export const ImageMessage = Template.bind({});
+ImageMessage.args = {
+  isMine: false,
+  isFollowing: true,
+  content: (
+    <img
+      style={{ objectFit: 'cover', margin: '-8px -12px' }}
+      alt=""
+      src="https://1.bp.blogspot.com/-RmJHrxaA5Zo/XTadowYaxQI/AAAAAAAAFBk/agxMBGgenRwuuUGs3kCpL-Xs2riqezPDwCLcBGAs/s1600/4.gif"
+    ></img>
+  ),
+  created_at: '2022-07-14T23:58:10Z',
 };

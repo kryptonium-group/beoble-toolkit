@@ -6,7 +6,7 @@ import { ChatRoom } from './chatroom';
 import { Notification } from './notification';
 import { IAPIClass } from './types';
 import { User } from './user';
-import { File } from './file';
+import { Attachment } from './attachment';
 
 export class Core extends IAPIClass {
   public user: User;
@@ -14,7 +14,7 @@ export class Core extends IAPIClass {
   public chat: Chat;
   public auth: Auth;
   public app_id: string;
-  public file: File;
+  public attachment: Attachment;
 
   constructor(config: CoreOptions) {
     const client = new ApiClient(config?.authToken);
@@ -24,7 +24,7 @@ export class Core extends IAPIClass {
     this.chatroom = new ChatRoom(this._client);
     this.chat = new Chat(this._client);
     this.auth = new Auth(this._client);
-    this.file = new File(this._client);
+    this.attachment = new Attachment(this._client);
   }
 
   public notification(user_id: string) {

@@ -1,6 +1,6 @@
-import { UploadType } from '../types/file';
+import { UploadType } from '../types/attachment';
 
-export interface IPostUploadFileBody {
+export interface IPostUploadBody {
   upload_file: File;
   upload_type: UploadType;
   chatroom_id?: string;

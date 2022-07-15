@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { MdGif, MdMoreHoriz } from 'react-icons/md';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { IEmojiData } from 'emoji-picker-react';
+import { IAttachment } from '@beoble/js-sdk';
 import { Colors } from '../../styles';
 import IconButton from '../IconButton';
 import Button from '../Button';
@@ -24,6 +25,7 @@ import { useBeoble } from '../../hooks';
 export interface MessageFormProps
   extends InputHTMLAttributes<HTMLTextAreaElement> {
   onSend: (value: string) => void;
+  onImageSend: (value: IAttachment) => void;
   disabled?: boolean;
 }
 
@@ -108,6 +110,7 @@ const SendButton = styled(Button)`
 const PickerContainer = styled.div`
   position: fixed;
   transform: translateY(calc(-100% - 8px)) translateX(-30%);
+  background-color: #fff;
 `;
 
 const IconContainer = styled.div``;
@@ -117,7 +120,7 @@ const UploadInput = styled.input`
 `;
 
 export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
-  ({ onSend, disabled, ...props }, ref) => {
+  ({ onSend, onImageSend, disabled, ...props }, ref) => {
     const [isFocused, setIsFoucesd] = useState(false);
     const [messageContent, setMessageContent] = useState('');
     const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
@@ -161,16 +164,38 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
       if (e.target?.files) {
         const file = e.target.files[0];
         console.log(file);
-        const res = await Beoble.file.upload({
+        const res = await Beoble.attachment.upload({
           upload_file: file,
           upload_type: 'USER',
         });
+        const attachment: IAttachment = {
+          image_url: res.data,
+          type: 'IMAGE',
+          asset_url: res.data,
+        };
+        onImageSend(attachment);
         console.log(res);
       }
     };
 
-    const handlePictureUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const handlePictureUpload = async (e: ChangeEvent<HTMLInputElement>) => {
       console.log(e.target?.files);
+
+      if (e.target?.files) {
+        const file = e.target.files[0];
+        console.log(file);
+        const res = await Beoble.attachment.upload({
+          upload_file: file,
+          upload_type: 'USER',
+        });
+        const attachment: IAttachment = {
+          image_url: res.data,
+          type: 'IMAGE',
+          asset_url: res.data,
+        };
+        onImageSend(attachment);
+        console.log(res);
+      }
     };
 
     return (
@@ -211,19 +236,18 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
               name="file_upload"
               onChange={handleFileUpload}
             />
-            <IconButton
-              size={32}
-              {...{ disabled }}
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <AiOutlinePaperClip />
-            </IconButton>
-            {/**
-             * 
-          <IconButton size={32} {...{ disabled }} type="button">
-            <MdGif />
-          </IconButton>
+            {/*
+              <IconButton
+                size={32}
+                {...{ disabled }}
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <AiOutlinePaperClip />
+              </IconButton>
+              <IconButton size={32} {...{ disabled }} type="button">
+                <MdGif />
+              </IconButton>
              */}
             <IconContainer>
               {isEmojiPickerOpen && (

@@ -103,8 +103,14 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   const [isMinimized, setIsMinimized] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { sendMessage, retrieveMessages, messages, isLoading, markAsRead } =
-    useChannel(chatroomId);
+  const {
+    sendMessage,
+    sendImage,
+    retrieveMessages,
+    messages,
+    isLoading,
+    markAsRead,
+  } = useChannel(chatroomId);
   const { closeChat, updateChatroomRead } = useChat();
   const { addRoute, open } = useBeobleModal();
   const {
@@ -214,6 +220,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
         </MessageDisplayContainer>
         <MessageForm
           onSend={sendMessage}
+          onImageSend={sendImage}
           disabled={isLoading}
           onFocus={handleFocus}
           ref={messageFormRef}
