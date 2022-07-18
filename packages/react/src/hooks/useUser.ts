@@ -16,14 +16,6 @@ export const useUser = (user_id?: string) => {
 
   const { Beoble, user } = useBeoble();
 
-  const friendState = useRestAPI(['friend'], () =>
-    Beoble.user.get({ user_id })
-  );
-
-  useEffect(() => {
-    console.log(friendState);
-  }, [friendState]);
-
   useEffect(() => {
     if (user_id) getUserInfo(user_id);
   }, [user_id]);
@@ -40,21 +32,21 @@ export const useUser = (user_id?: string) => {
   };
 
   const getFollowings = async () => {
-    if (!user) throw new BeobleNotInitizliedError();
+    if (!user_id) throw new BeobleNotInitizliedError();
     setIsFollowingFetching(true);
     const followers = await Beoble.user.follow.get({
       type: 'following',
-      user_id: user_id ?? user.id,
+      user_id: user_id ?? user_id,
     });
     setFollowings(followers.data);
     setIsFollowingFetching(false);
   };
 
   const getFriends = async () => {
-    if (!user) throw new BeobleNotInitizliedError();
+    if (!user_id) throw new BeobleNotInitizliedError();
     setIsFriendFetching(true);
     const freinds = await Beoble.user.friend.get({
-      user_id: user_id ?? user.id,
+      user_id: user_id ?? user_id,
     });
     setFriends(freinds.data);
     setIsFriendFetching(false);
@@ -62,10 +54,10 @@ export const useUser = (user_id?: string) => {
 
   const getFollowers = async () => {
     setIsFollowerFetching(true);
-    if (!user) throw new BeobleNotInitizliedError();
+    if (!user_id) throw new BeobleNotInitizliedError();
     const followers = await Beoble.user.follow.get({
       type: 'follower',
-      user_id: user_id ?? user.id,
+      user_id: user_id ?? user_id,
     });
     setFollowers(followers.data);
     setIsFollowerFetching(false);

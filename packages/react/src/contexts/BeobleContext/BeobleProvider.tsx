@@ -7,6 +7,7 @@ import { ChatProvider } from '../ChatContext/ChatProvider';
 import { useNotification } from '../../hooks/useNotification';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../../theme';
+import { isDateOver } from '../../utils';
 
 export interface IBeobleProvider {
   children?: ReactNode;
@@ -33,7 +34,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
     if (address) {
       setInitialized(true);
       initUser(address);
-      login(address);
+      if (!checkAuthTokenValidity()) login(address);
     }
   }, [address]);
 
@@ -42,6 +43,15 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
       updateUser(address);
     }
   }, [notification, address]);
+
+  const checkAuthTokenValidity = () => {
+    const existingToken = Beoble.auth.retrieveAuthData();
+    if (!existingToken) {
+      return false;
+    } else {
+      return !isDateOver(existingToken.expiry_date);
+    }
+  };
 
   const updateUser = async (wallet_address: string) => {
     const res = await Beoble.user.get({

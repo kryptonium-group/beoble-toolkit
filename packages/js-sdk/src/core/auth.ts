@@ -1,5 +1,6 @@
 import { AuthToken, Paths } from '../constants';
 import ApiClient from '../lib/api';
+import { ILoginData } from '../lib/Models/auth';
 import { IPostLogInBody } from '../lib/Requests/auth';
 import { IAuthResponse, ILoginResponse } from '../lib/Responses/auth';
 import { isBrowser } from '../util/environment';
@@ -11,13 +12,17 @@ export class Auth extends IAPIClass {
 
   constructor(client: ApiClient) {
     super(client);
-    const token = this.retrieveToken();
-    if (token) {
-      client.setAuthToekn(token);
-      this.authToken = token;
+    this.initAuth(client);
+  }
+
+  private initAuth = (client: ApiClient) => {
+    const authData = this.retrieveAuthData();
+    if (authData) {
+      client.setAuthToekn(authData.jwt_token);
+      this.authToken = authData.jwt_token;
       this.isAuthorized = true;
     }
-  }
+  };
 
   public async login(body: IPostLogInBody): Promise<ILoginResponse> {
     const res: ILoginResponse = await this._client.post(
@@ -25,7 +30,7 @@ export class Auth extends IAPIClass {
       body
     );
     this._client.setAuthToekn(res.data.jwt_token);
-    this.storeToken(res.data.jwt_token);
+    this.storeAuthData(res.data);
     return res;
   }
 
@@ -36,10 +41,9 @@ export class Auth extends IAPIClass {
   }
 
   // TODO: impl for server side
-  private storeToken(token: string): void {
-    console.log('hi?', isBrowser());
+  private storeAuthData(data: ILoginData): void {
     if (isBrowser()) {
-      window.localStorage.setItem(AuthToken, token);
+      window.localStorage.setItem(AuthToken, JSON.stringify(data));
     } else {
       console.log('should handle server side storing');
       return;
@@ -47,9 +51,16 @@ export class Auth extends IAPIClass {
   }
 
   // TODO: impl for server side
-  private retrieveToken(): string | null {
+  public retrieveAuthData(): ILoginData | null {
     if (isBrowser()) {
-      return window.localStorage.getItem(AuthToken);
+      try {
+        const retrievedAuthData = window.localStorage.getItem(AuthToken);
+        return retrievedAuthData !== null
+          ? JSON.parse(retrievedAuthData)
+          : null;
+      } catch {
+        return null;
+      }
     } else {
       return null;
     }

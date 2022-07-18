@@ -40,3 +40,9 @@ export const getUTCTimeStamp = (utcTime: string) => {
 export const getLocalTimeFromUTC = (utcTime: string) => {
   return new Date(utcTime).toString();
 };
+
+export const isDateOver = (utcTime: string) => {
+  const givenDate = new Date(utcTime);
+  const now = new Date();
+  return givenDate < now;
+};

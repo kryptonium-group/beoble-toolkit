@@ -53,11 +53,13 @@ export const useChatRooms = (Beoble: Core, user: IUser | null) => {
   };
 
   const addChatroom = (chatroomToAdd: IChatRoom) => {
-    const filteredChatrooms = chatrooms.filter(
-      (prevChatroom) => prevChatroom.channel.id === chatroomToAdd.channel.id
-    );
-    filteredChatrooms.unshift(chatroomToAdd);
-    setChatrooms(filteredChatrooms);
+    setChatrooms((prevChatrooms) => {
+      const filteredChatrooms = prevChatrooms.filter(
+        (chatroom) => chatroom.channel.id !== chatroomToAdd.channel.id
+      );
+      filteredChatrooms.unshift(chatroomToAdd);
+      return filteredChatrooms;
+    });
   };
 
   const updateChatroomRead = (chatroom: IChatRoom) => {

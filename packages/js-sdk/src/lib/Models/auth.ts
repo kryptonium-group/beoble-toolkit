@@ -5,4 +5,5 @@ export interface IAuthMessage {
 export interface ILoginData {
   login_account_address: string;
   jwt_token: string;
+  expiry_date: string;
 }
