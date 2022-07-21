@@ -1,13 +1,29 @@
 import { Core, IChatRoom, IUser } from '@beoble/js-sdk';
+import { APIState, initialAPIState } from '../hooks';
 
-interface IAppState {
-  beoble: Core;
-  user: IUser | null;
-  followers: IUser[];
-  followings: IUser[];
+export interface IUserState {
+  user: APIState<IUser>;
+  followers: APIState<IUser[]>;
+  followings: APIState<IUser[]>;
+  friends: APIState<IUser[]>;
 
-  chatrooms: IChatRoom[];
-  openedChatroom: string[];
+  chatrooms: APIState<IChatRoom[]>;
 }
 
-const initialState = {};
+export const initialUserState: IUserState = {
+  user: initialAPIState,
+  followers: initialAPIState,
+  followings: initialAPIState,
+  friends: initialAPIState,
+  chatrooms: initialAPIState,
+};
+
+export interface IAppState {
+  beoble: Core;
+  userState: IUserState;
+}
+
+export const initialAppState: IAppState = {
+  beoble: new Core({ appId: '' }),
+  userState: initialUserState,
+};

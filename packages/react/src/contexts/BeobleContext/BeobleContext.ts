@@ -2,8 +2,8 @@ import { ethers } from 'ethers';
 import { createContext } from 'react';
 import { Core, IUser, Notification } from '@beoble/js-sdk';
 
-interface Account {
-  address?: string;
+export interface Account {
+  address: string | null;
   ensName: string | null;
   ensAvatar: string | null;
 }
@@ -21,7 +21,6 @@ export interface IBeobleContext {
   Beoble: Core;
   user: IUser | null;
   setUser: (user: IUser) => void;
-  initProvider: () => void;
 }
 
 export const BeobleContext = createContext<IBeobleContext | null>(null);

@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, ReactNode, useState } from 'react';
-import { useFocus } from '../../hooks/useFocus';
+import { useFocus } from '../../hooks/commons/useFocus';
 import {
   Container,
   InputContainer,

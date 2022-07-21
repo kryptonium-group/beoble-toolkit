@@ -72,7 +72,9 @@ class Chat extends IAPIClass {
     });
   }
 
-  public async markAsRead(params: IPostMarkAsReadParam) {
+  public async markAsRead(
+    params: IPostMarkAsReadParam
+  ): Promise<IChatRoomResponse> {
     return await this._client.post(Paths.chatroom.markAsRead, params);
   }
 }

@@ -47,7 +47,6 @@ export const useChatRooms = (Beoble: Core, user: IUser | null) => {
       const res = await Beoble.user.chatroom.get({
         user_id: user.id,
       });
-      console.log(res);
       setChatrooms(res?.data ?? []);
     }
   };

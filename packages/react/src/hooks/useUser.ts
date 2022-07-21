@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { IUser } from '@beoble/js-sdk';
 import { useBeoble } from './useBeoble';
 import { BeobleNotInitizliedError } from '../lib/Errors';
-import { useRestAPI } from './useFetch';
 
 export const useUser = (user_id?: string) => {
   const [userInfo, setUserInfo] = useState<IUser>();

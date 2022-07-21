@@ -1,37 +1,27 @@
 import { ethers } from 'ethers';
 import { useState, useCallback, useEffect } from 'react';
+import { getENSAvatar, getENSName } from '../utils/ethersUtil';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IUseENS {
-  ENSAvatar?: string;
-  ENSName: string;
+  ENSAvatar: string | null;
+  ENSName: string | null;
 }
 
 export const useENS = (
   provider: ethers.providers.Web3Provider | null,
-  address?: string
+  address: string
 ): IUseENS => {
-  const [ENSName, setENSName] = useState('');
-  const [ENSAvatar, setENSAvatar] = useState('');
+  const [ENSName, setENSName] = useState<string | null>(null);
+  const [ENSAvatar, setENSAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    if (provider && address) getENS(provider, address);
-  }, [provider, address]);
-
-  const getENS = async (
-    provider: ethers.providers.Web3Provider,
-    address: string
-  ) => {
-    const currentChain = (await provider.getNetwork()).chainId;
-    if (ethers.utils.isAddress(address) && currentChain === 1) {
-      const ensName = (await provider.lookupAddress(address)) ?? '';
-      setENSName(ensName);
-      if (ensName) {
-        const ensAvatar = (await provider.getAvatar(ensName)) ?? '';
-        setENSAvatar(ensAvatar);
-      }
-    }
-  };
+    const setENS = async () => {
+      setENSName(await getENSName(address, provider));
+      setENSAvatar(await getENSAvatar(address, provider));
+    };
+    if (provider) setENS();
+  }, [address, provider]);
 
   return { ENSName, ENSAvatar };
 };

@@ -37,7 +37,6 @@ import {
   WalletConnectStatus,
   WalletInfoContainer,
 } from './style';
-import { useENS } from '../../hooks';
 import Button from '../Button';
 import styled from 'styled-components';
 import { useGraph } from '../../hooks/useGraph';
@@ -45,6 +44,7 @@ import Input from '../Input';
 import { FiSearch } from 'react-icons/fi';
 import { InputContainer } from '../Modal/style';
 import Avatar from '../Avatar';
+import { useENS } from '../../hooks';
 
 export interface ContentProps {
   profileUserId?: string;

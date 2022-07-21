@@ -10,7 +10,7 @@ interface FetchAction<T> {
   error?: any;
 }
 
-interface APIState<T> {
+export interface APIState<T> {
   loaded: boolean;
   loading: boolean;
   data?: T | null;
@@ -43,48 +43,27 @@ const fetchReducer = <T>(
   }
 };
 
-const initialState = {
+export const initialAPIState = {
   loaded: false,
   loading: false,
   data: null,
   error: null,
 };
 
-export const useRestAPI = <T = any>(
-  dependecies: ArrayWithMinimumOneElement<any>,
-  restFunc: () => Promise<T>
-) => {
+export const useAsync = <T = any>(
+  restFunc: () => Promise<T>,
+  deps: Array<any> = [],
+  skip = false
+): [APIState<T>, () => Promise<void>] => {
   const [state, dispatch] = useReducer<Reducer<APIState<T>, FetchAction<T>>>(
     fetchReducer,
-    initialState
+    initialAPIState
   );
 
   useEffect(() => {
-    runCallback();
-  }, dependecies);
-
-  const runCallback = async () => {
-    dispatch({
-      type: 'LOADING',
-    });
-    try {
-      const res = await restFunc();
-      dispatch({ type: 'SUCCESS', data: res });
-    } catch (error) {
-      dispatch({ type: 'ERROR', error });
-    }
-  };
-
-  return state;
-};
-
-export const useRestAPIMutation = <T = any>(
-  restFunc: (...args: string[]) => Promise<T>
-) => {
-  const [state, dispatch] = useReducer<Reducer<APIState<T>, FetchAction<T>>>(
-    fetchReducer,
-    initialState
-  );
+    if (skip) return;
+    mutate();
+  }, deps);
 
   const mutate = async () => {
     dispatch({
@@ -98,5 +77,10 @@ export const useRestAPIMutation = <T = any>(
     }
   };
 
-  return [mutate, state];
+  return [state, mutate];
 };
+
+export const useMutation = <T = any>(
+  restFunc: () => Promise<T>,
+  deps: Array<any> = []
+) => useAsync(restFunc, deps, true);

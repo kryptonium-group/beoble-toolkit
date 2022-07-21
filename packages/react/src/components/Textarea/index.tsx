@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, useState } from 'react';
-import { useFocus } from '../../hooks/useFocus';
+import { useFocus } from '../../hooks/commons/useFocus';
 import { Container, Title, TitleContainer } from '../Input/style';
 import { StyledTextarea } from './style';
 

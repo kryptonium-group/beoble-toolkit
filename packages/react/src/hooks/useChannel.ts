@@ -177,7 +177,7 @@ export const useChannel = (chatroomId: string) => {
     if (!user) throw new BeobleNotInitizliedError();
     await BeobleSDK.utils.until(() => isLoading === false);
     const last_message = messages.at(0);
-    if (!last_message) return;
+    if (!last_message) throw new Error("can't mark as read with no messages");
     const res = await Beoble.chatroom.chat.markAsRead({
       chat_id: last_message.chatId,
       chatroom_id: chatroomId,

@@ -8,7 +8,7 @@ import ProfileDrawer from '../../components/ProfileDrawer';
 import { ProfileModal } from '../../components/ProfileModal';
 import StatusButton from '../../components/StatusButton';
 import { ProfileType } from './type';
-import { useDelayOpen } from '../../hooks/useDelayOpen';
+import { useDelayOpen } from '../../hooks/commons/useDelayOpen';
 import { useBeobleModal } from '../../hooks';
 import Modal from '../../components/Modal';
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { IUser } from '@beoble/js-sdk';
-import useDebounce from './useDebounce';
+import useDebounce from './commons/useDebounce';
 import { useBeoble } from './useBeoble';
 
 export const useSearch = () => {

@@ -4,7 +4,7 @@ import ChatRoomModal from '../../components/ChatRoomModal';
 import ConversationPopUp from '../../components/ConversationPopUp';
 import MessageOverlay from '../../components/MessageOverlay';
 import useChat from '../../hooks/useChat';
-import { useDelayOpen } from '../../hooks/useDelayOpen';
+import { useDelayOpen } from '../../hooks/commons/useDelayOpen';
 import { GlobalStyle, zIndex } from '../../styles';
 
 /* eslint-disable-next-line */

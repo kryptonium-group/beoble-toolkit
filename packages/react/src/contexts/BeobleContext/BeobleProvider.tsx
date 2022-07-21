@@ -8,20 +8,19 @@ import { useNotification } from '../../hooks/useNotification';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../../theme';
 import { isDateOver } from '../../utils';
+import { getSign } from '../../utils/ethersUtil';
+import { ProviderNotInitializedError } from '../../lib/Errors';
 
 export interface IBeobleProvider {
-  children?: ReactNode;
   Beoble: Core;
+  children?: ReactNode;
 }
 
-export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
+export const BeobleProvider: FC<IBeobleProvider> = ({ Beoble, children }) => {
   const [initialized, setInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<IUser | null>(null);
-
-  const { provider, address, ensName, ensAvatar, initProvider, getSign } =
-    useWeb3();
-
+  const { provider, account } = useWeb3();
   const { notification, hasNewMessage, setHasNewMessage } = useNotification(
     Beoble,
     user?.id
@@ -31,26 +30,25 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
   // and web account information is fetched successfully
   // mark initialized and fetch user from beoble sdk
   useEffect(() => {
+    const { address } = account;
     if (address) {
       setInitialized(true);
       initUser(address);
       if (!checkAuthTokenValidity()) login(address);
     }
-  }, [address]);
+  }, [account.address]);
 
   useEffect(() => {
+    const { address } = account;
     if (notification && address) {
       updateUser(address);
     }
-  }, [notification, address]);
+  }, [notification, account.address]);
 
   const checkAuthTokenValidity = () => {
     const existingToken = Beoble.auth.retrieveAuthData();
-    if (!existingToken) {
-      return false;
-    } else {
-      return !isDateOver(existingToken.expiry_date);
-    }
+    if (!existingToken) return false;
+    else return !isDateOver(existingToken.expiry_date);
   };
 
   const updateUser = async (wallet_address: string) => {
@@ -66,7 +64,8 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
     try {
       const user = await updateUser(wallet_address);
       if (!user.public_key) {
-        await upadatePublicKey(wallet_address, user.id);
+        const updatedUser = await upadatePublicKey(wallet_address, user.id);
+        setUser(updatedUser);
       }
     } catch (error) {
       console.log(error);
@@ -80,18 +79,22 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
     const updated = await Beoble.user.update(user_id, {
       public_key,
     });
-    setUser(updated.data);
+    return updated.data;
   };
 
   const login = async (wallet_address: string) => {
-    const res = await Beoble.auth.getMessage(wallet_address);
-    const [signature, public_key] = await getSign(res.data.message_to_sign);
-    const res2 = await Beoble.auth.login({
+    if (!provider) throw new ProviderNotInitializedError();
+    const msgRes = await Beoble.auth.getMessage(wallet_address);
+    const [signature, public_key] = await getSign(
+      msgRes.data.message_to_sign,
+      provider
+    );
+    const loginRes = await Beoble.auth.login({
       wallet_address,
       signature,
       chain_type: 'ETHEREUM',
     });
-    console.log(res2, public_key);
+    console.log(loginRes, public_key);
     return public_key;
   };
 
@@ -102,18 +105,13 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ children, Beoble }) => {
           initialized,
           isAuthenticated,
           provider,
-          account: {
-            address,
-            ensName,
-            ensAvatar,
-          },
+          account,
           notification,
           hasNewMessage,
           setHasNewMessage,
           Beoble,
           user,
           setUser,
-          initProvider,
         }}
       >
         <ChatProvider core={Beoble} {...{ user, notification }}>

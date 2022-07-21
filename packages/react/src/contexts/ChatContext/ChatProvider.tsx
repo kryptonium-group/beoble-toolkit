@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FC, ReactNode, useState } from 'react';
 import { Core, IChatRoom, IUser, Notification } from '@beoble/js-sdk';
 import { useChatRooms } from '../../hooks/useChatRooms';
-import useScreen from '../../hooks/useScreen';
+import useScreen from '../../hooks/commons/useScreen';
 import { ChatContext } from './ChatContext';
 
 export interface IChatProvider {

@@ -1,5 +1,5 @@
 import { FC, ReactNode, useState } from 'react';
-import { useDelayOpen } from '../../hooks/useDelayOpen';
+import { useDelayOpen } from '../../hooks/commons/useDelayOpen';
 import { ModalContext, ModalPages } from './ModalContext';
 
 export interface ModalProvider {

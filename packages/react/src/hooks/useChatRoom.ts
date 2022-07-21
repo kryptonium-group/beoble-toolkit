@@ -27,10 +27,11 @@ export const useChatRoom = (chatroom_id: string) => {
     chatroom && user ? getChatroomUndreadCount(chatroom, user.id) : 0;
 
   useEffect(() => {
-    updateChatroom(chatroom_id);
+    updateChatroom();
   }, [Beoble]);
 
-  const updateChatroom = async (chatroom_id: string) => {
+  const updateChatroom = async () => {
+    setIsLoading(true);
     const res = await Beoble.chatroom.get({
       chatroom_id,
     });
@@ -46,5 +47,6 @@ export const useChatRoom = (chatroom_id: string) => {
     chatroomName,
     otherMembers,
     unreadMessages,
+    setChatroom,
   };
 };

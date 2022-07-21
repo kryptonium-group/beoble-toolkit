@@ -89,7 +89,7 @@ export const UserListItem: FC<UserListItemProps> = ({
           profileImg={
             user.representative_media_url
               ? user.representative_media_url[0]
-              : ENSAvatar
+              : ENSAvatar ?? ''
           }
           size={handleSize(size, [48, 36, 20])}
         />

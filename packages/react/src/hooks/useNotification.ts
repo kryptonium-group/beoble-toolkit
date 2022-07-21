@@ -20,6 +20,9 @@ export const useNotification = (core: Core, userId?: string) => {
         console.log(data);
         setHasNewMessage(true);
       });
+      noti.on('message', (data) => {
+        console.log(data);
+      });
       setNotification(noti);
     }
   };

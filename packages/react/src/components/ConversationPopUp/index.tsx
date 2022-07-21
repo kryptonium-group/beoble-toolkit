@@ -9,7 +9,7 @@ import { useChannel } from '../../hooks/useChannel';
 import Spinner from '../Spinner';
 import { useChatRoom, useChat, useBeobleModal, useFocus } from '../../hooks';
 import { Status } from '../OnlineStatus';
-import { useDebounceCallback } from '../../hooks/useDebounce';
+import { useDebounceCallback } from '../../hooks/commons/useDebounce';
 import { getUserOnlineStatus } from '../../utils/userUtil';
 
 export interface ConversationPopUpProps {
@@ -119,22 +119,28 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     chatroomName,
     otherMembers,
     chatroom,
+    setChatroom,
   } = useChatRoom(chatroomId);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // when user open conversaation
   // mark as read
   useEffect(() => {
-    if (!isLoading && unreadMessages > 0) markAsRead();
-    console.log(chatroom);
+    markAsReadAndUpdate();
   }, [isLoading, chatroom]);
 
   // whenever user focuses conversation
   // mark as read
   const handleFocus = async () => {
+    markAsReadAndUpdate();
+  };
+
+  const markAsReadAndUpdate = async () => {
     if (!isLoading && unreadMessages > 0) {
       const res = await markAsRead();
+      console.log('mark as read', res);
       updateChatroomRead(res.data);
+      setChatroom(res.data);
     }
   };
 
@@ -148,10 +154,10 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
 
   const handleExpandChat = () => {
     setIsExpanded(!isExpanded);
+    focusMessageForm();
   };
 
   const handleProfileClick = () => {
-    console.log(otherMembers);
     if (otherMembers.length > 0) {
       addRoute(otherMembers[0].user.id);
       open();
@@ -174,6 +180,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     [messages, scrollRef.current]
   );
 
+  // focus on mount
   useEffect(() => {
     messageFormRef && focusMessageForm();
   }, [focusMessageForm, messageFormRef]);
