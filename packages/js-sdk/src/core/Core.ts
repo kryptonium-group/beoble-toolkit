@@ -27,6 +27,14 @@ export class Core extends IAPIClass {
     this.attachment = new Attachment(this._client);
   }
 
+  /**
+   * Init beoble sdk with address.
+   * @param wallet_address
+   */
+  public initialize(wallet_address: string) {
+    this.auth.initAuth(wallet_address);
+  }
+
   public notification(user_id: string) {
     return new Notification({
       app_id: this.app_id,

@@ -83,3 +83,13 @@ export const getSign = async (
   const pk = ethers.utils.recoverPublicKey(ethers.utils.arrayify(msgId), sig);
   return [sig, pk];
 };
+
+/**
+ * check is there connected account
+ * @param provider
+ * @returns true if there is at least one connected user else false.
+ */
+export const isConnected = async (provider: ethers.providers.Web3Provider) => {
+  const accoutns = await provider.listAccounts();
+  return accoutns.length > 0;
+};

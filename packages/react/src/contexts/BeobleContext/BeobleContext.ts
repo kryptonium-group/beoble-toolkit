@@ -16,11 +16,9 @@ export interface IBeobleContext {
   account?: Account;
   notification?: Notification;
   hasNewMessage: boolean;
-  setHasNewMessage: (data: boolean) => void;
 
   Beoble: Core;
   user: IUser | null;
-  setUser: (user: IUser) => void;
 }
 
 export const BeobleContext = createContext<IBeobleContext | null>(null);

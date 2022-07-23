@@ -3,7 +3,8 @@ import { Notification, Core } from '@beoble/js-sdk';
 
 export const useNotification = (core: Core, userId?: string) => {
   const [notification, setNotification] = useState<Notification>();
-  const [hasNewMessage, setHasNewMessage] = useState(false);
+  const [notis, setNotis] = useState([]);
+  const hasNewMessage = notis.some((noti) => noti.type === '');
 
   useEffect(() => {
     openNotification();
@@ -18,7 +19,6 @@ export const useNotification = (core: Core, userId?: string) => {
       await noti.open();
       noti.onMessage('NEW_MESSAGE', (data) => {
         console.log(data);
-        setHasNewMessage(true);
       });
       noti.on('message', (data) => {
         console.log(data);
@@ -27,5 +27,9 @@ export const useNotification = (core: Core, userId?: string) => {
     }
   };
 
-  return { notification, hasNewMessage, setHasNewMessage };
+  const removeNoti = () => {
+    return;
+  };
+
+  return { notification, hasNewMessage };
 };

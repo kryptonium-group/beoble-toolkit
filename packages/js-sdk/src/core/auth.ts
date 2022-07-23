@@ -4,6 +4,7 @@ import { ILoginData } from '../lib/Models/auth';
 import { IPostLogInBody } from '../lib/Requests/auth';
 import { IAuthResponse, ILoginResponse } from '../lib/Responses/auth';
 import { isBrowser } from '../util/environment';
+import { isDateOver } from '../util/time';
 import { IAPIClass } from './types';
 
 export class Auth extends IAPIClass {
@@ -12,13 +13,12 @@ export class Auth extends IAPIClass {
 
   constructor(client: ApiClient) {
     super(client);
-    this.initAuth(client);
   }
 
-  private initAuth = (client: ApiClient) => {
-    const authData = this.retrieveAuthData();
+  public initAuth = (wallet_address: string) => {
+    const authData = this.retrieveAuthData(wallet_address);
     if (authData) {
-      client.setAuthToekn(authData.jwt_token);
+      this._client.setAuthToekn(authData.jwt_token);
       this.authToken = authData.jwt_token;
       this.isAuthorized = true;
     }
@@ -43,7 +43,10 @@ export class Auth extends IAPIClass {
   // TODO: impl for server side
   private storeAuthData(data: ILoginData): void {
     if (isBrowser()) {
-      window.localStorage.setItem(AuthToken, JSON.stringify(data));
+      window.localStorage.setItem(
+        `${AuthToken}_${data.login_account_address}`,
+        JSON.stringify(data)
+      );
     } else {
       console.log('should handle server side storing');
       return;
@@ -51,10 +54,12 @@ export class Auth extends IAPIClass {
   }
 
   // TODO: impl for server side
-  public retrieveAuthData(): ILoginData | null {
+  public retrieveAuthData(wallet_address: string): ILoginData | null {
     if (isBrowser()) {
       try {
-        const retrievedAuthData = window.localStorage.getItem(AuthToken);
+        const retrievedAuthData = window.localStorage.getItem(
+          `${AuthToken}_${wallet_address}`
+        );
         return retrievedAuthData !== null
           ? JSON.parse(retrievedAuthData)
           : null;
@@ -63,6 +68,16 @@ export class Auth extends IAPIClass {
       }
     } else {
       return null;
+    }
+  }
+
+  public checkAuthTokenValidity(wallet_address: string): boolean {
+    if (isBrowser()) {
+      const existingToken = this.retrieveAuthData(wallet_address);
+      if (!existingToken) return false;
+      else return !isDateOver(existingToken.expiry_date);
+    } else {
+      return false;
     }
   }
 }
