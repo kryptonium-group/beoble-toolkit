@@ -42,8 +42,8 @@ export const ChatProvider: FC<IChatProvider> = ({
 
   useEffect(() => {
     if (notification) {
-      notification.onMessage('NEW_MESSAGE', (data: IChatRoom) => {
-        addChatroom(data);
+      notification.onNotiMessage('NEW_MESSAGE', (data) => {
+        addChatroom(data as IChatRoom);
       });
     }
   }, [notification]);

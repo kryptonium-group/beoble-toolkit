@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Core } from '@beoble/js-sdk';
-import useWeb3 from '../../hooks/useWeb3';
+import { useWeb3 } from '../../hooks/useWeb3';
 import { BeobleContext } from './BeobleContext';
 import { ModalProvider } from '../ModalContext/ModalProvider';
 import { ChatProvider } from '../ChatContext/ChatProvider';
@@ -19,14 +19,12 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ Beoble, children }) => {
   const [initialized, setInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { provider, account } = useWeb3();
-
   const { userState, getUser, login } = useUserQuery(Beoble, provider, account);
   const { chatroomState, getChatrooms, unshiftChatroom } = useChatroomsQuery(
     Beoble,
     userState.data
   );
-
-  const { notification, hasNewMessage } = useNotification(
+  const { notification, hasNewMessage, shiftNoti } = useNotification(
     Beoble,
     userState.data?.id
   );
@@ -37,19 +35,17 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ Beoble, children }) => {
       Beoble.initialize(address);
       setInitialized(true);
       getUser();
-      if (!Beoble.auth.checkAuthTokenValidity(address))
+      if (!Beoble.auth.checkAuthTokenValidity(address)) {
+        setIsAuthenticated(false);
         login()
           .then(() => setIsAuthenticated(true))
           .catch(() => setIsAuthenticated(false));
-      else setIsAuthenticated(true);
+      } else setIsAuthenticated(true);
     }
   }, [account.address]);
 
   useEffect(() => {
-    if (userState.data) {
-      console.log(userState);
-      getChatrooms();
-    }
+    if (userState.data) getChatrooms();
   }, [userState]);
 
   return (

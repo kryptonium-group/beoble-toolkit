@@ -67,12 +67,11 @@ export const MessageOverlay: FC<MessageOverlayProps> = ({
 }) => {
   const [isMinimized, setIsMinimized] = useState(true);
 
-  const { account, hasNewMessage, setHasNewMessage, user } = useBeoble();
+  const { account, hasNewMessage, user } = useBeoble();
   const { conversations, isChatroomsLoading, unreadMessages } = useChat();
 
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
-    setHasNewMessage(false);
   };
 
   const getUserStatus = useCallback((): Status => {

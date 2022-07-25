@@ -62,5 +62,3 @@ export const useWeb3 = () => {
   };
   return { provider, account };
 };
-
-export default useWeb3;

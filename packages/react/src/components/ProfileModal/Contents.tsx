@@ -185,7 +185,11 @@ export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
         <AddressContainer>
           <AddressProfileButton>
             <AddressProfileDiv>
-              <Avatar size={36} account={getAddress()} profileImg={ENSAvatar} />
+              <Avatar
+                size={36}
+                account={getAddress()}
+                profileImg={ENSAvatar ?? undefined}
+              />
               <AddressDiv>
                 <AddressSpan>{getDisplayName()}</AddressSpan>
                 <ProfileSpan>{getTruncatedAddress()}</ProfileSpan>

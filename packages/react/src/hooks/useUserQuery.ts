@@ -7,6 +7,7 @@ import {
 } from '../lib/Errors';
 import { getSign } from '../utils/ethersUtil';
 import { useQuery } from './commons';
+import { useGraphQuery } from './useGraphQuery';
 
 export const useUserQuery = (
   Beoble: Core,
@@ -15,9 +16,9 @@ export const useUserQuery = (
 ) => {
   const [userState, userQuery] = useQuery([
     {
-      key: 'get',
+      key: 'fetch',
       reducer: async () => {
-        if (!account.address || !account.address) throw new Error('');
+        if (!account.address) throw new Error('');
         const { data } = await Beoble.user.get({
           wallet_address: account.address,
         });
@@ -27,6 +28,8 @@ export const useUserQuery = (
       },
     },
   ]);
+
+  const graph = useGraphQuery(Beoble, userState.data?.id);
 
   const updatePublicKey = async (user_id: string) => {
     const public_key = await login();
@@ -52,7 +55,7 @@ export const useUserQuery = (
     return public_key;
   };
 
-  const getUser = () => userQuery('get');
+  const getUser = () => userQuery('fetch');
 
   return { userState, getUser, login };
 };

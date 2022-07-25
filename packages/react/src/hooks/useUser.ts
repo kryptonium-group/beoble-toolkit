@@ -31,32 +31,32 @@ export const useUser = (user_id?: string) => {
   };
 
   const getFollowings = async () => {
-    if (!user_id) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     setIsFollowingFetching(true);
     const followers = await Beoble.user.follow.get({
       type: 'following',
-      user_id: user_id ?? user_id,
+      user_id: user_id ?? user.id,
     });
     setFollowings(followers.data);
     setIsFollowingFetching(false);
   };
 
   const getFriends = async () => {
-    if (!user_id) throw new BeobleNotInitizliedError();
+    if (!user) throw new BeobleNotInitizliedError();
     setIsFriendFetching(true);
     const freinds = await Beoble.user.friend.get({
-      user_id: user_id ?? user_id,
+      user_id: user_id ?? user.id,
     });
     setFriends(freinds.data);
     setIsFriendFetching(false);
   };
 
   const getFollowers = async () => {
+    if (!user) throw new BeobleNotInitizliedError();
     setIsFollowerFetching(true);
-    if (!user_id) throw new BeobleNotInitizliedError();
     const followers = await Beoble.user.follow.get({
       type: 'follower',
-      user_id: user_id ?? user_id,
+      user_id: user_id ?? user.id,
     });
     setFollowers(followers.data);
     setIsFollowerFetching(false);
