@@ -1,4 +1,4 @@
-import { Core } from '@beoble/js-sdk';
+import { Core, IPutUserBody } from '@beoble/js-sdk';
 import { ethers } from 'ethers';
 import { Account } from '../contexts';
 import {
@@ -24,6 +24,15 @@ export const useUserQuery = (
         });
         const user = data[0];
         if (!user.public_key) return await updatePublicKey(user.id);
+        return user;
+      },
+    },
+    {
+      key: 'update',
+      reducer: async (prev, body) => {
+        if (!prev) throw new Error('');
+        console.log(prev);
+        const { data: user } = await Beoble.user.update(prev?.id, body);
         return user;
       },
     },
@@ -56,6 +65,7 @@ export const useUserQuery = (
   };
 
   const getUser = () => userQuery('fetch');
+  const updateUser = (user: IPutUserBody) => userQuery('update', user);
 
-  return { userState, getUser, login };
+  return { userState, getUser, login, updateUser };
 };

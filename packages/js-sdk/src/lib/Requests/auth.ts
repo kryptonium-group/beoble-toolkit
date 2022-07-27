@@ -1,4 +1,4 @@
-import { ChainType } from '../types';
+import { ChainType } from '../../types';
 
 export interface IPostLogInBody {
   wallet_address: string;

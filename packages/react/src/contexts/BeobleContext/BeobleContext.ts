@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { createContext } from 'react';
-import { Core, IUser, Notification } from '@beoble/js-sdk';
+import { Core, IPutUserBody, IUser, Notification } from '@beoble/js-sdk';
+import { APIState } from '../../hooks';
 
 export interface Account {
   address: string | null;
@@ -19,6 +20,8 @@ export interface IBeobleContext {
 
   Beoble: Core;
   user: IUser | null;
+  userState: APIState<IUser>;
+  updateUser: (body: IPutUserBody) => void;
 }
 
 export const BeobleContext = createContext<IBeobleContext | null>(null);

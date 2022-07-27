@@ -3,8 +3,10 @@ import { Core } from '../../src/core';
 import { MyWallet, MasterKeyAuthToken, getUser, ch } from './index.test';
 import { MyWallets, TestWallets } from '../constants';
 
+const demoAppId = 'ddcd9c84-45c7-4d05-8008-18582d7f91be';
 const core = new Core({
   authToken: MasterKeyAuthToken,
+  appId: demoAppId,
 });
 
 describe('user test', () => {
@@ -48,12 +50,20 @@ describe('user test', () => {
     console.log(res);
     expect(res.data.display_name).toEqual(timestamp);
   });
+
+  it('get nft', async () => {
+    const res = await core.user.getNFTs({
+      user_id: '36bea95d-546b-4874-8ff0-0815b02a6c7a',
+    });
+    console.log(res);
+    expect(res.data).toHaveLength(1);
+  });
 });
 
 describe('user chatroom test', () => {
   it('get Chatroom', async () => {
     const user = await core.user.get({ wallet_address: MyWallet });
-    const user_id = user.data[0].user_id;
+    const user_id = user.data[0].id;
     const res = await core.user.chatroom.get({
       user_id,
     });
@@ -167,7 +177,7 @@ describe('User Friend Test', () => {
     const { user_id } = await getUser(core, MyWallet);
     const res = await core.user.friend.updateFriendship(user_id, {
       target_user_id: user_id,
-      friendship_action_type: 'REQEUST',
+      friendship_action_type: 'REQUEST',
     });
     console.log(res);
   });
@@ -185,7 +195,7 @@ describe('User Friend Test', () => {
     const { user_id } = await getUser(core, MyWallet);
     const res = await core.user.friend.updateFriendship(user_id, {
       target_user_id: user_id,
-      friendship_action_type: 'REQEUST',
+      friendship_action_type: 'REQUEST',
     });
     console.log(res);
   });

@@ -29,7 +29,12 @@ export const getChatroomMemberAccount = (
 
 export const getChatroomLatestMessage = (chatroom: IChatRoom) => {
   const { messages } = chatroom;
-  return messages.length > 0 ? messages[0].text : 'Type anything to start!';
+
+  return messages.length > 0
+    ? messages[0].attachments.length > 0
+      ? '(photo)'
+      : messages[0].text
+    : 'Type anything to start!';
 };
 
 export const filterOutUser = (members: IUser[], user_id: string): IUser[] => {

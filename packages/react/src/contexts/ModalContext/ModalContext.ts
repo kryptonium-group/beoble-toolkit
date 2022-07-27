@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { INFT } from '../../../../../dist/packages/js-sdk/src';
 
 export interface IModalContext {
   route: (ModalPages | string)[];
@@ -15,6 +16,13 @@ export interface IModalContext {
   openSearchModal: () => void;
   closeSearchModal: () => void;
   toggleSearchModal: () => void;
+
+  isNftModalOpen: boolean;
+  renderNftModal: boolean;
+  openNftModal: () => void;
+  closeNftModal: () => void;
+  selectedNft: INFT;
+  setSelectedNft: (nft: INFT | undefined) => void;
 }
 
 export type ModalPages = 'default' | 'edit';

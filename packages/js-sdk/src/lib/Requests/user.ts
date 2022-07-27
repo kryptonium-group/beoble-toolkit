@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { SortngOrder } from '../../core/user';
+import { ArrayUpdate } from '../Models/core';
 import { MembershipAction } from '../types';
 export interface IGetUserChatRoomParams {
   user_id: string;
@@ -33,6 +34,6 @@ export interface IPutUserBody {
   alias?: string;
   display_name?: string;
   description?: string;
-  representative_media_url?: string[];
+  representative_media_url?: ArrayUpdate<string>;
   public_key?: string;
 }

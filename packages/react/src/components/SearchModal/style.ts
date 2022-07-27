@@ -117,7 +117,6 @@ export const FooterContainer = styled.footer`
   align-items: center;
   padding: 20px;
   background-color: inherit;
-  margin-top: auto;
 `;
 
 export const SpinnerContainer = styled.div`

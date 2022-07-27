@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
+import { ChainType } from '../../types';
 import { UserRole } from '../types/user';
 
 export interface IUser {
@@ -38,3 +39,12 @@ export interface UserCounts {
 }
 
 export interface Dapp extends IUser {}
+
+export interface INFT {
+  token_address: string;
+  token_id: string | null;
+  name: string;
+  description: string;
+  image_url: string;
+  chain: ChainType;
+}

@@ -74,7 +74,12 @@ const MessageBox = styled.div<{ isMine: boolean; contentType: ContentType }>`
   font-size: 14px;
   padding: ${({ contentType }) =>
     contentType === 'IMAGE' ? '0px' : '8px 12px'};
-  ${({ contentType }) => contentType === 'IMAGE' && 'line-height: 0;'}
+  ${({ contentType }) =>
+    contentType === 'IMAGE' &&
+    css`
+      line-height: 0;
+      background-color: transparent;
+    `}
   block-size: fit-content;
   min-width: 10px;
   max-width: 100%;

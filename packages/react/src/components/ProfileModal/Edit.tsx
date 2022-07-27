@@ -3,7 +3,6 @@ import { IPutUserBody } from '@beoble/js-sdk';
 import useBeoble from '../../hooks/useBeoble/useBeoble';
 import Input from '../Input';
 import Textarea from '../Textarea';
-import { useBeobleSDK } from '../../hooks/useBeoble/useBeobleSDK';
 import Spinner from '../Spinner';
 import NftPicker from '../NftPicker';
 import {
@@ -17,16 +16,19 @@ import {
   SaveButton,
   TitleContainer,
 } from './style';
+import { useBeobleModal } from '../../hooks';
 
 export const EditProfile = () => {
   const [inputs, setInputs] = useState<IPutUserBody>({});
-  const { user } = useBeoble();
-  const { updateUser, data, isFetching } = useBeobleSDK();
-  const disableInput = isFetching || !user;
+  const { userState, updateUser } = useBeoble();
+  const { selectedNft } = useBeobleModal();
+  const disableInput =
+    userState.loading || userState.updating || !userState.data;
 
   const handleSave = async () => {
-    if (!user) throw new Error('user is not initialized!');
-    updateUser(user.id, inputs);
+    console.log(inputs);
+    if (!userState.data) throw new Error('user is not initialized!');
+    updateUser(inputs);
   };
 
   const handleInputChage = (
@@ -39,24 +41,33 @@ export const EditProfile = () => {
   };
 
   useEffect(() => {
-    if (data) {
-      setInputs({
-        alias: data.data.alias,
-        description: data.data.description,
-        display_name: data.data.display_name,
-      });
-    }
-  }, [data]);
+    setInputs((prev) => ({
+      ...prev,
+      representative_media_url: selectedNft
+        ? { update_type: 'NORMAL', elements: [selectedNft.image_url] }
+        : undefined,
+    }));
+  }, [selectedNft]);
 
   useEffect(() => {
-    if (user) {
+    if (userState.data) {
       setInputs({
-        alias: user.alias,
-        display_name: user.display_name,
-        description: user.description ?? undefined,
+        alias: userState.data.alias,
+        description: userState.data.description ?? undefined,
+        display_name: userState.data.display_name,
       });
     }
-  }, [user]);
+  }, [userState.data]);
+
+  useEffect(() => {
+    if (userState.data) {
+      setInputs({
+        alias: userState.data.alias,
+        display_name: userState.data.display_name,
+        description: userState.data.description ?? undefined,
+      });
+    }
+  }, [userState.data]);
 
   return (
     <ModalContent>
@@ -67,7 +78,15 @@ export const EditProfile = () => {
         <InputTitleContainer>
           <InputTitle>Profile Image</InputTitle>
         </InputTitleContainer>
-        <NftPicker size={100} />
+        <NftPicker
+          size={100}
+          currentProfileImage={
+            selectedNft?.image_url ??
+            (userState.data?.representative_media_url
+              ? userState.data.representative_media_url[0]
+              : undefined)
+          }
+        />
       </ProfileImageContainer>
       <InputContainer>
         <Input
@@ -86,7 +105,7 @@ export const EditProfile = () => {
           placeholder="Enter Display Name"
           value={inputs?.display_name}
           onChange={handleInputChage}
-          disabled={isFetching || !user}
+          disabled={disableInput}
         />
       </InputContainer>
       <InputContainer>
@@ -96,12 +115,12 @@ export const EditProfile = () => {
           placeholder="Describe yourself on web3!"
           value={inputs?.description}
           onChange={handleInputChage}
-          disabled={isFetching || !user}
+          disabled={disableInput}
         />
       </InputContainer>
       <Footer>
-        <SaveButton onClick={handleSave} disabled={isFetching || !user}>
-          {isFetching ? <Spinner size={20} color="#ffffff" /> : 'Save'}
+        <SaveButton onClick={handleSave} disabled={disableInput}>
+          {userState.loading ? <Spinner size={20} color="#ffffff" /> : 'Save'}
         </SaveButton>
       </Footer>
     </ModalContent>

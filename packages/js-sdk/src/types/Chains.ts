@@ -8,8 +8,12 @@ export const Chains = {
   avax: 'AVALANCHE',
   solana: 'SOLANA',
   harmony: 'HARMONY',
-  okex: 'OKEX_CHAIN',
+  okex: 'OKEX',
   cronos: 'CRONOS',
+  tron: 'TRON',
+  heco: 'HECO',
+  arbitrium: 'ARBITRUM',
+  unknown: 'UNKNOWN ',
 } as const;
 
 type ChainKeys = keyof typeof Chains;

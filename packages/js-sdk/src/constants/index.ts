@@ -32,6 +32,7 @@ export const Paths = {
       base: '/user/group',
       membership: (user_id: string) => `/user/${user_id}/group/membership`,
     },
+    nft: 'user/nft',
   },
   chat: {
     base: '/chat',

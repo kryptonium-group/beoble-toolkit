@@ -8,7 +8,11 @@ import {
   IPutUserBody,
   IPutUserChatRoomMembershipBody,
 } from '../lib/Requests/user';
-import { IUserResponse, IUsersResponse } from '../lib/Responses/user';
+import {
+  IUserNFTResponse,
+  IUserResponse,
+  IUsersResponse,
+} from '../lib/Responses/user';
 import { IAPIClass, IRestEndPoint } from './types';
 
 export class User extends IAPIClass implements IRestEndPoint {
@@ -40,6 +44,10 @@ export class User extends IAPIClass implements IRestEndPoint {
 
   public async add(body: IPostUserBody): Promise<IUser> {
     return await this._client.post(Paths.user.base, body);
+  }
+
+  public async getNFTs(params: IUserIdParam): Promise<IUserNFTResponse> {
+    return await this._client.get(`${Paths.user.nft}`, params);
   }
 }
 

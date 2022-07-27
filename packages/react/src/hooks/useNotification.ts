@@ -19,9 +19,6 @@ export const useNotification = (core: Core, userId?: string) => {
     if (userId) {
       const noti = core.notification(userId);
       await noti.open();
-      noti.onNotiMessage('NEW_MESSAGE', (data) => {
-        console.log(data);
-      });
       noti.onMessage((data) => {
         setNotis((prev) => [...prev, data]);
       });
@@ -31,8 +28,8 @@ export const useNotification = (core: Core, userId?: string) => {
 
   const shiftNoti = (callback?: (noti?: INotiMessage) => void) => {
     const firstElem = notis.at(0);
-    setNotis((notis) => notis.slice(1));
     callback && callback(firstElem);
+    setNotis((notis) => notis.slice(1));
     return firstElem;
   };
 

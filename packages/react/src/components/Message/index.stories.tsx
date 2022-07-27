@@ -51,7 +51,7 @@ ImageMessage.args = {
       style={{ objectFit: 'cover', margin: '-8px -12px' }}
       alt=""
       src="https://1.bp.blogspot.com/-RmJHrxaA5Zo/XTadowYaxQI/AAAAAAAAFBk/agxMBGgenRwuuUGs3kCpL-Xs2riqezPDwCLcBGAs/s1600/4.gif"
-    ></img>
+    />
   ),
   created_at: '2022-07-14T23:58:10Z',
 };

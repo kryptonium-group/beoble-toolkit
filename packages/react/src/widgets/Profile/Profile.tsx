@@ -10,7 +10,8 @@ import StatusButton from '../../components/StatusButton';
 import { ProfileType } from './type';
 import { useDelayOpen } from '../../hooks/commons/useDelayOpen';
 import { useBeobleModal } from '../../hooks';
-import Modal from '../../components/Modal';
+import { SearchModal } from '../../components/SearchModal';
+import NftModal from '../../components/NftModal';
 
 /* eslint-disable-next-line */
 export interface ProfileProps {
@@ -32,31 +33,10 @@ export const Profile: FC<ProfileProps> = ({
     isSearchModalOpen,
     renderSearchModal,
     closeSearchModal,
+    isNftModalOpen,
+    renderNftModal,
+    closeNftModal,
   } = useBeobleModal();
-
-  /*
-  const renderModal = () => {
-    const modalContainer = document.createElement('div');
-    modalContainer.id = PROFILE_MODAL_CLASSNAME;
-    getDocumentRoot().appendChild(modalContainer);
-    const root = createRoot(modalContainer);
-    root.render(<ProfileModal isOpen />);
-  };
-
-  const renderDrawer = () => {
-    const drawerContainer = document.createElement('div');
-    drawerContainer.id = PROFILE_DRAWER_CLASSNAME;
-    getDocumentRoot().appendChild(drawerContainer);
-    const root = createRoot(drawerContainer);
-    root.render(<ProfileDrawer />);
-  };
-  
-  const getDocumentRoot = () => {
-    const nextBody = document.getElementById('__next');
-    const reactBody = document.getElementById('root');
-    return nextBody ?? reactBody ?? document.body;
-  };
-  */
 
   useEffect(() => {
     //  detailElement === 'drawer' ? renderDrawer() : renderModal();
@@ -67,7 +47,11 @@ export const Profile: FC<ProfileProps> = ({
       {hasButton && <StatusButton onClick={toggle} />}
       {render && <ProfileModal isOpen={isOpen} close={close} />}
       {renderSearchModal && (
-        <Modal isOpen={isSearchModalOpen} onClose={closeSearchModal} />
+        <SearchModal isOpen={isSearchModalOpen} onClose={closeSearchModal} />
+      )}
+
+      {renderNftModal && (
+        <NftModal onClose={closeNftModal} isOpen={isNftModalOpen} />
       )}
     </StyledProfile>
   );

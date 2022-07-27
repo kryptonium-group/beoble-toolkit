@@ -1,4 +1,5 @@
 import { FC, ReactNode, useState } from 'react';
+import { INFT } from '../../../../../dist/packages/js-sdk/src';
 import { useDelayOpen } from '../../hooks/commons/useDelayOpen';
 import { ModalContext, ModalPages } from './ModalContext';
 
@@ -16,6 +17,9 @@ export const ModalProvider: FC<ModalProvider> = ({ children }) => {
     closeSearchModal,
     toggleSearchModal,
   ] = useDelayOpen(300);
+  const [isNftModalOpen, renderNftModal, openNftModal, closeNftModal] =
+    useDelayOpen(300);
+  const [selectedNft, setSelectedNft] = useState<INFT>();
 
   const addRoute = (page: ModalPages | string) => {
     setRoute([...route, page]);
@@ -52,6 +56,14 @@ export const ModalProvider: FC<ModalProvider> = ({ children }) => {
         openSearchModal,
         closeSearchModal,
         toggleSearchModal,
+
+        isNftModalOpen,
+        renderNftModal,
+        openNftModal,
+        closeNftModal,
+
+        selectedNft,
+        setSelectedNft,
       }}
     >
       {children}
