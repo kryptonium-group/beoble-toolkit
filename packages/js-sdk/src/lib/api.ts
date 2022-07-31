@@ -62,9 +62,9 @@ export default class ApiClient {
     );
   }
 
-  public async post(
+  public async post<T = any>(
     path: string,
-    data?: any,
+    data?: T,
     config?: AxiosRequestConfig<any>
   ): Promise<any> {
     return this.tryRestApi(

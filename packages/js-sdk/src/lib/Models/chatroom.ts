@@ -12,6 +12,11 @@ export interface IChatRoom {
   membership: null | any;
 }
 
+export interface IChatRoomKey {
+  timestamp: string;
+  user_id_to_key_map: { [user_id: string]: string };
+}
+
 export interface IChannel {
   id: string;
   type: string;

@@ -22,6 +22,7 @@ export interface IBeobleContext {
   user: IUser | null;
   userState: APIState<IUser>;
   updateUser: (body: IPutUserBody) => void;
+  registerUser: () => void;
 }
 
 export const BeobleContext = createContext<IBeobleContext | null>(null);

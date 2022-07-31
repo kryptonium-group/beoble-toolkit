@@ -150,6 +150,7 @@ export const ProfileContent: FC<ContentProps> = ({ profileUserId }) => {
         size={'sm'}
         key={user.id}
         onClick={handleClickUserListItem(user.id)}
+        color="#fff"
       />
     );
   };

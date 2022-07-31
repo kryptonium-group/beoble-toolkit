@@ -9,6 +9,8 @@ import Spinner from '../Spinner';
 import useChat from '../../hooks/useChat';
 import { Status } from '../OnlineStatus';
 import { getUserOnlineStatus } from '../../utils/userUtil';
+import { BiLock } from 'react-icons/bi';
+import Button from '../Button';
 
 /* eslint-disable-next-line */
 export interface MessageOverlayProps {
@@ -20,7 +22,7 @@ const MessageOverlayBubble = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 100px);
+  height: calc(90vh - 100px);
   box-shadow: 0px 0px 0px 1px ${Colors.background.noneTintHover},
     0px 4px 4px ${Colors.background.shadow};
   background-color: ${Colors.background.white};
@@ -52,14 +54,39 @@ const ScrollSection = styled.section`
   height: inherit;
 `;
 
-const ConversationContainer = styled.div``;
+const ConversationContainer = styled.div<{ blured: boolean }>`
+  ${({ blured }) => (blured ? `filter: blur(4px)` : 'none')};
+`;
 
 const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
   flex-grow: 1;
+  position: absolute;
+`;
+
+const LockContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+`;
+
+const Locker = styled.div`
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 2;
+  margin-bottom: 20px;
 `;
 
 export const MessageOverlay: FC<MessageOverlayProps> = ({
@@ -67,7 +94,7 @@ export const MessageOverlay: FC<MessageOverlayProps> = ({
 }) => {
   const [isMinimized, setIsMinimized] = useState(true);
 
-  const { account, hasNewMessage, user } = useBeoble();
+  const { account, hasNewMessage, user, registerUser } = useBeoble();
   const { conversations, isChatroomsLoading, unreadMessages } = useChat();
 
   const toggleMinimize = () => {
@@ -94,13 +121,24 @@ export const MessageOverlay: FC<MessageOverlayProps> = ({
         {...{ onNewChatRoomClick, unreadMessages, hasNewMessage }}
       />
 
-      {isChatroomsLoading && (
-        <SpinnerContainer>
-          <Spinner color={Colors.background.messageTint} />
-        </SpinnerContainer>
-      )}
       <ScrollSection>
-        <ConversationContainer>
+        {user?.public_key && isChatroomsLoading && (
+          <SpinnerContainer>
+            <Spinner color={Colors.background.messageTint} />
+          </SpinnerContainer>
+        )}
+        {!user?.public_key && (
+          <LockContainer>
+            <Locker>
+              <BiLock size={42} />
+              <p style={{ marginBottom: 8, fontWeight: 'bold' }}>
+                Register To See Messages
+              </p>
+              <Button onClick={registerUser}>Register</Button>
+            </Locker>
+          </LockContainer>
+        )}
+        <ConversationContainer blured={!user?.public_key}>
           {conversations.map((args) => (
             <MessageConversation {...args} key={args.chatroomId} />
           ))}

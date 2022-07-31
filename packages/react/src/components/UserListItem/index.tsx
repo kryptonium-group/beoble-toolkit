@@ -17,6 +17,7 @@ export interface UserListItemProps {
   hasCheckBox?: boolean;
   checked?: boolean;
   onCheckChange?: (value: boolean) => void;
+  color?: string;
 }
 
 const Container = styled.div<SpaceProps>`
@@ -47,12 +48,12 @@ const ProfileContainer = styled.div`
   width: 100%;
 `;
 
-const DisplayName = styled.span`
+const DisplayName = styled.span<{ color?: string }>`
   margin: 0px;
   margin-left: 8px;
   padding: 0;
   flex: 1;
-  color: ${({ theme }) => theme.text.normal};
+  color: ${({ theme, color }) => color ?? theme.text.normal};
   ${Truncate}
 `;
 
@@ -66,6 +67,7 @@ export const UserListItem: FC<UserListItemProps> = ({
   hasCheckBox,
   checked,
   onCheckChange,
+  color,
 }) => {
   const { provider } = useBeoble();
   const { ENSName, ENSAvatar } = useENS(provider, user.wallets[0]);
@@ -93,7 +95,10 @@ export const UserListItem: FC<UserListItemProps> = ({
           }
           size={handleSize(size, [48, 36, 20])}
         />
-        <DisplayName style={{ fontSize: handleSize(size, [20, 16, 14]) }}>
+        <DisplayName
+          color={color}
+          style={{ fontSize: handleSize(size, [20, 16, 14]) }}
+        >
           {user.display_name ?? (!ENSName ? user.wallets[0] : ENSName)}
         </DisplayName>
       </ProfileContainer>

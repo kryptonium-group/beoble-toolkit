@@ -16,7 +16,7 @@ export const useChatRoom = (chatroom_id: string) => {
     chatroom && user ? getChatroomMemberAccount(chatroom, user.id) : '';
 
   const chatroomName =
-    chatroom && user ? getChatroomName(chatroom, user.id) : '';
+    chatroom && user ? getChatroomName(chatroom, user.id) : 'Loading...';
 
   const otherMembers =
     chatroom && user
@@ -35,6 +35,7 @@ export const useChatRoom = (chatroom_id: string) => {
     const res = await Beoble.chatroom.get({
       chatroom_id,
     });
+    console.log(res);
     setChatroom(res.data.length > 0 ? res.data[0] : undefined);
     setIsLoading(false);
   };

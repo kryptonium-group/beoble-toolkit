@@ -6,6 +6,16 @@ import { Profile, Chat, useBeoble } from '@beoble/react';
 import ConnectButton from '../components/Web3Button';
 import { useWeb3Context } from '../components/Web3Button/web3Context';
 import styles from '../styles/Home.module.css';
+import Button from '../../react/src/components/Button';
+import { ethers } from 'ethers';
+import { publicKey } from 'eth-crypto';
+import {
+  arrayify,
+  computeAddress,
+  hashMessage,
+  hexlify,
+} from 'ethers/lib/utils';
+import { Encrypter } from '../../../dist/packages/js-sdk/src/core/encryption';
 
 const Home: NextPage = () => {
   const { connect, address } = useWeb3Context();
@@ -13,6 +23,52 @@ const Home: NextPage = () => {
     connect().then(() => {
       console.log('connected');
     });
+  };
+
+  const { provider, registerUser } = useBeoble();
+
+  const testDecrypt = async () => {
+    const [account] = await window.ethereum.request({ method: 'eth_accounts' });
+    const expectedPk = await window.ethereum.request({
+      method: 'eth_getEncryptionPublicKey',
+      params: [account],
+    });
+    console.log(`original pk is ${expectedPk}`);
+
+    const signer = provider.getSigner();
+    const sig = await signer.signMessage(account);
+
+    const accountHash = hashMessage(account);
+    const accountHashBytes = arrayify(accountHash);
+
+    const pk = ethers.utils.recoverPublicKey(accountHashBytes, sig);
+    const encrypter = new Encrypter();
+
+    console.log(
+      'computed address from public key by ethers util',
+      computeAddress(pk)
+    );
+
+    console.log(
+      `account is ${account}`,
+      `\nsignature is ${sig}`,
+      `\npublic key: ${pk}`
+    );
+
+    const key = encrypter.generateKey();
+    console.log('generated key', key);
+
+    const recoveredAddress = publicKey.toAddress(pk.slice(2));
+    console.log(
+      'recovered address from public key by EthCrypto',
+      recoveredAddress
+    );
+
+    const encrypted = await encrypter.ethEncrypt(key, expectedPk);
+    console.log('encryted message with pk', encrypted);
+
+    const decrypted = await encrypter.ethDecrypt(encrypted, account);
+    console.log('decrypted message with private key', decrypted);
   };
 
   return (
@@ -36,6 +92,7 @@ const Home: NextPage = () => {
             <p className={styles.description}>
               your address is <code className={styles.code}>{address}</code>
             </p>
+            <Button onClick={registerUser}>register</Button>
           </main>
         </>
       ) : (

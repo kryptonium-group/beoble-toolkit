@@ -1,3 +1,4 @@
+import { IChatRoomKey, IUser } from '../Models';
 import { ChatRoomType, MembershipAction, MembershipType } from '../types';
 
 export interface IPostMarkAsReadParam {
@@ -18,6 +19,14 @@ export interface IPostChatRoomBody {
   creator_id: string;
   chatroom_type: ChatRoomType;
   members: string[];
+  dapp_id?: string;
+  keys: IChatRoomKey[];
+}
+
+export interface IAddChatRoomBody
+  extends Omit<IPostChatRoomBody, 'keys' | 'members' | 'creator_id'> {
+  creator: IUser;
+  members: IUser[];
 }
 
 export interface IPutChatRoomBody {

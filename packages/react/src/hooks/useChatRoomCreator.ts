@@ -63,9 +63,9 @@ export const useChatRoomCreator = () => {
       const res = await Beoble.chatroom.add({
         alias: config.alias,
         display_name: config.display_name,
-        creator_id: user.id,
+        creator: user,
         chatroom_type: members.length > 1 ? 'GROUP_CHAT' : 'DIRECT_CHAT',
-        members: members.map((member) => member.id),
+        members: members,
       });
       openChat(res.data.channel.id);
       updateChatrooms();

@@ -4,45 +4,61 @@ import { IChannelConfig } from '../lib/Models/channel';
 import { IMessage } from '../lib/Responses/channel';
 import { MessageType, WebScocketEvents } from '../lib/types/channel';
 import { until } from '../util';
+import { Encrypter, Encryption } from './encryption';
 
 export class Channel {
-  private _socket: WebSocket;
-  private _isOpen = false;
+  private socket: WebSocket;
+  private isOpen = false;
+  private secretKey: string | null = null;
+  public hasKey: boolean = this.secretKey !== null;
+  private encryption: Encrypter;
 
   constructor(config: IChannelConfig) {
     const chatUrl =
       `${Paths.wss.chat(config.chatroom_id)}` +
       (config.authToken ? `?auth_token=${config.authToken}` : '');
-    this._socket = new WebSocket(chatUrl);
+    this.socket = new WebSocket(chatUrl);
+    this.encryption = new Encrypter();
 
-    this._socket.onopen = () => {
-      this._isOpen = true;
+    this.socket.onopen = () => {
+      this.isOpen = true;
     };
 
-    this._socket.onmessage = (ev: MessageEvent<any>) => {
+    this.socket.onmessage = (ev: MessageEvent<any>) => {
       //console.log(ev.data);
     };
 
-    this._socket.onclose = () => {
-      this._isOpen = false;
+    this.socket.onclose = () => {
+      this.isOpen = false;
     };
   }
 
   public watch() {
-    return this._socket.readyState;
+    return this.socket.readyState;
   }
 
   public async open() {
-    await until(() => this._isOpen == true);
-    return this._isOpen;
+    await until(() => this.isOpen == true);
+    return this.isOpen;
+  }
+
+  public setSecretKey(secretKey: string) {
+    this.secretKey = secretKey;
+    this.encryption.setSecretKey(secretKey);
   }
 
   public async sendMessage(message: ISendMessage) {
+    const { text, attachments } = message;
+    if (text) message.text = this.encryption.encrypt(text);
+    if (attachments)
+      message.attachments?.map((attachment) =>
+        this.encryption.encrypt(attachment)
+      );
     const data: IAction = {
       action_type: 'SEND_MESSAGE',
       data: message,
     };
-    this._socket.send(JSON.stringify(data));
+    this.socket.send(JSON.stringify(data));
   }
 
   public retrieveMessage(last_message_created_at: string) {
@@ -54,7 +70,7 @@ export class Channel {
         },
       },
     };
-    this._socket.send(JSON.stringify(data));
+    this.socket.send(JSON.stringify(data));
   }
 
   //TODO
@@ -63,18 +79,18 @@ export class Channel {
   }
 
   public async close() {
-    this._socket.close();
+    this.socket.close();
   }
 
   public on(
     event: WebScocketEvents,
     callback: (ev: MessageEvent<any> | Event | CloseEvent) => void
   ) {
-    this._socket.addEventListener(event, callback);
+    this.socket.addEventListener(event, callback);
   }
 
   public onMessage(event: MessageType, callback: (data: any) => void) {
-    this._socket.addEventListener('message', (e: MessageEvent) => {
+    this.socket.addEventListener('message', (e: MessageEvent) => {
       try {
         const data: IMessage<any> = JSON.parse(e.data);
         if (data.message_type === event) callback(data.data);

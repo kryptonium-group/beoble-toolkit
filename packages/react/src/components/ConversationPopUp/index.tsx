@@ -11,6 +11,8 @@ import { useChatRoom, useChat, useBeobleModal, useFocus } from '../../hooks';
 import { Status } from '../OnlineStatus';
 import { useDebounceCallback } from '../../hooks/commons/useDebounce';
 import { getUserOnlineStatus } from '../../utils/userUtil';
+import { BiLock } from 'react-icons/bi';
+import Button from '../Button';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
@@ -94,6 +96,14 @@ const SpinnerContainer = styled.div`
   flex-grow: 1;
   align-items: center;
   justify-content: center;
+`;
+
+const LockContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 export const ConversationPopUp: FC<ConversationPopUpProps> = ({
@@ -195,6 +205,10 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
       : 'none';
   };
 
+  const handleDecrypt = () => {
+    return;
+  };
+
   return (
     <Container
       {...{ isMinimized, isExpanded }}
@@ -216,13 +230,18 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
       <ContentContainer>
         <MessageDisplayContainer>
           <MessageListScrollable ref={scrollRef} onScroll={handleScroll}>
-            {isLoading && (
+            <LockContainer>
+              <BiLock size={42} />
+              <p style={{ marginBottom: 8 }}>Your content is secured</p>
+              <Button onClick={handleDecrypt}>Decrypt</Button>
+            </LockContainer>
+            {/* {isLoading ? (
               <SpinnerContainer>
                 <Spinner color={Colors.background.messageTint} />
               </SpinnerContainer>
-            )}
-            {!isLoading &&
-              messages.map((args) => <Message key={args.chatId} {...args} />)}
+            ) : (
+              messages.map((args) => <Message key={args.chatId} {...args} />)
+            )} */}
           </MessageListScrollable>
         </MessageDisplayContainer>
         <MessageForm

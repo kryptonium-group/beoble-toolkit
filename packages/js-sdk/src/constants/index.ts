@@ -75,6 +75,10 @@ export const Paths = {
   file: {
     upload: '/file/upload',
   },
+  encryption: {
+    base: '/encryption',
+    beoble: '/encryption/beoble',
+  },
 };
 
 export const AuthToken = 'beobletoken';

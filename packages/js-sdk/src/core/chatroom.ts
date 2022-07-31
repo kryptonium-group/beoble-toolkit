@@ -1,35 +1,91 @@
 import { Paths } from '../constants';
 import {
+  IChatRoomKey,
   IChatRoomMembershipResponse,
   IChatRoomResponse,
   IChatRoomsResponse,
   IRecentChatResponse,
+  IUser,
 } from '../lib';
 import ApiClient from '../lib/api';
 import {
+  IAddChatRoomBody,
   IGetChatRoomParams,
   IPostChatRoomBody,
   IPostMarkAsReadParam,
   IPutChatRoomBody,
   IPutChatRoomMembershipBody,
 } from '../lib/Requests/chatroom';
+import { Encrypter, Encryption } from './encryption';
 import { IAPIClass, IRestEndPoint } from './types';
 
 export class ChatRoom extends IAPIClass implements IRestEndPoint {
   public member: Member;
   public chat: Chat;
-  constructor(client: ApiClient) {
+  private encryption: Encryption;
+  private encrypter: Encrypter;
+
+  constructor(client: ApiClient, encryption: Encryption) {
     super(client);
     this.member = new Member(this._client);
     this.chat = new Chat(this._client);
+    this.encryption = encryption;
+    this.encrypter = new Encrypter();
   }
 
   public async get(params: IGetChatRoomParams): Promise<IChatRoomsResponse> {
     return await this._client.get(Paths.chatroom.base, params);
   }
 
-  public async add(body: IPostChatRoomBody): Promise<IChatRoomResponse> {
-    return await this._client.post(Paths.chatroom.base, body);
+  public async add(body: IAddChatRoomBody) /*: Promise<IChatRoomResponse>*/ {
+    const { creator, members, ...others } = body;
+    if (!creator.public_key)
+      throw new Error('User should register before try to create chatroom');
+
+    const timestamp = new Date().toISOString();
+    const chatroomKey = this.encrypter.generateKey();
+
+    const pubkey = members.some((member) => member.public_key === null)
+      ? async () => await this.encryption.getBeobleKey()
+      : (member: IUser) => member.public_key;
+    let user_id_to_key_map = {};
+
+    for (const member of members) {
+      user_id_to_key_map = {
+        ...user_id_to_key_map,
+        [member.id]: await this.encrypter.ethEncrypt(
+          chatroomKey,
+          await pubkey(member)
+        ),
+      };
+    }
+
+    user_id_to_key_map = {
+      ...user_id_to_key_map,
+      [creator.id]: await this.encrypter.ethEncrypt(
+        chatroomKey,
+        creator.public_key
+      ),
+    };
+
+    const keys = [
+      {
+        timestamp,
+        user_id_to_key_map,
+      },
+    ];
+
+    const postBody: IPostChatRoomBody = {
+      ...others,
+      creator_id: creator.id,
+      members: members.map((member) => member.id),
+      keys,
+    };
+
+    return await this._client.post<IPostChatRoomBody>(
+      Paths.chatroom.base,
+      postBody
+    );
   }
 
   public async update(

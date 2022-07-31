@@ -19,7 +19,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ Beoble, children }) => {
   const [initialized, setInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { provider, account } = useWeb3();
-  const { userState, getUser, login, updateUser } = useUserQuery(
+  const { userState, getUser, login, updateUser, registerUser } = useUserQuery(
     Beoble,
     provider,
     account
@@ -66,6 +66,7 @@ export const BeobleProvider: FC<IBeobleProvider> = ({ Beoble, children }) => {
           user: userState.data ?? null,
           userState,
           updateUser,
+          registerUser,
         }}
       >
         <ChatProvider
