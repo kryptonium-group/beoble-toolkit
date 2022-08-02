@@ -34,10 +34,15 @@ export class ChatRoom extends IAPIClass implements IRestEndPoint {
   }
 
   public async get(params: IGetChatRoomParams): Promise<IChatRoomsResponse> {
-    return await this._client.get(Paths.chatroom.base, params);
+    // this is for before changing show_keys field  to none optional
+    const tempParam = {
+      ...params,
+      show_keys: true,
+    };
+    return await this._client.get(Paths.chatroom.base, tempParam);
   }
 
-  public async add(body: IAddChatRoomBody) /*: Promise<IChatRoomResponse>*/ {
+  public async add(body: IAddChatRoomBody): Promise<IChatRoomResponse> {
     const { creator, members, ...others } = body;
     if (!creator.public_key)
       throw new Error('User should register before try to create chatroom');

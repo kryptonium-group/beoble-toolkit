@@ -9,8 +9,6 @@ import { Encrypter, Encryption } from './encryption';
 export class Channel {
   private socket: WebSocket;
   private isOpen = false;
-  private secretKey: string | null = null;
-  public hasKey: boolean = this.secretKey !== null;
   private encryption: Encrypter;
 
   constructor(config: IChannelConfig) {
@@ -43,7 +41,6 @@ export class Channel {
   }
 
   public setSecretKey(secretKey: string) {
-    this.secretKey = secretKey;
     this.encryption.setSecretKey(secretKey);
   }
 

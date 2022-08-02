@@ -1,5 +1,6 @@
 import { IChatRoom, IUser } from '@beoble/js-sdk';
 import { useEffect, useState } from 'react';
+import { Encrypter } from '../../../../dist/packages/js-sdk/src/core/encryption';
 import {
   getChatroomMemberAccount,
   getChatroomName,
@@ -8,7 +9,7 @@ import {
 import { useBeoble } from './useBeoble';
 
 export const useChatRoom = (chatroom_id: string) => {
-  const { Beoble, user } = useBeoble();
+  const { Beoble, user, account } = useBeoble();
   const [chatroom, setChatroom] = useState<IChatRoom>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,6 +41,18 @@ export const useChatRoom = (chatroom_id: string) => {
     setIsLoading(false);
   };
 
+  const decryptChatRoomKey = async () => {
+    if (chatroom && user) {
+      const key = chatroom.channel.keys.at(-1)?.user_id_to_key_map[user.id];
+      if (key && account?.address) {
+        const encrypter = new Encrypter();
+        const chatroomKey = await encrypter.ethDecrypt(key, account.address);
+        encrypter.setSecretKey(chatroomKey);
+        console.log(chatroomKey);
+      }
+    }
+  };
+
   return {
     chatroom,
     isLoading,
@@ -49,5 +62,6 @@ export const useChatRoom = (chatroom_id: string) => {
     otherMembers,
     unreadMessages,
     setChatroom,
+    decryptChatRoomKey,
   };
 };

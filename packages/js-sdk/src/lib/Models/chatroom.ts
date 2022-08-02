@@ -36,6 +36,7 @@ export interface IChannel {
   alias: string;
   description: null | string;
   last_message_at: string;
+  keys: IChatRoomKey[];
 }
 
 export interface ChannelConfig {

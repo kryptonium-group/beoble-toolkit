@@ -130,6 +130,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     otherMembers,
     chatroom,
     setChatroom,
+    decryptChatRoomKey,
   } = useChatRoom(chatroomId);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -206,7 +207,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
   };
 
   const handleDecrypt = () => {
-    return;
+    decryptChatRoomKey();
   };
 
   return (
@@ -230,18 +231,20 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
       <ContentContainer>
         <MessageDisplayContainer>
           <MessageListScrollable ref={scrollRef} onScroll={handleScroll}>
-            <LockContainer>
-              <BiLock size={42} />
-              <p style={{ marginBottom: 8 }}>Your content is secured</p>
-              <Button onClick={handleDecrypt}>Decrypt</Button>
-            </LockContainer>
-            {/* {isLoading ? (
+            {
+              // <LockContainer>
+              //   <BiLock size={42} />
+              //   <p style={{ marginBottom: 8 }}>Your content is secured</p>
+              //   <Button onClick={handleDecrypt}>Decrypt</Button>
+              // </LockContainer>
+            }
+            {isLoading ? (
               <SpinnerContainer>
                 <Spinner color={Colors.background.messageTint} />
               </SpinnerContainer>
             ) : (
               messages.map((args) => <Message key={args.chatId} {...args} />)
-            )} */}
+            )}
           </MessageListScrollable>
         </MessageDisplayContainer>
         <MessageForm

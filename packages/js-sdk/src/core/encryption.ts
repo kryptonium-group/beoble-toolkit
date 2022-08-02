@@ -1,6 +1,5 @@
 import { ethers } from 'ethers';
 import { AES, enc } from 'crypto-js';
-import EthCrypto from 'eth-crypto';
 import { bufferToHex } from 'ethereumjs-util';
 import { encrypt } from '@metamask/eth-sig-util';
 import { Paths } from '../constants';

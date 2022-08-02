@@ -21,7 +21,7 @@ export interface IModalContext {
   renderNftModal: boolean;
   openNftModal: () => void;
   closeNftModal: () => void;
-  selectedNft: INFT;
+  selectedNft?: INFT;
   setSelectedNft: (nft: INFT | undefined) => void;
 }
 
