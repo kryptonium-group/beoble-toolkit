@@ -22,15 +22,13 @@ module.exports = {
     // add your own webpack tweaks if needed
     config.resolve.fallback = {
       ...config.resolve.fallback,
-      buffer: require.resolve('buffer'),
+      buffer: require.resolve('buffer/'),
     };
 
-    // config.module.buildInfo = {};
-
     config.plugins.push(
-      new webpack.ProvidePlugin({ Buffer: ['buffer, Buffer'] })
+      new webpack.ProvidePlugin({ Buffer: ['buffer/', 'Buffer'] })
     );
-    console.log(config);
+    console.log(config, config.plugins);
 
     return config;
   },
