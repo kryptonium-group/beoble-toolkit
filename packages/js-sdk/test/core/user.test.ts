@@ -1,4 +1,3 @@
-import { createComponentStoriesFile } from '@nrwl/react/src/generators/component-story/component-story';
 import { Core } from '../../src/core';
 import { MyWallet, MasterKeyAuthToken, getUser, ch } from './index.test';
 import { MyWallets, TestWallets } from '../constants';
@@ -29,7 +28,7 @@ describe('user test', () => {
     const WalletToCheck = TestWallets[1];
 
     const res = await core.user.get({
-      wallet_address: '0xfadC90E2E4B7DE2B5672D45e445908FB924B88b5',
+      wallet_address: WalletToCheck,
     });
 
     console.log(res, res.data[0]);
