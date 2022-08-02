@@ -46,11 +46,11 @@ export class Channel {
 
   public async sendMessage(message: ISendMessage) {
     const { text, attachments } = message;
-    if (text) message.text = this.encryption.encrypt(text);
-    if (attachments)
-      message.attachments?.map((attachment) =>
-        this.encryption.encrypt(attachment)
-      );
+    // if (text) message.text = this.encryption.encrypt(text);
+    // if (attachments)
+    //   message.attachments?.map((attachment) =>
+    //     this.encryption.encrypt(attachment)
+    //   );
     const data: IAction = {
       action_type: 'SEND_MESSAGE',
       data: message,

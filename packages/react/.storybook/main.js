@@ -1,6 +1,5 @@
 const rootMain = require('../../../.storybook/main');
 const webpack = require('webpack');
-const buffer = require.resolve('../../../node_modules/buffer');
 
 module.exports = {
   ...rootMain,
@@ -23,12 +22,12 @@ module.exports = {
     // add your own webpack tweaks if needed
     config.resolve.fallback = {
       ...config.resolve.fallback,
-      buffer: require.resolve(buffer),
+      buffer: require.resolve('buffer'),
     };
 
     // config.module.buildInfo = {};
 
-    config.resolve.plugins.push(
+    config.plugins.push(
       new webpack.ProvidePlugin({ Buffer: ['buffer, Buffer'] })
     );
     console.log(config);
