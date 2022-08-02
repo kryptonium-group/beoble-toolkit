@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { forwardRef, InputHTMLAttributes } from 'react';
-import { AiOutlinePaperClip, AiOutlinePicture } from 'react-icons/ai';
+import { AiOutlinePicture } from 'react-icons/ai';
 import dynamic from 'next/dynamic';
-import { MdGif, MdMoreHoriz } from 'react-icons/md';
+import { MdMoreHoriz, MdClose } from 'react-icons/md';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { IEmojiData } from 'emoji-picker-react';
 import { IAttachment } from '@beoble/js-sdk';
@@ -20,6 +20,7 @@ import React, {
   HTMLInputTypeAttribute,
 } from 'react';
 import { useBeoble } from '../../hooks';
+import { Spinner } from '../Spinner';
 
 /* eslint-disable-next-line */
 export interface MessageFormProps
@@ -87,6 +88,17 @@ const TextEditor = styled.textarea`
   }
 `;
 
+const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+const ImagePreview = styled.img`
+  object-fit: cover;
+  width: 100px;
+  margin: 10px;
+`;
+
 const FormFooter = styled.footer`
   display: flex;
   align-items: center;
@@ -107,6 +119,10 @@ const SendButton = styled(Button)`
   margin-right: 8px;
 `;
 
+const ImageSpinner = styled(Spinner)`
+  margin: 0px;
+`;
+
 const PickerContainer = styled.div`
   position: fixed;
   transform: translateY(calc(-100% - 8px)) translateX(-30%);
@@ -124,7 +140,8 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
     const [isFocused, setIsFoucesd] = useState(false);
     const [messageContent, setMessageContent] = useState('');
     const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
-
+    const [attachment, setAttachment] = useState<IAttachment>();
+    const [image, setImage] = useState('');
     const { Beoble } = useBeoble();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -136,7 +153,12 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
 
     const handleSubmit = (e: SyntheticEvent) => {
       e.preventDefault();
-      handleSendMessage();
+      if (attachment) {
+        onImageSend(attachment);
+        clearAttachments();
+      } else {
+        handleSendMessage();
+      }
     };
 
     const handleSendMessage = () => {
@@ -173,17 +195,15 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
           type: 'IMAGE',
           asset_url: res.data,
         };
-        onImageSend(attachment);
+        setAttachment(attachment);
         console.log(res);
       }
     };
 
     const handlePictureUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-      console.log(e.target?.files);
-
       if (e.target?.files) {
         const file = e.target.files[0];
-        console.log(file);
+        setImage(URL.createObjectURL(file));
         const res = await Beoble.attachment.upload({
           upload_file: file,
           upload_type: 'USER',
@@ -193,25 +213,40 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
           type: 'IMAGE',
           asset_url: res.data,
         };
-        onImageSend(attachment);
-        console.log(res);
+        setAttachment(attachment);
       }
+    };
+
+    const clearAttachments = () => {
+      setImage('');
+      setAttachment(undefined);
     };
 
     return (
       <FormContainer onSubmit={handleSubmit}>
         <TextEditorContainer {...{ isFocused }}>
-          <TextEditor
-            ref={ref}
-            placeholder="Write a message..."
-            onFocus={() => setIsFoucesd(true)}
-            onBlur={() => setIsFoucesd(false)}
-            onChange={handleMessageChange}
-            value={messageContent}
-            onKeyDown={handleKeyDown}
-            {...{ disabled }}
-            {...props}
-          />
+          {image ? (
+            <ImageContainer>
+              <ImagePreview src={image} alt="uploaded" />
+              {attachment?.image_url ? (
+                <MdClose onClick={clearAttachments} size={24}></MdClose>
+              ) : (
+                <ImageSpinner color={Colors.background.messageTint} />
+              )}
+            </ImageContainer>
+          ) : (
+            <TextEditor
+              ref={ref}
+              placeholder="Write a message..."
+              onFocus={() => setIsFoucesd(true)}
+              onBlur={() => setIsFoucesd(false)}
+              onChange={handleMessageChange}
+              value={messageContent}
+              onKeyDown={handleKeyDown}
+              {...{ disabled }}
+              {...props}
+            />
+          )}
         </TextEditorContainer>
         <FormFooter>
           <FooterActionButtonContainer>
@@ -266,7 +301,10 @@ export const MessageForm = forwardRef<HTMLTextAreaElement, MessageFormProps>(
             </IconContainer>
           </FooterActionButtonContainer>
           <FooterActionButtonContainer>
-            <SendButton disabled={!messageContent || disabled} type="submit">
+            <SendButton
+              disabled={(!messageContent && !attachment?.image_url) || disabled}
+              type="submit"
+            >
               Send
             </SendButton>
             <IconButton size={32} {...{ disabled }} type="button">
