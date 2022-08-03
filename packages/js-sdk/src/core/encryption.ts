@@ -36,14 +36,14 @@ export class Encrypter {
    */
   public encrypt(message: string | object) {
     if (!this.secretKey)
-      throw new Error('You should initialize private key first');
+      throw new Error('You should initialize secret key first');
     if (typeof message === 'object') message = JSON.stringify(message);
     return AES.encrypt(message, this.secretKey).toString();
   }
 
   public decrypt(chipher: string) {
     if (!this.secretKey)
-      throw new Error('You should initialize private key first');
+      throw new Error('You should initialize secret key first');
     const bytes = AES.decrypt(chipher, this.secretKey);
     return JSON.parse(bytes.toString(enc.Utf8));
   }
@@ -52,19 +52,19 @@ export class Encrypter {
     encryptedMessage: string,
     address: string,
     provider?: ethers.providers.ExternalProvider
-  ) {
+  ): Promise<string> {
     if (provider && provider.request)
       return await provider.request({
         method: 'eth_decrypt',
         params: [encryptedMessage, address],
       });
-
-    if (isBrowser())
+    else if (isBrowser())
       return await window.ethereum.request({
         method: 'eth_decrypt',
         params: [encryptedMessage, address],
       });
-    else return;
+    // TODO implement for Node env
+    else return '';
   }
 
   public async ethEncrypt(message: string, publicKey: string) {

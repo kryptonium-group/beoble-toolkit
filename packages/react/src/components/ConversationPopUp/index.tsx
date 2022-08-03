@@ -13,6 +13,7 @@ import { useDebounceCallback } from '../../hooks/commons/useDebounce';
 import { getUserOnlineStatus } from '../../utils/userUtil';
 import { BiLock } from 'react-icons/bi';
 import Button from '../Button';
+import { channel } from 'diagnostics_channel';
 
 export interface ConversationPopUpProps {
   chatroomId: string;
@@ -120,6 +121,7 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
     messages,
     isLoading,
     markAsRead,
+    setSecretKey,
   } = useChannel(chatroomId);
   const { closeChat, updateChatroomRead } = useChat();
   const { addRoute, open } = useBeobleModal();
@@ -206,8 +208,9 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
       : 'none';
   };
 
-  const handleDecrypt = () => {
-    decryptChatRoomKey();
+  const handleDecrypt = async () => {
+    const chatroomKey = await decryptChatRoomKey();
+    setSecretKey(chatroomKey);
   };
 
   return (
@@ -232,19 +235,21 @@ export const ConversationPopUp: FC<ConversationPopUpProps> = ({
         <MessageDisplayContainer>
           <MessageListScrollable ref={scrollRef} onScroll={handleScroll}>
             {
-              // <LockContainer>
-              //   <BiLock size={42} />
-              //   <p style={{ marginBottom: 8 }}>Your content is secured</p>
-              //   <Button onClick={handleDecrypt}>Decrypt</Button>
-              // </LockContainer>
+              <LockContainer>
+                <BiLock size={42} />
+                <p style={{ marginBottom: 8 }}>Your content is secured</p>
+                <Button onClick={handleDecrypt} disabled={isLoading}>
+                  Decrypt
+                </Button>
+              </LockContainer>
             }
-            {isLoading ? (
+            {/* {isLoading ? (
               <SpinnerContainer>
                 <Spinner color={Colors.background.messageTint} />
               </SpinnerContainer>
             ) : (
               messages.map((args) => <Message key={args.chatId} {...args} />)
-            )}
+            )} */}
           </MessageListScrollable>
         </MessageDisplayContainer>
         <MessageForm

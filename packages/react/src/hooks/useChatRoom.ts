@@ -47,9 +47,13 @@ export const useChatRoom = (chatroom_id: string) => {
       if (key && account?.address) {
         const encrypter = new Encrypter();
         const chatroomKey = await encrypter.ethDecrypt(key, account.address);
-        encrypter.setSecretKey(chatroomKey);
         console.log(chatroomKey);
+        return chatroomKey;
+      } else {
+        throw new Error(`user with id ${user.id} has no permission to access`);
       }
+    } else {
+      throw new Error(`chatroom and user should be initialized first`);
     }
   };
 

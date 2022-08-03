@@ -186,6 +186,11 @@ export const useChannel = (chatroomId: string) => {
     return res;
   };
 
+  const setSecretKey = (secretKey: string) => {
+    if (!channel) throw new Error('channel is not initialized yet!');
+    channel.setSecretKey(secretKey);
+  };
+
   return {
     sendMessage,
     sendImage,
@@ -194,5 +199,6 @@ export const useChannel = (chatroomId: string) => {
     messages,
     isLoading,
     markAsRead,
+    setSecretKey,
   };
 };
